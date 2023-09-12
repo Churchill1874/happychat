@@ -14,7 +14,7 @@ public class LoginManageReq implements Serializable {
 
     @NotNull(message = "账号不能为空")
     @ApiModelProperty(value = "账号", required = true)
-    private Integer account;
+    private String account;
 
     @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码", required = true)

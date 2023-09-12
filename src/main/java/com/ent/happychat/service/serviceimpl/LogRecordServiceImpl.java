@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.common.constant.LogTypeEnum;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.LogRecord;
 import com.ent.happychat.mapper.LogRecordMapper;

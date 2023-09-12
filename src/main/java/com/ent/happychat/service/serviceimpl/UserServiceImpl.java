@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.common.constant.UserStatusEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.entity.User;
 import com.ent.happychat.mapper.UserMapper;
 import com.ent.happychat.pojo.req.user.UserPageReq;
@@ -30,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     public boolean add(User po) {
         po.setCreateTime(LocalDateTime.now());
-        po.setStatus(UserStatusEnum.NORMAL.getValue());
+        po.setStatus(UserStatusEnum.NORMAL);
         return this.save(po);
     }
 
@@ -61,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User findByAccount(Integer account) {
+    public User findByAccount(String account) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("account", account);
         return this.getOne(queryWrapper);
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //账号
         queryWrapper.eq(po.getAccount() != null, "account", po.getAccount());
         //手机号
-        queryWrapper.eq(StringUtils.isNotBlank(po.getPhoneNumber()), "phone_number", po.getPhoneNumber());
+        queryWrapper.eq(StringUtils.isNotBlank(po.getPhone()), "phone_number", po.getPhone());
         //真实姓名
         queryWrapper.eq(StringUtils.isNotBlank(po.getRealName()), "real_name", po.getRealName());
         //等级
@@ -118,10 +118,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.like(StringUtils.isNotBlank(po.getAddress()), "address", po.getAddress());
         //状态
         queryWrapper.eq(po.getStatus() != null, "status", po.getStatus());
-        //角色
-        queryWrapper.eq(po.getRole() != null, "role", po.getRole());
-        //平台
-        queryWrapper.eq(po.getPlatform() != null, "platform", po.getPlatform());
         //创建时间
         queryWrapper.orderByDesc("create_time");
         return list(queryWrapper);

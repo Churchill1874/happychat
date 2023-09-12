@@ -1,6 +1,6 @@
 package com.ent.happychat.common.aspect;
 
-import com.ent.happychat.common.constant.RoleEnum;
+import com.ent.happychat.common.constant.enums.RoleEnum;
 import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.pojo.vo.Token;
@@ -25,9 +25,9 @@ public class SuperAdminCheck {
     @Before("superAdminLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
         Token token = TokenTools.getToken();
-        if (token.getRole() != RoleEnum.SUPER_ADMIN.getCode()) {
+/*        if (token.getRole() != RoleEnum.SUPER_ADMIN.getCode()) {
             throw new AuthException();
-        }
+        }*/
     }
 
 

@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.vo;
 
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,17 +16,12 @@ public class Token {
     /**
      * 账号
      */
-    private Integer account;
+    private String account;
 
     /**
      * 昵称
      */
     private String name;
-
-    /**
-     * 角色
-     */
-    private Integer role;
 
     /**
      * 创建时间
@@ -40,12 +36,7 @@ public class Token {
     /**
      * 状态 0禁用 1正常
      */
-    private Integer status;
-
-    /**
-     * 平台
-     */
-    private Integer platform;
+    private UserStatusEnum status;
 
 
 }

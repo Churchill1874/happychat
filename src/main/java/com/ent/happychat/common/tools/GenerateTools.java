@@ -1,7 +1,8 @@
 package com.ent.happychat.common.tools;
 
 import cn.hutool.core.util.RandomUtil;
-import com.ent.happychat.common.constant.LogTypeEnum;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
+import com.ent.happychat.entity.Administrator;
 import com.ent.happychat.entity.LogRecord;
 import com.ent.happychat.entity.User;
 import com.ent.happychat.pojo.vo.Token;
@@ -75,14 +76,13 @@ public class GenerateTools {
      * @param account
      * @return
      */
-    public static LogRecord registerLog(String name, int account, int platform) {
+    public static LogRecord registerLog(String name, String account) {
         String ip = HttpTools.getIp();
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(ip);
         logRecord.setType(LogTypeEnum.REGISTER.getValue());
         logRecord.setMessage(name);
         logRecord.setAccount(account);
-        logRecord.setPlatform(platform);
         return logRecord;
     }
 
@@ -128,11 +128,10 @@ public class GenerateTools {
         Token token = new Token();
         token.setName(user.getName());
         token.setLoginTime(LocalDateTime.now());
-        token.setRole(user.getRole());
         token.setAccount(user.getAccount());
         token.setId(user.getId());
         token.setStatus(user.getStatus());
-        token.setPlatform(user.getPlatform());
+        token.setLevel(user.getLevel());
         return token;
     }
 
@@ -143,7 +142,7 @@ public class GenerateTools {
      * @param account
      * @return
      */
-    public static String createTokenId(int account) {
+    public static String createTokenId(String account) {
         int accountLength = String.valueOf(account).length();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         uuid = uuid.substring(0, uuid.length() - accountLength);

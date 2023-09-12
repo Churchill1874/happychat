@@ -37,7 +37,7 @@ public class TokenTools {
      * 获取账号可以为空
      * @return
      */
-    public static Integer getAccountMayNull(){
+    public static String getAccountMayNull(){
         Token token = ehcacheService.getTokenCache().get(HttpTools.getHeaderToken(), Token.class);
         if (token != null){
             return token.getAccount();

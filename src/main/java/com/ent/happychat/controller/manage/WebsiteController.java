@@ -2,7 +2,7 @@ package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.RoleEnum;
+import com.ent.happychat.common.constant.enums.RoleEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.tools.CodeTools;
@@ -68,11 +68,6 @@ public class WebsiteController {
             throw new AccountOrPasswordException();
         }
 
-        //判断角色是否是管理员
-        if (user.getRole() != RoleEnum.ADMIN.getCode() && user.getRole() != RoleEnum.SUPER_ADMIN.getCode()) {
-            throw new AuthException();
-        }
-
         //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
         checkLoginCache(user.getAccount());
 
@@ -81,16 +76,13 @@ public class WebsiteController {
         String tokenId = GenerateTools.createTokenId(user.getAccount());
         ehcacheService.getTokenCache().put(tokenId, token);
 
-        //记录登录日志
-        logRecordService.insert(GenerateTools.createLoginLog(token.getPlatform()));
-
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
         return R.ok(tokenId);
     }
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
-    private void checkLoginCache(int account) {
+    private void checkLoginCache(String account) {
         Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
         List<String> list = c.getKeys();
         if (CollectionUtils.isNotEmpty(list)) {

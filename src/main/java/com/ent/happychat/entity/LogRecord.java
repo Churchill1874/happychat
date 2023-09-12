@@ -39,7 +39,7 @@ public class LogRecord extends BaseInfo implements Serializable {
 
     @TableField("account")
     @ApiModelProperty("账号")
-    private Integer account;
+    private String account;
 
     @TableField("platform")
     @ApiModelProperty("平台")

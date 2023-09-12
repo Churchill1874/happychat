@@ -1,7 +1,7 @@
 package com.ent.happychat.common.exception;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.LogTypeEnum;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
         LogRecord logRecord = GenerateTools.createLog(logTypeEnum,message);
         Integer platform = null;
         try {
-            platform= TokenTools.getToken().getPlatform();
+            //platform= TokenTools.getToken().getPlatform();
         }catch (TokenException e){
             platform = HttpTools.getPlatform();
         }

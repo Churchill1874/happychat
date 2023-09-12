@@ -3,10 +3,8 @@ package com.ent.happychat.controller.player;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.LogTypeEnum;
-import com.ent.happychat.common.constant.RoleEnum;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
-import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
@@ -87,10 +85,6 @@ public class WebsiteApi {
             throw new AccountOrPasswordException();
         }
 
-        //判断角色是否是玩家
-        if (user.getRole() != RoleEnum.PLAYER.getCode()) {
-            throw new AuthException();
-        }
 
         //如果已经登陆过,删除之前的tokenId和缓存
         checkLoginCache(user.getAccount());
@@ -100,9 +94,6 @@ public class WebsiteApi {
         String tokenId = GenerateTools.createTokenId(user.getAccount());
         ehcacheService.getTokenCache().put(tokenId, token);
 
-        //记录登录日志
-        logRecordService.insert(GenerateTools.createLoginLog(token.getPlatform()));
-
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
         return R.ok(tokenId);
@@ -110,7 +101,7 @@ public class WebsiteApi {
 
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
-    private void checkLoginCache(int account) {
+    private void checkLoginCache(String account) {
         Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
         List<String> list = c.getKeys();
         if (CollectionUtils.isNotEmpty(list)) {
@@ -126,11 +117,16 @@ public class WebsiteApi {
     @ApiOperation(value = "注册")
     public synchronized R<User> register(@RequestBody @Valid RegisterReq req) {
         //校验图形验证码
-        checkGraphicVerificationCode(req.getVerificationCode());
+        //checkGraphicVerificationCode(req.getVerificationCode());
 
         User user = userService.findByName(req.getName());
         if (user != null) {
             return R.failed("该用户名已被注册");
+        }
+
+        user = userService.findByAccount(req.getAccount());
+        if (user != null){
+            return R.failed("该账号已经存在");
         }
 
         //todo 不需要先临时注释
@@ -138,28 +134,23 @@ public class WebsiteApi {
         //checkSmsVerificationCode(req.getPhoneNumber(), req.getSmsVerificationCode());
 
         //校验ip总注册数量是否超过10个
-        checkRegister(10);
+        //checkRegister(10);
 
         //创建用户数据
         user = new User();
         BeanUtils.copyProperties(req, user);
 
         String passwordReq = CodeTools.md5AndSalt(req.getPassword());
-        user.setAccount(userService.maxAccount() + 1);
+        user.setAccount(req.getAccount());
         user.setPassword(passwordReq);
-        user.setAvatar(1);
         user.setBalance(BigDecimal.ZERO);
-        user.setRole(RoleEnum.PLAYER.getCode());
         user.setLevel(1);
+        user.setName(req.getName());
         user.setAddress(HttpTools.getAddress());
-        user.setPlatform(HttpTools.getPlatform());
-        boolean flag = userService.add(user);
+        userService.add(user);
 
-        //如果创建用户成功
-        if (flag) {
-            //记录登录日志
-            logRecordService.insert(GenerateTools.registerLog(user.getName(), user.getAccount(), user.getPlatform()));
-        }
+        //记录登录日志
+        //logRecordService.insert(GenerateTools.registerLog(user.getName(), user.getAccount()));
 
         return R.ok(null);
     }
@@ -218,7 +209,7 @@ public class WebsiteApi {
 
     @PostMapping("/根据ip获取地址")
     @ApiOperation(value = "根据ip获取地址")
-    public R<String> getAddressByIp(@RequestBody JSONObject json){
+    public R<String> getAddressByIp(@RequestBody JSONObject json) {
         return R.ok(HttpTools.findAddressByIp(""));
     }
 

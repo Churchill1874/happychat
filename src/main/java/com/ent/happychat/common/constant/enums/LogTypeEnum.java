@@ -1,4 +1,4 @@
-package com.ent.happychat.common.constant;
+package com.ent.happychat.common.constant.enums;
 
 import lombok.Getter;
 

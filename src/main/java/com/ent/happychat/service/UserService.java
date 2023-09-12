@@ -51,7 +51,7 @@ public interface UserService extends IService<User> {
      * @param account
      * @return
      */
-    User findByAccount(Integer account);
+    User findByAccount(String account);
 
     /**
      * 根据网名查找用户

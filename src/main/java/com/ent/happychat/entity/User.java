@@ -2,6 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.config.BigDecimalSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 
 @Data
 @TableName("user")
-@ApiModel("用户类")
+@ApiModel("用户")
 public class User extends BaseInfo implements Serializable {
 
     private static final long serialVersionUID = -2092696757443231064L;
@@ -25,16 +26,16 @@ public class User extends BaseInfo implements Serializable {
 
     @TableField("account")
     @ApiModelProperty("账号")
-    private Integer account;
+    private String account;
 
     @JsonIgnore
     @TableField("password")
     @ApiModelProperty("密码")
     private String password;
 
-    @TableField("phone_number")
+    @TableField("phone")
     @ApiModelProperty("手机号")
-    private String phoneNumber;
+    private String phone;
 
     @TableField("real_name")
     @ApiModelProperty("真实姓名")
@@ -55,19 +56,11 @@ public class User extends BaseInfo implements Serializable {
 
     @TableField("status")
     @ApiModelProperty("状态 1正常 0禁用")
-    private Integer status;
+    private UserStatusEnum status;
 
-    @TableField("avatar")
+    @TableField("avatar_path")
     @ApiModelProperty("头像")
-    private Integer avatar;
-
-    @TableField("role")
-    @ApiModelProperty("角色")
-    private Integer role;
-
-    @TableField("platform")
-    @ApiModelProperty("平台")
-    private Integer platform;
+    private String avatarPath;
 
 
 }

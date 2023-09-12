@@ -76,6 +76,7 @@ mybatis-plus:
       logic-not-delete-value: 1
       logic-delete-value: 0
       field-strategy: IGNORED
+  type-enums-package: com.ent.happychat.constant.enums
 
 logging:
   config: classpath:log/logback.xml

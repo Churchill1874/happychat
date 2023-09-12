@@ -1,7 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.LogTypeEnum;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.service.EhcacheService;
