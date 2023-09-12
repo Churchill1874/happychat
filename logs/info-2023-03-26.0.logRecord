@@ -1,0 +1,35 @@
+2023-03-26 15:21:51.182 INFO  16640 --- [main] com.ent.happychat.HappyChatApplication - Starting SportsApplication using Java 1.8.0_144 on DESKTOP-VB4U1M1 with PID 16640 (D:\project\sports\target\classes started by admin in D:\project\sports)
+2023-03-26 15:21:51.183 INFO  16640 --- [background-preinit] org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
+2023-03-26 15:21:51.186 INFO  16640 --- [main] com.ent.happychat.HappyChatApplication - The following 1 profile is active: "dev"
+2023-03-26 15:21:52.711 INFO  16640 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2023-03-26 15:21:52.712 INFO  16640 --- [main] org.apache.catalina.core.AprLifecycleListener - Loaded Apache Tomcat Native library [1.2.35] using APR version [1.7.0].
+2023-03-26 15:21:52.713 INFO  16640 --- [main] org.apache.catalina.core.AprLifecycleListener - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+2023-03-26 15:21:52.713 INFO  16640 --- [main] org.apache.catalina.core.AprLifecycleListener - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2023-03-26 15:21:52.717 INFO  16640 --- [main] org.apache.catalina.core.AprLifecycleListener - OpenSSL successfully initialized [OpenSSL 1.1.1q  5 Jul 2022]
+2023-03-26 15:21:52.725 INFO  16640 --- [main] org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2023-03-26 15:21:52.725 INFO  16640 --- [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2023-03-26 15:21:52.726 INFO  16640 --- [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-03-26 15:21:52.841 INFO  16640 --- [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2023-03-26 15:21:52.841 INFO  16640 --- [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1612 ms
+2023-03-26 15:21:52.990 INFO  16640 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
+2023-03-26 15:21:53.090 INFO  16640 --- [main] com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+2023-03-26 15:21:53.734 INFO  16640 --- [main] com.ent.happychat.config.InitConfig - 获取创建机器人开关配置:false
+2023-03-26 15:21:54.315 INFO  16640 --- [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-03-26 15:21:54.706 INFO  16640 --- [main] org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2023-03-26 15:21:54.720 INFO  16640 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2023-03-26 15:21:54.720 INFO  16640 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Context refreshed
+2023-03-26 15:21:54.735 INFO  16640 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Found 2 custom documentation plugin(s)
+2023-03-26 15:21:54.758 INFO  16640 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
+2023-03-26 15:21:54.882 INFO  16640 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
+2023-03-26 15:21:54.895 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: addUsingPOST_1
+2023-03-26 15:21:54.896 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: delUsingPOST_1
+2023-03-26 15:21:54.904 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_1
+2023-03-26 15:21:54.911 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: updateScoreUsingPOST_1
+2023-03-26 15:21:54.912 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: updateScoreUsingPOST_2
+2023-03-26 15:21:54.920 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_2
+2023-03-26 15:21:54.924 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: delUsingPOST_2
+2023-03-26 15:21:54.931 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_3
+2023-03-26 15:21:54.935 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: getUsingPOST_1
+2023-03-26 15:21:54.938 INFO  16640 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+2023-03-26 15:21:54.950 INFO  16640 --- [main] com.ent.happychat.HappyChatApplication - Started SportsApplication in 4.333 seconds (JVM running for 5.133)
+2023-03-26 15:21:56.825 INFO  16640 --- [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource - {dataSource-1} closing ...
