@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 //.globalOperationParameters(setRequestHeaders())
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ent.sports.controller.player"))
+                .apis(RequestHandlerSelectors.basePackage("com.ent.happychat.controller.player"))
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
@@ -44,7 +44,7 @@ public class SwaggerConfig {
                 //.globalOperationParameters(setRequestHeaders())
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ent.sports.controller.manage"))
+                .apis(RequestHandlerSelectors.basePackage("com.ent.happychat.controller.manage"))
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
@@ -53,9 +53,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("sports", "http://127.0.0.1:8080/doc.html", "joy1cs1112@gmail.com");
+        Contact contact = new Contact("happychat", "http://127.0.0.1:8009/doc.html", "joy1cs1112@gmail.com");
         return new ApiInfoBuilder()
-                .title("富咔测试API接口")//标题
+                .title("快聊测试API接口")//标题
                 .description("API接口的描述")//文档接口的描述
                 .contact(contact)
                 .termsOfServiceUrl("www.baidu.com")

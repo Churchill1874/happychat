@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.LogTypeEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CodeTools;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -125,7 +127,7 @@ public class WebsiteApi {
         }
 
         user = userService.findByAccount(req.getAccount());
-        if (user != null){
+        if (user != null) {
             return R.failed("该账号已经存在");
         }
 
@@ -147,6 +149,8 @@ public class WebsiteApi {
         user.setLevel(1);
         user.setName(req.getName());
         user.setAddress(HttpTools.getAddress());
+        user.setStatus(UserStatusEnum.NORMAL);
+        user.setCreateTime(LocalDateTime.now());
         userService.add(user);
 
         //记录登录日志
