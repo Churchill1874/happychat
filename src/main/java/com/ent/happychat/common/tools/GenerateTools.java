@@ -46,7 +46,7 @@ public class GenerateTools {
     public static LogRecord createLog(LogTypeEnum logTypeEnum, String message) {
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(HttpTools.getIp());
-        logRecord.setType(logTypeEnum.getValue());
+        logRecord.setType(logTypeEnum);
         logRecord.setMessage(message);
         logRecord.setAccount(TokenTools.getAccountMayNull());
         logRecord.setPlatform(HttpTools.getPlatform());
@@ -62,7 +62,7 @@ public class GenerateTools {
         String ip = HttpTools.getIp();
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.LOGIN.getValue());
+        logRecord.setType(LogTypeEnum.LOGIN);
         logRecord.setMessage(HttpTools.findAddressByIp(ip));
         logRecord.setAccount(TokenTools.getAccountMayNull());
         logRecord.setPlatform(platform);
@@ -80,7 +80,7 @@ public class GenerateTools {
         String ip = HttpTools.getIp();
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.REGISTER.getValue());
+        logRecord.setType(LogTypeEnum.REGISTER);
         logRecord.setMessage(name);
         logRecord.setAccount(account);
         return logRecord;
@@ -96,7 +96,7 @@ public class GenerateTools {
         String ip = HttpTools.getIp();
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.WARN.getValue());
+        logRecord.setType(LogTypeEnum.WARN);
         logRecord.setMessage(message);
         return logRecord;
     }
@@ -111,7 +111,7 @@ public class GenerateTools {
     public static LogRecord createWarnLog(String message, String ip, int platform) {
         LogRecord logRecord = new LogRecord();
         logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.WARN.getValue());
+        logRecord.setType(LogTypeEnum.WARN);
         logRecord.setMessage(message);
         logRecord.setPlatform(platform);
         return logRecord;

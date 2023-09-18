@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 角色枚举
  */
-public enum RoleEnum {
+public enum RoleEnum  {
 
     BOT(0, "机器人"),
     PLAYER(1, "玩家"),
@@ -29,7 +29,7 @@ public enum RoleEnum {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name + ":" + this.code;
     }
 
 }

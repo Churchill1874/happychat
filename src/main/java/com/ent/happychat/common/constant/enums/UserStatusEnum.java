@@ -27,7 +27,7 @@ public enum UserStatusEnum {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name + ":" + this.code;
     }
 
 }

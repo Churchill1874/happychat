@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 @Data
 @TableName("user")
 @ApiModel("用户")
+@Accessors(chain = true)
 public class User extends BaseInfo implements Serializable {
 
     private static final long serialVersionUID = -2092696757443231064L;

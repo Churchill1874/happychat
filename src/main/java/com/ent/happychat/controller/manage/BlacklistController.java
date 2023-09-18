@@ -1,5 +1,6 @@
 package com.ent.happychat.controller.manage;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
@@ -66,7 +67,7 @@ public class BlacklistController {
     @AdminLoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页黑名单", notes = "分页黑名单")
-    public R page(@RequestBody BlacklistPageReq req) {
+    public R<IPage<Blacklist>> page(@RequestBody BlacklistPageReq req) {
         return R.ok(blacklistService.page(req.getPageNum(), req.getPageSize(), req.getIp(), req.getPhoneNumber()));
     }
 

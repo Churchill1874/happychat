@@ -1,60 +1,27 @@
-2023-09-14 12:31:18.625 INFO  15040 --- [background-preinit] org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
-2023-09-14 12:31:18.628 INFO  15040 --- [main] com.ent.happychat.HappyChatApplication - Starting HappyChatApplication using Java 1.8.0_144 on DESKTOP-VB4U1M1 with PID 15040 (D:\project\happychat\target\classes started by admin in D:\project\happychat)
-2023-09-14 12:31:18.629 INFO  15040 --- [main] com.ent.happychat.HappyChatApplication - The following 1 profile is active: "dev"
-2023-09-14 12:31:20.020 INFO  15040 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8009 (http)
-2023-09-14 12:31:20.021 INFO  15040 --- [main] org.apache.catalina.core.AprLifecycleListener - Loaded Apache Tomcat Native library [1.2.35] using APR version [1.7.0].
-2023-09-14 12:31:20.022 INFO  15040 --- [main] org.apache.catalina.core.AprLifecycleListener - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
-2023-09-14 12:31:20.022 INFO  15040 --- [main] org.apache.catalina.core.AprLifecycleListener - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
-2023-09-14 12:31:20.025 INFO  15040 --- [main] org.apache.catalina.core.AprLifecycleListener - OpenSSL successfully initialized [OpenSSL 1.1.1q  5 Jul 2022]
-2023-09-14 12:31:20.032 INFO  15040 --- [main] org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8009"]
-2023-09-14 12:31:20.033 INFO  15040 --- [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2023-09-14 12:31:20.033 INFO  15040 --- [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
-2023-09-14 12:31:20.150 INFO  15040 --- [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2023-09-14 12:31:20.150 INFO  15040 --- [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1483 ms
-2023-09-14 12:31:20.297 INFO  15040 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
-2023-09-14 12:31:20.373 INFO  15040 --- [main] com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-2023-09-14 12:31:21.007 INFO  15040 --- [main] com.ent.happychat.config.InitConfig - 获取创建机器人开关配置:false
-2023-09-14 12:31:21.361 INFO  15040 --- [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2023-09-14 12:31:21.795 INFO  15040 --- [main] org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8009"]
-2023-09-14 12:31:21.816 INFO  15040 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8009 (http) with context path ''
-2023-09-14 12:31:21.817 INFO  15040 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Context refreshed
-2023-09-14 12:31:21.833 INFO  15040 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Found 2 custom documentation plugin(s)
-2023-09-14 12:31:21.867 INFO  15040 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
-2023-09-14 12:31:22.023 INFO  15040 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
-2023-09-14 12:31:22.046 INFO  15040 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_1
-2023-09-14 12:31:22.048 INFO  15040 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: getUsingPOST_1
-2023-09-14 12:31:22.057 INFO  15040 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
-2023-09-14 12:31:22.068 INFO  15040 --- [main] com.ent.happychat.HappyChatApplication - Started HappyChatApplication in 3.982 seconds (JVM running for 4.843)
-2023-09-14 12:36:24.547 INFO  15040 --- [http-nio-8009-exec-1] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2023-09-14 12:36:24.548 INFO  15040 --- [http-nio-8009-exec-1] org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2023-09-14 12:36:24.549 INFO  15040 --- [http-nio-8009-exec-1] org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2023-09-14 21:43:43.237 INFO  12508 --- [main] com.ent.happychat.HappyChatApplication - Starting HappyChatApplication using Java 1.8.0_144 on DESKTOP-VB4U1M1 with PID 12508 (D:\project\happychat\target\classes started by admin in D:\project\happychat)
-2023-09-14 21:43:43.237 INFO  12508 --- [background-preinit] org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
-2023-09-14 21:43:43.242 INFO  12508 --- [main] com.ent.happychat.HappyChatApplication - The following 1 profile is active: "dev"
-2023-09-14 21:43:45.200 INFO  12508 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8009 (http)
-2023-09-14 21:43:45.201 INFO  12508 --- [main] org.apache.catalina.core.AprLifecycleListener - Loaded Apache Tomcat Native library [1.2.35] using APR version [1.7.0].
-2023-09-14 21:43:45.201 INFO  12508 --- [main] org.apache.catalina.core.AprLifecycleListener - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
-2023-09-14 21:43:45.201 INFO  12508 --- [main] org.apache.catalina.core.AprLifecycleListener - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
-2023-09-14 21:43:45.204 INFO  12508 --- [main] org.apache.catalina.core.AprLifecycleListener - OpenSSL successfully initialized [OpenSSL 1.1.1q  5 Jul 2022]
-2023-09-14 21:43:45.211 INFO  12508 --- [main] org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8009"]
-2023-09-14 21:43:45.212 INFO  12508 --- [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
-2023-09-14 21:43:45.212 INFO  12508 --- [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
-2023-09-14 21:43:45.350 INFO  12508 --- [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2023-09-14 21:43:45.351 INFO  12508 --- [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2037 ms
-2023-09-14 21:43:45.508 INFO  12508 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
-2023-09-14 21:43:45.589 INFO  12508 --- [main] com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-2023-09-14 21:43:46.265 INFO  12508 --- [main] com.ent.happychat.config.InitConfig - 获取创建机器人开关配置:false
-2023-09-14 21:43:46.660 INFO  12508 --- [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2023-09-14 21:43:47.080 INFO  12508 --- [main] org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8009"]
-2023-09-14 21:43:47.096 INFO  12508 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8009 (http) with context path ''
-2023-09-14 21:43:47.097 INFO  12508 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Context refreshed
-2023-09-14 21:43:47.111 INFO  12508 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Found 2 custom documentation plugin(s)
-2023-09-14 21:43:47.140 INFO  12508 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
-2023-09-14 21:43:47.278 INFO  12508 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
-2023-09-14 21:43:47.302 INFO  12508 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_1
-2023-09-14 21:43:47.304 INFO  12508 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: getUsingPOST_1
-2023-09-14 21:43:47.313 INFO  12508 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
-2023-09-14 21:43:47.326 INFO  12508 --- [main] com.ent.happychat.HappyChatApplication - Started HappyChatApplication in 5.016 seconds (JVM running for 6.085)
-2023-09-14 21:46:10.010 INFO  12508 --- [http-nio-8009-exec-1] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2023-09-14 21:46:10.010 INFO  12508 --- [http-nio-8009-exec-1] org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2023-09-14 21:46:10.012 INFO  12508 --- [http-nio-8009-exec-1] org.springframework.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2023-09-18 23:58:21.570 INFO  13748 --- [background-preinit] org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
+2023-09-18 23:58:21.572 INFO  13748 --- [main] com.ent.happychat.HappyChatApplication - Starting HappyChatApplication using Java 1.8.0_144 on DESKTOP-VB4U1M1 with PID 13748 (D:\project\happychat\target\classes started by admin in D:\project\happychat)
+2023-09-18 23:58:21.574 INFO  13748 --- [main] com.ent.happychat.HappyChatApplication - The following 1 profile is active: "dev"
+2023-09-18 23:58:22.952 INFO  13748 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8009 (http)
+2023-09-18 23:58:22.953 INFO  13748 --- [main] org.apache.catalina.core.AprLifecycleListener - Loaded Apache Tomcat Native library [1.2.35] using APR version [1.7.0].
+2023-09-18 23:58:22.954 INFO  13748 --- [main] org.apache.catalina.core.AprLifecycleListener - APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+2023-09-18 23:58:22.955 INFO  13748 --- [main] org.apache.catalina.core.AprLifecycleListener - APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2023-09-18 23:58:22.957 INFO  13748 --- [main] org.apache.catalina.core.AprLifecycleListener - OpenSSL successfully initialized [OpenSSL 1.1.1q  5 Jul 2022]
+2023-09-18 23:58:22.964 INFO  13748 --- [main] org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8009"]
+2023-09-18 23:58:22.965 INFO  13748 --- [main] org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2023-09-18 23:58:22.965 INFO  13748 --- [main] org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-09-18 23:58:23.081 INFO  13748 --- [main] o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2023-09-18 23:58:23.081 INFO  13748 --- [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1464 ms
+2023-09-18 23:58:23.224 INFO  13748 --- [main] c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
+2023-09-18 23:58:23.298 INFO  13748 --- [main] com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+2023-09-18 23:58:23.920 INFO  13748 --- [main] com.ent.happychat.config.InitConfig - 获取创建机器人开关配置:false
+2023-09-18 23:58:24.271 INFO  13748 --- [main] s.d.s.w.PropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2023-09-18 23:58:24.681 INFO  13748 --- [main] org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8009"]
+2023-09-18 23:58:24.696 INFO  13748 --- [main] o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8009 (http) with context path ''
+2023-09-18 23:58:24.697 INFO  13748 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Context refreshed
+2023-09-18 23:58:24.710 INFO  13748 --- [main] s.d.s.web.plugins.DocumentationPluginsBootstrapper - Found 2 custom documentation plugin(s)
+2023-09-18 23:58:24.736 INFO  13748 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
+2023-09-18 23:58:24.860 INFO  13748 --- [main] s.d.spring.web.scanners.ApiListingReferenceScanner - Scanning for api listing references
+2023-09-18 23:58:24.886 INFO  13748 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: pageUsingPOST_1
+2023-09-18 23:58:24.888 INFO  13748 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: getUsingPOST_1
+2023-09-18 23:58:24.895 INFO  13748 --- [main] s.d.s.w.r.operation.CachingOperationNameGenerator - Generating unique operation named: loginUsingPOST_1
+2023-09-18 23:58:24.908 INFO  13748 --- [main] com.ent.happychat.HappyChatApplication - Started HappyChatApplication in 3.829 seconds (JVM running for 4.623)

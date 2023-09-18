@@ -89,7 +89,7 @@ public class WebsiteApi {
 
 
         //如果已经登陆过,删除之前的tokenId和缓存
-        checkLoginCache(user.getAccount());
+        this.checkLoginCache(user.getAccount());
 
         //生成token并返回
         Token token = GenerateTools.createToken(user);
@@ -174,7 +174,7 @@ public class WebsiteApi {
 
                 //校验注册次数过限警告次数,是否大于等于20次,如果大于将ip拉黑
                 LogRecord logRecord = new LogRecord();
-                logRecord.setType(LogTypeEnum.WARN.getValue());
+                logRecord.setType(LogTypeEnum.WARN);
                 logRecord.setIp(ip);
                 logRecord.setMessage(warnContent);
                 List<LogRecord> registerWarnLogListRecord = logRecordService.getList(logRecord);

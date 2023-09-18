@@ -2,6 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class LogRecord extends BaseInfo implements Serializable {
 
     @TableField("type")
     @ApiModelProperty("日志类型 1异常日志 2操作日志 3登录日志 4请求统计日志")
-    private Integer type;
+    private LogTypeEnum type;
 
     @TableField("message")
     @ApiModelProperty("日志内容")
