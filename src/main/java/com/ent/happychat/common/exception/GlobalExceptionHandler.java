@@ -22,64 +22,38 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenException.class)
     public R errorTokenExceptionHandler(TokenException e) {
-        log.error("未登录操作:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.OPERATION);
+        log.error("未登录操作:{}", e.getMessage());
         return R.failed(e.getMessage()).setCode(e.getCode());
     }
-
     @ExceptionHandler(AuthException.class)
     public R errorAuthExceptionHandler(AuthException e) {
-        log.error("未授权操作:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.OPERATION);
+        log.error("未授权操作:{}", e.getMessage());
         return R.failed(e.getMessage()).setCode(e.getCode());
     }
-
     @ExceptionHandler(AccountOrPasswordException.class)
     public R errorAccountOrPasswordException(AccountOrPasswordException e) {
-        log.error("账号或密码有误:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.OPERATION);
+        log.error("账号或密码有误:{}", e.getMessage());
         return R.failed(e.getMessage()).setCode(e.getCode());
     }
-
     @ExceptionHandler(IpException.class)
     public R errorIpException(IpException e) {
-        log.error("获取ip失败:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.ERROR);
+        log.error("获取ip失败:{}", e.getMessage());
         return R.failed(e.getMessage()).setCode(e.getCode());
     }
-
     @ExceptionHandler(DataException.class)
     public R errorDataException(DataException e) {
-        log.error("业务异常:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.OPERATION);
+        log.error("业务异常:{}", e.getMessage());
         return R.failed(e.getMessage()).setCode(e.getCode());
     }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R errorMethodArgumentNotValidException(MethodArgumentNotValidException e){
-        log.error("数据异常:{}", e);
-        insertErrorLog(e.getMessage(),LogTypeEnum.ERROR);
+        log.error("数据异常:{}", e.getFieldError().getDefaultMessage());
         return R.failed(e.getBindingResult().getFieldError().getDefaultMessage()).setCode(-1);
     }
-
     @ExceptionHandler(Exception.class)
     public R errorExceptionHandler(Exception e) {
-        log.error("异常信息:", e);
-        insertErrorLog(e.toString(),LogTypeEnum.ERROR);
+        log.error("异常信息:", e.getMessage());
         return R.failed(e.toString()).setCode(-1);
-    }
-
-    //插入日志
-    private void insertErrorLog(String message,LogTypeEnum logTypeEnum){
-        LogRecord logRecord = GenerateTools.createLog(logTypeEnum,message);
-        Integer platform = null;
-        try {
-            //platform= TokenTools.getToken().getPlatform();
-        }catch (TokenException e){
-            platform = HttpTools.getPlatform();
-        }
-        logRecord.setPlatform(platform);
-        logRecordService.insert(logRecord);
     }
 
 }

@@ -42,79 +42,14 @@ import java.util.List;
 @Api(tags = "登录")
 @RequestMapping("/player/website")
 public class WebsiteApi {
-
     @Autowired
     private EhcacheService ehcacheService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private LogRecordService logRecordService;
-
     @Autowired
     private BlacklistService blacklistService;
-
-    @PostMapping("/login")
-    @ApiOperation(value = "登录", notes = "手机号或账号 至少有一个有值")
-    public R<String> login(@RequestBody @Valid LoginPlayerReq req) {
-        //校验请求参数
-        if (req.getAccount() == null && StringUtils.isBlank(req.getName())) {
-            throw new DataException("网名或账号不能同时为空");
-        }
-
-        //校验图形验证码
-        checkGraphicVerificationCode(req.getVerificationCode());
-
-        //判断账号密码是否正确
-        User user = null;
-        if (req.getAccount() != null) {
-            user = userService.findByAccount(req.getAccount());
-        } else if (StringUtils.isNotBlank(req.getName())) {
-            user = userService.findByName(req.getName());
-        }
-
-        if (user == null) {
-            throw new AccountOrPasswordException();
-        }
-
-        //对比登录密码和正确密码
-        String password = user.getPassword();
-        String passwordReq = CodeTools.md5AndSalt(req.getPassword());
-
-        //如果填写的登录密码是错误的
-        if (!password.equals(passwordReq)) {
-            throw new AccountOrPasswordException();
-        }
-
-
-        //如果已经登陆过,删除之前的tokenId和缓存
-        this.checkLoginCache(user.getAccount());
-
-        //生成token并返回
-        Token token = GenerateTools.createToken(user);
-        String tokenId = GenerateTools.createTokenId(user.getAccount());
-        ehcacheService.getTokenCache().put(tokenId, token);
-
-        //删除使用过的验证码缓存
-        ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
-        return R.ok(tokenId);
-    }
-
-
-    //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
-    private void checkLoginCache(String account) {
-        Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
-        List<String> list = c.getKeys();
-        if (CollectionUtils.isNotEmpty(list)) {
-            list.forEach(tokenId -> {
-                if (tokenId.contains(String.valueOf(account))) {
-                    ehcacheService.getTokenCache().evict(tokenId);
-                }
-            });
-        }
-    }
-
     @PostMapping("/register")
     @ApiOperation(value = "注册")
     public synchronized R<User> register(@RequestBody @Valid RegisterReq req) {
@@ -157,6 +92,64 @@ public class WebsiteApi {
         //logRecordService.insert(GenerateTools.registerLog(user.getName(), user.getAccount()));
 
         return R.ok(null);
+    }
+
+    @PostMapping("/login")
+    @ApiOperation(value = "登录", notes = "手机号或账号 至少有一个有值")
+    public R<String> login(@RequestBody @Valid LoginPlayerReq req) {
+        //校验请求参数
+        if (req.getAccount() == null) {
+            throw new DataException("网名或账号不能同时为空");
+        }
+
+        //校验图形验证码
+        //checkGraphicVerificationCode(req.getVerificationCode());
+
+        //判断账号密码是否正确
+        User user = null;
+        if (req.getAccount() != null) {
+            user = userService.findByAccount(req.getAccount());
+        }
+
+        if (user == null) {
+            throw new AccountOrPasswordException();
+        }
+
+        //对比登录密码和正确密码
+        String password = user.getPassword();
+        String passwordReq = CodeTools.md5AndSalt(req.getPassword());
+
+        //如果填写的登录密码是错误的
+        if (!password.equals(passwordReq)) {
+            throw new AccountOrPasswordException();
+        }
+
+
+        //如果已经登陆过,删除之前的tokenId和缓存
+        this.checkLoginCache(user.getAccount());
+
+        //生成token并返回
+        Token token = GenerateTools.createToken(user);
+        String tokenId = GenerateTools.createTokenId(user.getAccount());
+        ehcacheService.getTokenCache().put(tokenId, token);
+
+        //删除使用过的验证码缓存
+        ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
+        return R.ok(tokenId);
+    }
+
+
+    //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
+    private void checkLoginCache(String account) {
+        Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
+        List<String> list = c.getKeys();
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(tokenId -> {
+                if (tokenId.contains(String.valueOf(account))) {
+                    ehcacheService.getTokenCache().evict(tokenId);
+                }
+            });
+        }
     }
 
     /**
