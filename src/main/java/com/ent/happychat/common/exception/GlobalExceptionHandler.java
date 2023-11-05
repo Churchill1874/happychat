@@ -1,14 +1,7 @@
 package com.ent.happychat.common.exception;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.enums.LogTypeEnum;
-import com.ent.happychat.common.tools.GenerateTools;
-import com.ent.happychat.common.tools.HttpTools;
-import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.LogRecord;
-import com.ent.happychat.service.LogRecordService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,9 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @Autowired
-    private LogRecordService logRecordService;
 
     @ExceptionHandler(TokenException.class)
     public R errorTokenExceptionHandler(TokenException e) {

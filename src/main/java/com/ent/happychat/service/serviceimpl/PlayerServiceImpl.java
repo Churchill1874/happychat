@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
-import com.ent.happychat.entity.User;
-import com.ent.happychat.mapper.UserMapper;
+import com.ent.happychat.entity.Player;
+import com.ent.happychat.mapper.PlayerMapper;
 import com.ent.happychat.pojo.req.user.UserPageReq;
-import com.ent.happychat.service.UserService;
+import com.ent.happychat.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,14 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class PlayerServiceImpl extends ServiceImpl<PlayerMapper, Player> implements PlayerService {
 
     @Autowired
-    private UserMapper userMapper;
+    private PlayerMapper playerMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean add(User po) {
+    public boolean add(Player po) {
         po.setCreateTime(LocalDateTime.now());
         po.setStatus(UserStatusEnum.NORMAL);
         return this.save(po);
@@ -36,8 +36,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public boolean updateStatus(User po) {
-        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+    public boolean updateStatus(Player po) {
+        UpdateWrapper<Player> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", po.getId());
         updateWrapper.set("status", po.getStatus());
         return update(updateWrapper);
@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean update(User po) {
+    public boolean update(Player po) {
         return this.update(po);
     }
 
@@ -56,28 +56,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User getUser(Long id) {
+    public Player getUser(Long id) {
         return this.getById(id);
     }
 
     @Override
-    public User findByAccount(String account) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public Player findByAccount(String account) {
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("account", account);
         return this.getOne(queryWrapper);
     }
 
     @Override
-    public User findByName(String name) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public Player findByName(String name) {
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", name);
         return this.getOne(queryWrapper);
     }
 
     @Override
-    public IPage<User> page(UserPageReq po) {
-        IPage<User> iPage = new Page<>(po.getPageNum(), po.getPageSize());
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public IPage<Player> page(UserPageReq po) {
+        IPage<Player> iPage = new Page<>(po.getPageNum(), po.getPageSize());
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         //网名
         queryWrapper.like(StringUtils.isNotBlank(po.getName()), "name", po.getName());
         //账号
@@ -102,8 +102,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> getList(User po) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public List<Player> getList(Player po) {
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         //网名
         queryWrapper.eq(StringUtils.isNotBlank(po.getName()), "name", po.getName());
         //账号
@@ -124,21 +124,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> findByIds(List<Long> idList) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public List<Player> findByIds(List<Long> idList) {
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("id", idList);
         queryWrapper.orderByDesc("create_time");
         return list(queryWrapper);
     }
 
     @Override
-    public int maxAccount() {
-        return userMapper.maxCount();
-    }
-
-    @Override
-    public User findByPhoneNumber(String phoneNumber) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    public Player findByPhoneNumber(String phoneNumber) {
+        QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("phone_number", phoneNumber);
         return getOne(queryWrapper);
     }

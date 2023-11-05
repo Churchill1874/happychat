@@ -1,10 +1,7 @@
 package com.ent.happychat.common.tools;
 
 import cn.hutool.core.util.RandomUtil;
-import com.ent.happychat.common.constant.enums.LogTypeEnum;
-import com.ent.happychat.entity.Administrator;
-import com.ent.happychat.entity.LogRecord;
-import com.ent.happychat.entity.User;
+import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.vo.Token;
 
 import java.time.LocalDateTime;
@@ -36,55 +33,6 @@ public class GenerateTools {
         return String.valueOf(num);
     }
 
-    /**
-     * 生成日志对象
-     *
-     * @param logTypeEnum 日志类型
-     * @param message     日志内容
-     * @return
-     */
-    public static LogRecord createLog(LogTypeEnum logTypeEnum, String message) {
-        LogRecord logRecord = new LogRecord();
-        logRecord.setIp(HttpTools.getIp());
-        logRecord.setType(logTypeEnum);
-        logRecord.setMessage(message);
-        logRecord.setAccount(TokenTools.getAccountMayNull());
-        logRecord.setPlatform(HttpTools.getPlatform());
-        return logRecord;
-    }
-
-    /**
-     * 生成登录日志
-     *
-     * @return
-     */
-    public static LogRecord createLoginLog(Integer platform) {
-        String ip = HttpTools.getIp();
-        LogRecord logRecord = new LogRecord();
-        logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.LOGIN);
-        logRecord.setMessage(HttpTools.findAddressByIp(ip));
-        logRecord.setAccount(TokenTools.getAccountMayNull());
-        logRecord.setPlatform(platform);
-        return logRecord;
-    }
-
-    /**
-     * 传概念注册账号日志
-     *
-     * @param name
-     * @param account
-     * @return
-     */
-    public static LogRecord registerLog(String name, String account) {
-        String ip = HttpTools.getIp();
-        LogRecord logRecord = new LogRecord();
-        logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.REGISTER);
-        logRecord.setMessage(name);
-        logRecord.setAccount(account);
-        return logRecord;
-    }
 
     /**
      * 生产警告日志对象
@@ -92,30 +40,6 @@ public class GenerateTools {
      * @param message
      * @return
      */
-    public static LogRecord createWarnLog(String message) {
-        String ip = HttpTools.getIp();
-        LogRecord logRecord = new LogRecord();
-        logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.WARN);
-        logRecord.setMessage(message);
-        return logRecord;
-    }
-
-    /**
-     * 生产警告日志对象
-     *
-     * @param message
-     * @param ip
-     * @return
-     */
-    public static LogRecord createWarnLog(String message, String ip, int platform) {
-        LogRecord logRecord = new LogRecord();
-        logRecord.setIp(ip);
-        logRecord.setType(LogTypeEnum.WARN);
-        logRecord.setMessage(message);
-        logRecord.setPlatform(platform);
-        return logRecord;
-    }
 
 
     /**
@@ -124,7 +48,7 @@ public class GenerateTools {
      * @param user
      * @return
      */
-    public static Token createToken(User user) {
+    public static Token createToken(Player user) {
         Token token = new Token();
         token.setName(user.getName());
         token.setLoginTime(LocalDateTime.now());

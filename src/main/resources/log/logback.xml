@@ -3,7 +3,7 @@
     <property name="LOG_CHARSET" value="UTF-8" />
     <!--定义日志文件的存储地址-->
     <!--windows系统存在位置-->
-    <property name="LOG_PATH" value="./logs" />
+    <property name="LOG_PATH" value="D:/project/logs/happychat" />
     <!--linux系统下存放位置-->
     <!--<property name="LOG_PATH" value="/home/java/logs"/>-->
     <!-- 控制台输出 -->
@@ -18,10 +18,10 @@
     <!-- info级别日志文件输出 -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志文件输出的文件名 -->
-        <File>${LOG_PATH}/info.logRecord</File>
+        <File>${LOG_PATH}/info.txt</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 每日生成日志文件或日志文件大小超出限制后输出的文件名模板 -->
-            <fileNamePattern>${LOG_PATH}/info-%d{yyyy-MM-dd}.%i.logRecord</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/info-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
             <!-- 日志文件保留天数 -->
             <maxHistory>30</maxHistory>
             <!-- 日志文件最大大小：100MB -->
@@ -38,9 +38,9 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
-        <File>${LOG_PATH}/error.logRecord</File>
+        <File>${LOG_PATH}/error.txt</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/error-%d{yyyy-MM-dd}.%i.logRecord</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/error-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
             <maxHistory>30</maxHistory>
             <maxFileSize>100MB</maxFileSize>
         </rollingPolicy>

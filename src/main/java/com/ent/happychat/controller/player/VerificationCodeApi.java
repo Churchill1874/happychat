@@ -1,11 +1,9 @@
 package com.ent.happychat.controller.player;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.LogRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +21,6 @@ public class VerificationCodeApi {
     @Autowired
     private EhcacheService ehcacheService;
 
-    @Autowired
-    private LogRecordService logRecordService;
-
     @PostMapping("/get")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
     public synchronized R<String> get() {
@@ -34,7 +29,6 @@ public class VerificationCodeApi {
         //获取验证码
         String verificationCode = GenerateTools.getVerificationCode();
         ehcacheService.getVerificationCodeCache().put(HttpTools.getIp(), verificationCode);
-        logRecordService.insert(GenerateTools.createLog(LogTypeEnum.OPERATION,"获取验证码"));
         return R.ok(verificationCode);
     }
 

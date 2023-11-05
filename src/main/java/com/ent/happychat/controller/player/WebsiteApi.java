@@ -3,23 +3,19 @@ package com.ent.happychat.controller.player;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.enums.LogTypeEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
-import com.ent.happychat.entity.Blacklist;
-import com.ent.happychat.entity.LogRecord;
-import com.ent.happychat.entity.User;
+import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.req.website.LoginPlayerReq;
 import com.ent.happychat.pojo.req.website.RegisterReq;
 import com.ent.happychat.pojo.vo.Token;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.LogRecordService;
-import com.ent.happychat.service.UserService;
+import com.ent.happychat.service.PlayerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -45,24 +41,21 @@ public class WebsiteApi {
     @Autowired
     private EhcacheService ehcacheService;
     @Autowired
-    private UserService userService;
-    @Autowired
-    private LogRecordService logRecordService;
-    @Autowired
-    private BlacklistService blacklistService;
+    private PlayerService playerService;
+
     @PostMapping("/register")
     @ApiOperation(value = "注册")
-    public synchronized R<User> register(@RequestBody @Valid RegisterReq req) {
+    public synchronized R<Player> register(@RequestBody @Valid RegisterReq req) {
         //校验图形验证码
         //checkGraphicVerificationCode(req.getVerificationCode());
 
-        User user = userService.findByName(req.getName());
-        if (user != null) {
+        Player player = playerService.findByName(req.getName());
+        if (player != null) {
             return R.failed("该用户名已被注册");
         }
 
-        user = userService.findByAccount(req.getAccount());
-        if (user != null) {
+        player = playerService.findByAccount(req.getAccount());
+        if (player != null) {
             return R.failed("该账号已经存在");
         }
 
@@ -74,19 +67,19 @@ public class WebsiteApi {
         //checkRegister(10);
 
         //创建用户数据
-        user = new User();
-        BeanUtils.copyProperties(req, user);
+        player = new Player();
+        BeanUtils.copyProperties(req, player);
 
         String passwordReq = CodeTools.md5AndSalt(req.getPassword());
-        user.setAccount(req.getAccount());
-        user.setPassword(passwordReq);
-        user.setBalance(BigDecimal.ZERO);
-        user.setLevel(1);
-        user.setName(req.getName());
-        user.setAddress(HttpTools.getAddress());
-        user.setStatus(UserStatusEnum.NORMAL);
-        user.setCreateTime(LocalDateTime.now());
-        userService.add(user);
+        player.setAccount(req.getAccount());
+        player.setPassword(passwordReq);
+        player.setBalance(BigDecimal.ZERO);
+        player.setLevel(1);
+        player.setName(req.getName());
+        player.setAddress(HttpTools.getAddress());
+        player.setStatus(UserStatusEnum.NORMAL);
+        player.setCreateTime(LocalDateTime.now());
+        playerService.add(player);
 
         //记录登录日志
         //logRecordService.insert(GenerateTools.registerLog(user.getName(), user.getAccount()));
@@ -106,17 +99,17 @@ public class WebsiteApi {
         //checkGraphicVerificationCode(req.getVerificationCode());
 
         //判断账号密码是否正确
-        User user = null;
+        Player player = null;
         if (req.getAccount() != null) {
-            user = userService.findByAccount(req.getAccount());
+            player = playerService.findByAccount(req.getAccount());
         }
 
-        if (user == null) {
+        if (player == null) {
             throw new AccountOrPasswordException();
         }
 
         //对比登录密码和正确密码
-        String password = user.getPassword();
+        String password = player.getPassword();
         String passwordReq = CodeTools.md5AndSalt(req.getPassword());
 
         //如果填写的登录密码是错误的
@@ -126,11 +119,11 @@ public class WebsiteApi {
 
 
         //如果已经登陆过,删除之前的tokenId和缓存
-        this.checkLoginCache(user.getAccount());
+        this.checkLoginCache(player.getAccount());
 
         //生成token并返回
-        Token token = GenerateTools.createToken(user);
-        String tokenId = GenerateTools.createTokenId(user.getAccount());
+        Token token = GenerateTools.createToken(player);
+        String tokenId = GenerateTools.createTokenId(player.getAccount());
         ehcacheService.getTokenCache().put(tokenId, token);
 
         //删除使用过的验证码缓存
@@ -149,38 +142,6 @@ public class WebsiteApi {
                     ehcacheService.getTokenCache().evict(tokenId);
                 }
             });
-        }
-    }
-
-    /**
-     * 校验ip注册次数限制
-     */
-    private void checkRegister(int limitCount) {
-        String ip = HttpTools.getIp();
-        List<LogRecord> registerLogListRecord = logRecordService.registerList(ip);
-        //校验ip是否已经注册了10个以上的账号
-        if (CollectionUtils.isNotEmpty(registerLogListRecord)) {
-            int count = registerLogListRecord.size();
-            if (count >= limitCount) {
-                final String warnContent = "注册次数过限";
-                logRecordService.insert(GenerateTools.createWarnLog(warnContent, ip, HttpTools.getPlatform()));
-
-                //校验注册次数过限警告次数,是否大于等于20次,如果大于将ip拉黑
-                LogRecord logRecord = new LogRecord();
-                logRecord.setType(LogTypeEnum.WARN);
-                logRecord.setIp(ip);
-                logRecord.setMessage(warnContent);
-                List<LogRecord> registerWarnLogListRecord = logRecordService.getList(logRecord);
-
-                if (CollectionUtils.isNotEmpty(registerWarnLogListRecord) && registerWarnLogListRecord.size() > 20) {
-                    Blacklist blacklist = new Blacklist();
-                    blacklist.setIp(ip);
-                    blacklist.setRemarks("大量注册账号");
-                    blacklistService.insert(blacklist);
-                    throw new DataException("注册次数已达上限,若仍需注册请联系管理员");
-                }
-
-            }
         }
     }
 

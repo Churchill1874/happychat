@@ -2,7 +2,8 @@ package com.ent.happychat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ent.happychat.entity.User;
+import com.ent.happychat.entity.Player;
+import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.req.user.UserPageReq;
 
 import java.util.List;
@@ -10,27 +11,27 @@ import java.util.List;
 /**
  * 用户
  */
-public interface UserService extends IService<User> {
+public interface PlayerService extends IService<Player> {
 
     /**
      * 添加用户
      * @param po
      * @return
      */
-    boolean add(User po);
+    boolean add(Player po);
 
     /**
      * 修改用户状态
      * @return
      */
-    boolean updateStatus(User po);
+    boolean updateStatus(Player po);
 
     /**
      * 修改用户
      * @param po
      * @return
      */
-    boolean update(User po);
+    boolean update(Player po);
 
     /**
      * 删除用户
@@ -44,35 +45,35 @@ public interface UserService extends IService<User> {
      * @param id
      * @return
      */
-    User getUser(Long id);
+    Player getUser(Long id);
 
     /**
      * 根据账号查询用户
      * @param account
      * @return
      */
-    User findByAccount(String account);
+    Player findByAccount(String account);
 
     /**
      * 根据网名查找用户
      * @param name
      * @return
      */
-    User findByName(String name);
+    Player findByName(String name);
 
     /**
      * 分页查询用户信息
      * @param po
      * @return
      */
-    IPage<User> page(UserPageReq po);
+    IPage<Player> page(UserPageReq po);
 
     /**
      * 查询用户列表
      * @param po
      * @return
      */
-    List<User> getList(User po);
+    List<Player> getList(Player po);
 
 
     /**
@@ -80,18 +81,12 @@ public interface UserService extends IService<User> {
      * @param idList
      * @return
      */
-    List<User> findByIds(List<Long> idList);
-
-    /**
-     * 获取最大账号值
-     * @return
-     */
-    int maxAccount();
+    List<Player> findByIds(List<Long> idList);
 
     /**
      * 根据手机号查找用户
      * @param phoneNumber
      */
-    User findByPhoneNumber(String phoneNumber);
+    Player findByPhoneNumber(String phoneNumber);
 
 }

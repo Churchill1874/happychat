@@ -2,19 +2,16 @@ package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.enums.RoleEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
-import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.User;
+import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.req.website.LoginManageReq;
 import com.ent.happychat.pojo.vo.Token;
 import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.LogRecordService;
-import com.ent.happychat.service.UserService;
+import com.ent.happychat.service.PlayerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +36,7 @@ public class WebsiteController {
     private EhcacheService ehcacheService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private LogRecordService logRecordService;
+    private PlayerService playerService;
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
@@ -55,7 +49,7 @@ public class WebsiteController {
         }
 
         //判断账号密码是否正确
-        User user = userService.findByAccount(req.getAccount());
+        Player user = playerService.findByAccount(req.getAccount());
         if (user == null) {
             throw new AccountOrPasswordException();
         }
@@ -103,7 +97,7 @@ public class WebsiteController {
 
     @PostMapping("/getAllToken")
     @ApiOperation(value = "获取所有登陆人", notes = "获取所有登陆人")
-    public R<List<User>> getAllToken() {
+    public R<List<Player>> getAllToken() {
         net.sf.ehcache.Cache c = (net.sf.ehcache.Cache) ehcacheService.getTokenCache().getNativeCache();
         List<String> list = c.getKeys();
         List<Long> idList = new ArrayList<>();
@@ -119,7 +113,7 @@ public class WebsiteController {
         }
 
         if (!CollectionUtils.isEmpty(idList)) {
-            List<User> userList = (List<User>) userService.listByIds(idList);
+            List<Player> userList = (List<Player>) playerService.listByIds(idList);
             return R.ok(userList);
         }
 

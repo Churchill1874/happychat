@@ -1,6 +1,5 @@
 package com.ent.happychat.config;
 
-import com.ent.happychat.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +15,6 @@ public class InitConfig {
     private static final int SUPER_ADMIN_ACCOUNT = 5000;
 
     private static final String PASSWORD = "111111a";
-    @Autowired
-    private UserService userService;
 
     //获取创建机器人开关
     @Value("${init.create.bot}")
