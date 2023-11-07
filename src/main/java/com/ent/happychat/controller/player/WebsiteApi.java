@@ -12,8 +12,7 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.req.website.LoginPlayerReq;
 import com.ent.happychat.pojo.req.website.RegisterReq;
-import com.ent.happychat.pojo.vo.Token;
-import com.ent.happychat.service.BlacklistService;
+import com.ent.happychat.pojo.dto.PlayerToken;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerService;
 import io.swagger.annotations.Api;
@@ -122,9 +121,9 @@ public class WebsiteApi {
         this.checkLoginCache(player.getAccount());
 
         //生成token并返回
-        Token token = GenerateTools.createToken(player);
+        PlayerToken playerToken = GenerateTools.createToken(player);
         String tokenId = GenerateTools.createTokenId(player.getAccount());
-        ehcacheService.getTokenCache().put(tokenId, token);
+        ehcacheService.getTokenCache().put(tokenId, playerToken);
 
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());

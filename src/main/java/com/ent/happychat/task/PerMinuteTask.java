@@ -7,6 +7,7 @@ import com.ent.happychat.entity.News;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +29,21 @@ public class PerMinuteTask {
      * 每分钟执行定时任务
      */
     @Scheduled(cron = "0 */1 * * * ?")
-    private void perMinute() {
+    public void perMinute() {
         LocalDateTime currentTime = LocalDateTime.now();
         int hour = currentTime.getHour();
         int minutes = currentTime.getMinute();
 
-        log.info("执行新闻定时任务");
+        //执行新闻定时任务
         reqNewsApiTask(hour, minutes);
+
+
     }
 
+
     //请求新闻定时任务
-    private void reqNewsApiTask(int hour, int minutes) {
+    @Async
+    public void reqNewsApiTask(int hour, int minutes) {
         List<News> newsList = new ArrayList<>();
         //12点 请求育儿新闻
         if (12 == hour && minutes == 0) {
@@ -83,10 +88,9 @@ public class PerMinuteTask {
         }
 
         if (CollectionUtils.isNotEmpty(newsList)) {
+            log.info("执行新闻定时任务,处理新闻数据{}条", newsList.size());
             newsService.saveList(newsList);
         }
-
-        log.info("执行新闻定时任务,处理新闻数据{}条", newsList.size());
     }
 
 }

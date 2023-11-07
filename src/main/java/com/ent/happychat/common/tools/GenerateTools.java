@@ -2,7 +2,7 @@ package com.ent.happychat.common.tools;
 
 import cn.hutool.core.util.RandomUtil;
 import com.ent.happychat.entity.Player;
-import com.ent.happychat.pojo.vo.Token;
+import com.ent.happychat.pojo.dto.PlayerToken;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -48,15 +48,14 @@ public class GenerateTools {
      * @param user
      * @return
      */
-    public static Token createToken(Player user) {
-        Token token = new Token();
-        token.setName(user.getName());
-        token.setLoginTime(LocalDateTime.now());
-        token.setAccount(user.getAccount());
-        token.setId(user.getId());
-        token.setStatus(user.getStatus());
-        token.setLevel(user.getLevel());
-        return token;
+    public static PlayerToken createToken(Player user) {
+        PlayerToken playerToken = new PlayerToken();
+        playerToken.setName(user.getName());
+        playerToken.setLoginTime(LocalDateTime.now());
+        playerToken.setAccount(user.getAccount());
+        playerToken.setId(user.getId());
+        playerToken.setLevel(user.getLevel());
+        return playerToken;
     }
 
 

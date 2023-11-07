@@ -3,8 +3,7 @@ package com.ent.happychat.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Player;
-import com.ent.happychat.entity.Player;
-import com.ent.happychat.pojo.req.user.UserPageReq;
+import com.ent.happychat.pojo.req.player.PlayerPageReq;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public interface PlayerService extends IService<Player> {
      * @param po
      * @return
      */
-    IPage<Player> page(UserPageReq po);
+    IPage<Player> page(PlayerPageReq po);
 
     /**
      * 查询用户列表

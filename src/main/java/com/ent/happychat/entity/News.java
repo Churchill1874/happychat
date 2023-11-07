@@ -62,7 +62,6 @@ public class News extends BaseInfo implements Serializable {
     @ApiModelProperty("新闻状态")
     private NewsStatusEnum newsStatus;
 
-
     @TableField("news_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime newsTime;

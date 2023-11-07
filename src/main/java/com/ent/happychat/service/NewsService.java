@@ -3,6 +3,7 @@ package com.ent.happychat.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
 
 import java.util.List;
@@ -23,6 +24,14 @@ public interface NewsService extends IService<News> {
      * @param categoryEnum
      */
     IPage<News> queryPage(Integer number, Integer size, String title, NewsCategoryEnum categoryEnum);
+
+    /**
+     * 根据新闻状态,获取最近几条新闻
+     * @param newsStatusEnum
+     * @return
+     */
+    List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size);
+
 
 
 }

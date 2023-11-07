@@ -64,5 +64,9 @@ public class Player extends BaseInfo implements Serializable {
     @ApiModelProperty("头像")
     private String avatarPath;
 
+    @TableField("is_robot")
+    @ApiModelProperty("是否机器人")
+    private Boolean isRobot;
+
 
 }

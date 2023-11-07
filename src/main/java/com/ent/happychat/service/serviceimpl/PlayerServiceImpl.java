@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.entity.Player;
 import com.ent.happychat.mapper.PlayerMapper;
-import com.ent.happychat.pojo.req.user.UserPageReq;
+import com.ent.happychat.pojo.req.player.PlayerPageReq;
 import com.ent.happychat.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +75,7 @@ public class PlayerServiceImpl extends ServiceImpl<PlayerMapper, Player> impleme
     }
 
     @Override
-    public IPage<Player> page(UserPageReq po) {
+    public IPage<Player> page(PlayerPageReq po) {
         IPage<Player> iPage = new Page<>(po.getPageNum(), po.getPageSize());
         QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         //网名
@@ -83,19 +83,11 @@ public class PlayerServiceImpl extends ServiceImpl<PlayerMapper, Player> impleme
         //账号
         queryWrapper.eq(po.getAccount() != null, "account", po.getAccount());
         //手机号
-        queryWrapper.eq(StringUtils.isNotBlank(po.getPhoneNumber()), "phone_number", po.getPhoneNumber());
+        queryWrapper.eq(StringUtils.isNotBlank(po.getPhone()), "phone_number", po.getPhone());
         //真实姓名
         queryWrapper.like(StringUtils.isNotBlank(po.getRealName()), "real_name", po.getRealName());
-        //等级
-        queryWrapper.eq(po.getLevel() != null, "level", po.getLevel());
-        //地址
-        queryWrapper.like(StringUtils.isNotBlank(po.getAddress()), "address", po.getAddress());
         //状态
         queryWrapper.eq(po.getStatus() != null, "status", po.getStatus());
-        //角色
-        queryWrapper.eq(po.getRole() != null, "role", po.getRole());
-        //平台
-        queryWrapper.eq(po.getPlatform() != null, "platform", po.getPlatform());
         //创建时间
         queryWrapper.orderByDesc("create_time");
         return page(iPage, queryWrapper);

@@ -1,7 +1,7 @@
 package com.ent.happychat.common.tools;
 
 import com.ent.happychat.common.exception.TokenException;
-import com.ent.happychat.pojo.vo.Token;
+import com.ent.happychat.pojo.dto.PlayerToken;
 import com.ent.happychat.service.EhcacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,12 +25,12 @@ public class TokenTools {
      *
      * @return
      */
-    public static Token getToken() {
-        Token token = ehcacheService.getTokenCache().get(HttpTools.getHeaderToken(), Token.class);
-        if (token == null) {
+    public static PlayerToken getToken() {
+        PlayerToken playerToken = ehcacheService.getTokenCache().get(HttpTools.getHeaderToken(), PlayerToken.class);
+        if (playerToken == null) {
             throw new TokenException();
         }
-        return token;
+        return playerToken;
     }
 
     /**
@@ -38,9 +38,9 @@ public class TokenTools {
      * @return
      */
     public static String getAccountMayNull(){
-        Token token = ehcacheService.getTokenCache().get(HttpTools.getHeaderToken(), Token.class);
-        if (token != null){
-            return token.getAccount();
+        PlayerToken playerToken = ehcacheService.getTokenCache().get(HttpTools.getHeaderToken(), PlayerToken.class);
+        if (playerToken != null){
+            return playerToken.getAccount();
         }
         return null;
     }

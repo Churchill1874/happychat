@@ -9,7 +9,7 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Player;
 import com.ent.happychat.pojo.req.website.LoginManageReq;
-import com.ent.happychat.pojo.vo.Token;
+import com.ent.happychat.pojo.dto.PlayerToken;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerService;
 import io.swagger.annotations.Api;
@@ -66,9 +66,9 @@ public class WebsiteController {
         checkLoginCache(user.getAccount());
 
         //生成token并返回
-        Token token = GenerateTools.createToken(user);
+        PlayerToken playerToken = GenerateTools.createToken(user);
         String tokenId = GenerateTools.createTokenId(user.getAccount());
-        ehcacheService.getTokenCache().put(tokenId, token);
+        ehcacheService.getTokenCache().put(tokenId, playerToken);
 
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
@@ -103,10 +103,10 @@ public class WebsiteController {
         List<Long> idList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(list)) {
             list.forEach(tokenId -> {
-                Token token = ehcacheService.getTokenCache().get(tokenId, Token.class);
+                PlayerToken playerToken = ehcacheService.getTokenCache().get(tokenId, PlayerToken.class);
 
-                if (token != null) {
-                    idList.add(token.getId());
+                if (playerToken != null) {
+                    idList.add(playerToken.getId());
                 }
 
             });
