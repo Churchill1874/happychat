@@ -1,5 +1,6 @@
 package com.ent.happychat.controller.manage;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
@@ -41,6 +42,7 @@ public class WebsiteController {
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
     public R<String> login(@RequestBody @Valid LoginManageReq req) {
+        log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
 
         //校验验证码
         String verificationCode = ehcacheService.getVerificationCodeCache().get(HttpTools.getIp(), String.class);

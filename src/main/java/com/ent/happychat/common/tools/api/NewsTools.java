@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,14 @@ public class NewsTools {
                         news.setNewsStatus(NewsStatusEnum.NORMAL);
                         //将返回的新闻发生时间转换成localdatetime格式
                         String time = obj.getStr("time");
-                        news.setNewsTime(StringUtils.isNotBlank(time) ? LocalDateTime.parse(time.replace(" ","T")) : LocalDateTime.now());
+                        if (StringUtils.isNotBlank(time)){
+                            if (time.contains(" ")){
+                                news.setNewsTime(LocalDateTime.parse(time.replace(" ","T")));
+                            }
+                            if (!time.contains(" ")){
+                                news.setNewsTime(LocalDate.parse(time).atStartOfDay());
+                            }
+                        }
                         news.setCreateTime(LocalDateTime.now());
                         newsList.add(news);
                     }

@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
+import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
@@ -18,10 +20,10 @@ import com.ent.happychat.service.PlayerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.ehcache.Cache;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,7 +135,11 @@ public class WebsiteApi {
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
     private void checkLoginCache(String account) {
-        Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
+        Cache cache = ehcacheService.getTokenCache();
+        if (cache == null){
+            throw new TokenException();
+        }
+        net.sf.ehcache.Cache c = (net.sf.ehcache.Cache) cache.getNativeCache();
         List<String> list = c.getKeys();
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(tokenId -> {

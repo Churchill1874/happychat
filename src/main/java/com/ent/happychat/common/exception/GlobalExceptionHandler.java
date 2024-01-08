@@ -42,6 +42,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public R errorExceptionHandler(Exception e) {
+        e.printStackTrace();
         log.error("异常信息:", e.getMessage());
         return R.failed(e.toString()).setCode(-1);
     }

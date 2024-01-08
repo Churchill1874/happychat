@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class NewsApi {
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R<IPage<News>> page(@RequestBody NewsPageReq req) {
+    public R<IPage<News>> page(@RequestBody @Valid NewsPageReq req) {
         IPage<News> iPage = newsService.queryPage(req.getPageNum(), req.getPageSize(), req.getTitle(), req.getCategoryEnum());
         return R.ok(iPage);
     }

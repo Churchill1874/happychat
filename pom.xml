@@ -11,9 +11,9 @@
 	</parent>
 	<groupId>com.ent</groupId>
 	<artifactId>happychat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>happychat</name>
-	<description>sports</description>
+	<description>happychat</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>

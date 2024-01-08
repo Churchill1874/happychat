@@ -19,7 +19,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public void saveList(List<News> newsList) {
-        this.saveList(newsList);
+        this.saveBatch(newsList);
     }
 
     @Override

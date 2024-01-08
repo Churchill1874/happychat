@@ -3,9 +3,9 @@
     <property name="LOG_CHARSET" value="UTF-8" />
     <!--定义日志文件的存储地址-->
     <!--windows系统存在位置-->
-    <property name="LOG_PATH" value="D:/project/logs/happychat" />
+    <!--<property name="LOG_PATH" value="D:/project/logs/happychat" />-->
     <!--linux系统下存放位置-->
-    <!--<property name="LOG_PATH" value="/home/java/logs"/>-->
+    <property name="LOG_PATH" value="/jar/logs/"/>
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
