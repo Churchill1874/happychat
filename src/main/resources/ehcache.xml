@@ -44,6 +44,16 @@
             memoryStoreEvictionPolicy="LRU"
     />
 
+    <cache name="token"
+           eternal="false"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           memoryStoreEvictionPolicy="LRU"
+    />
+
     <cache name="playerToken"
            eternal="false"
            maxElementsInMemory="5000"

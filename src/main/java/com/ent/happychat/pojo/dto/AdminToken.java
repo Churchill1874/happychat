@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.dto;
 
+import com.ent.happychat.common.constant.enums.RoleEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -19,5 +20,8 @@ public class AdminToken {
 
     @ApiModelProperty("登陆时间")
     private LocalDateTime loginTime;
+
+    @ApiModelProperty("角色")
+    private RoleEnum roleEnum;
 
 }

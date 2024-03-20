@@ -1,6 +1,7 @@
 package com.ent.happychat.config;
 
 import com.ent.happychat.common.constant.enums.RoleEnum;
+import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.service.AdministratorsService;
 import com.ent.happychat.service.NewsService;
@@ -43,7 +44,7 @@ public class InitConfig {
             administrators.setAccount(SUPER_ADMIN_ACCOUNT);
             administrators.setName(RoleEnum.SUPER_ADMIN.getName());
             administrators.setRole(RoleEnum.SUPER_ADMIN);
-            administrators.setPassword(PASSWORD);
+            administrators.setPassword(CodeTools.md5AndSalt(PASSWORD));
             administrators.setCreateTime(LocalDateTime.now());
             administratorsService.save(administrators);
         }
@@ -53,5 +54,9 @@ public class InitConfig {
 /*        List<News> newsList = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT,25);
         newsService.saveList(newsList);*/
     }
+
+/*    public static void main(String[] args) {
+        log.info(CodeTools.md5AndSalt(PASSWORD));
+    }*/
 
 }

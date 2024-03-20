@@ -13,10 +13,10 @@ public class PageReq implements Serializable {
 
     @ApiModelProperty(value = "页号", required = true)
     @NotNull(message = "分页页号不能为空")
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
     @ApiModelProperty(value = "数据长度", required = true)
     @NotNull(message = "分页数据长度不能为空")
-    private Integer pageSize;
+    private Integer pageSize = 10;
 
 }

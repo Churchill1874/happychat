@@ -47,6 +47,7 @@ public class WebsiteApi {
     @PostMapping("/register")
     @ApiOperation(value = "注册")
     public synchronized R<Player> register(@RequestBody @Valid RegisterReq req) {
+        log.info("注册请求参数:{}", JSONObject.toJSONString(req));
         //校验图形验证码
         //checkGraphicVerificationCode(req.getVerificationCode());
 
@@ -80,6 +81,7 @@ public class WebsiteApi {
         player.setAddress(HttpTools.getAddress());
         player.setStatus(UserStatusEnum.NORMAL);
         player.setCreateTime(LocalDateTime.now());
+        player.setIsRobot(false);
         playerService.add(player);
 
         //记录登录日志
@@ -93,7 +95,7 @@ public class WebsiteApi {
     public R<String> login(@RequestBody @Valid LoginPlayerReq req) {
         //校验请求参数
         if (req.getAccount() == null) {
-            throw new DataException("网名或账号不能同时为空");
+            throw new DataException("账号不能同时为空");
         }
 
         //校验图形验证码

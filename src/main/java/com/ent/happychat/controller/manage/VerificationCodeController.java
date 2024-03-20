@@ -26,7 +26,7 @@ public class VerificationCodeController {
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
     public synchronized R<String> get() {
         //添加频繁点击校验 3秒内点击超过30次 检查警告日志 如果该ip已经存在警告则拉黑 不存在则新加警告日志
-        ehcacheService.checkIp3SecondsClick(30,"每3秒超过30次点击验证码");
+        ehcacheService.checkIp3SecondsClick(10,"每3秒超过10次点击验证码");
         //获取验证码
         String verificationCode = GenerateTools.getVerificationCode();
         ehcacheService.getVerificationCodeCache().put(HttpTools.getIp(), verificationCode);

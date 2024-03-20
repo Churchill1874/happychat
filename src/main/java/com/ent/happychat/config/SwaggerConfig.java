@@ -68,7 +68,7 @@ public class SwaggerConfig {
         List<Parameter> pars = new ArrayList<>();
         //header中的token参数非必填写,传空也可以
         tokenHeaderParamter
-                .name("token_id")
+                .name("TOKEN_ID")
                 .description("token")
                 .modelRef(new ModelRef("String"))
                 .parameterType("header")

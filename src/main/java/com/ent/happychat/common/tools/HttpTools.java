@@ -82,7 +82,7 @@ public class HttpTools {
      * @return
      */
     public static String getHeaderToken() {
-        return getRequest().getHeader("token_id");
+        return getRequest().getHeader("TOKEN_ID");
     }
 
     /**
