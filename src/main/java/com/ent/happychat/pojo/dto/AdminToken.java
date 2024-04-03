@@ -22,7 +22,7 @@ public class AdminToken {
     private LocalDateTime loginTime;
 
     @ApiModelProperty("角色")
-    private RoleEnum roleEnum;
+    private RoleEnum role;
 
     @ApiModelProperty("tokenId")
     private String tokenId;
