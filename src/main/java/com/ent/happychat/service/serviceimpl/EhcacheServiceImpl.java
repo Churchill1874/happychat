@@ -22,8 +22,13 @@ public class EhcacheServiceImpl implements EhcacheService {
     private CacheManager cacheManager;
 
     @Override
-    public Cache getTokenCache() {
-        return cacheManager.getCache("token");
+    public Cache getPlayerTokenCache() {
+        return cacheManager.getCache("playerToken");
+    }
+
+    @Override
+    public Cache getAdminTokenCache() {
+        return cacheManager.getCache("adminToken");
     }
 
     @Override

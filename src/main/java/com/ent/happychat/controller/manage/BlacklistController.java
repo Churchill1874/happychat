@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.entity.Blacklist;
-import com.ent.happychat.pojo.req.IdListReq;
-import com.ent.happychat.pojo.req.blacklist.BlacklistAddReq;
-import com.ent.happychat.pojo.req.blacklist.BlacklistPageReqReq;
+import com.ent.happychat.pojo.req.IdList;
+import com.ent.happychat.pojo.req.blacklist.BlacklistAdd;
+import com.ent.happychat.pojo.req.blacklist.BlacklistPage;
 import com.ent.happychat.service.BlacklistService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +36,7 @@ public class BlacklistController {
     @AdminLoginCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加黑名单", notes = "添加黑名单")
-    public R add(@RequestBody @Valid BlacklistAddReq req) {
+    public R add(@RequestBody @Valid BlacklistAdd req) {
         if (StringUtils.isBlank(req.getIp()) && StringUtils.isBlank(req.getPhoneNumber())) {
             return R.failed("ip和手机号不能同时为空");
         }
@@ -59,7 +59,7 @@ public class BlacklistController {
     @SuperAdminLoginCheck
     @PostMapping("/del")
     @ApiOperation(value = "删除黑名单", notes = "删除黑名单")
-    public R del(@RequestBody @Valid IdListReq req) {
+    public R del(@RequestBody @Valid IdList req) {
         return R.ok(blacklistService.del(req.getIdList()));
     }
 
@@ -67,7 +67,7 @@ public class BlacklistController {
     @AdminLoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页黑名单", notes = "分页黑名单")
-    public R<IPage<Blacklist>> page(@RequestBody BlacklistPageReqReq req) {
+    public R<IPage<Blacklist>> page(@RequestBody BlacklistPage req) {
         return R.ok(blacklistService.page(req.getPageNum(), req.getPageSize(), req.getIp(), req.getPhoneNumber()));
     }
 

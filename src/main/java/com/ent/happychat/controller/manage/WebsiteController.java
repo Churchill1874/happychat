@@ -10,7 +10,7 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.pojo.dto.AdminToken;
-import com.ent.happychat.pojo.req.website.LoginManageReq;
+import com.ent.happychat.pojo.req.website.LoginManage;
 import com.ent.happychat.service.AdministratorsService;
 import com.ent.happychat.service.EhcacheService;
 import io.swagger.annotations.Api;
@@ -41,7 +41,7 @@ public class WebsiteController {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
-    public R<String> login(@RequestBody @Valid LoginManageReq req) {
+    public R<AdminToken> login(@RequestBody @Valid LoginManage req) {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
 
         //校验验证码
@@ -67,27 +67,29 @@ public class WebsiteController {
         //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
         //checkLoginCache(administrators.getAccount());
 
+        String tokenId = GenerateTools.createTokenId(administrators.getAccount());
         //生成token并返回
         AdminToken adminToken = new AdminToken();
         adminToken.setAccount(req.getAccount());
         adminToken.setLoginTime(LocalDateTime.now());
         adminToken.setName(administrators.getName());
-        String tokenId = GenerateTools.createTokenId(administrators.getAccount());
-        ehcacheService.getTokenCache().put(tokenId, adminToken);
+        adminToken.setTokenId(tokenId);
+
+        ehcacheService.getAdminTokenCache().put(tokenId, adminToken);
 
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
-        return R.ok(tokenId);
+        return R.ok(adminToken);
     }
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
     private void checkLoginCache(String account) {
-        Cache c = (Cache) ehcacheService.getTokenCache().getNativeCache();
+        Cache c = (Cache) ehcacheService.getAdminTokenCache().getNativeCache();
         List<String> list = c.getKeys();
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(tokenId -> {
                 if (tokenId.contains(String.valueOf(account))) {
-                    ehcacheService.getTokenCache().evict(tokenId);
+                    ehcacheService.getAdminTokenCache().evict(tokenId);
                 }
             });
         }
@@ -96,7 +98,7 @@ public class WebsiteController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        ehcacheService.getTokenCache().evict(TokenTools.getToken().getAccount());
+        ehcacheService.getAdminTokenCache().evict(TokenTools.getAdminToken().getAccount());
         return R.ok(null);
     }
 

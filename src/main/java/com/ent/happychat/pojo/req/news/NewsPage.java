@@ -1,14 +1,14 @@
 package com.ent.happychat.pojo.req.news;
 
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
-import com.ent.happychat.pojo.req.PageReq;
+import com.ent.happychat.pojo.req.Page;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class NewsPageReq extends PageReq implements Serializable {
+public class NewsPage extends Page implements Serializable {
     private static final long serialVersionUID = -3968897108907540868L;
 
     @ApiModelProperty("标题")

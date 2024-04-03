@@ -24,4 +24,7 @@ public class AdminToken {
     @ApiModelProperty("角色")
     private RoleEnum roleEnum;
 
+    @ApiModelProperty("tokenId")
+    private String tokenId;
+
 }

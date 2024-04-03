@@ -1,13 +1,13 @@
 package com.ent.happychat.pojo.req.player;
 
-import com.ent.happychat.pojo.req.PageReq;
+import com.ent.happychat.pojo.req.Page;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class PlayerPageReq extends PageReq implements Serializable {
+public class PlayerPage extends Page implements Serializable {
 
     private static final long serialVersionUID = -4795834215061216103L;
 

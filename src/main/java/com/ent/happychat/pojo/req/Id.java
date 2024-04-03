@@ -8,7 +8,7 @@ import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 @Data
-public class IdReq implements Serializable {
+public class Id implements Serializable {
 
     private static final long serialVersionUID = -9147895635279259749L;
 

@@ -8,11 +8,17 @@ import org.springframework.cache.Cache;
 public interface EhcacheService {
 
     /**
-     * 获取token缓存容器
+     * 获取玩家token缓存容器
      *
      * @return
      */
-    Cache getTokenCache();
+    Cache getPlayerTokenCache();
+
+    /**
+     * 获取管理员token
+     * @return
+     */
+    Cache getAdminTokenCache();
 
     /**
      * 获取3秒锁缓存容器

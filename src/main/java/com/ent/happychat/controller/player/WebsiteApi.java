@@ -5,15 +5,14 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
-import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Player;
-import com.ent.happychat.pojo.req.website.LoginPlayerReq;
-import com.ent.happychat.pojo.req.website.RegisterReq;
+import com.ent.happychat.pojo.req.website.LoginPlayer;
+import com.ent.happychat.pojo.req.website.Register;
 import com.ent.happychat.pojo.dto.PlayerToken;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerService;
@@ -46,7 +45,7 @@ public class WebsiteApi {
 
     @PostMapping("/register")
     @ApiOperation(value = "注册")
-    public synchronized R<Player> register(@RequestBody @Valid RegisterReq req) {
+    public synchronized R<Player> register(@RequestBody @Valid Register req) {
         log.info("注册请求参数:{}", JSONObject.toJSONString(req));
         //校验图形验证码
         //checkGraphicVerificationCode(req.getVerificationCode());
@@ -92,7 +91,7 @@ public class WebsiteApi {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "手机号或账号 至少有一个有值")
-    public R<String> login(@RequestBody @Valid LoginPlayerReq req) {
+    public R<String> login(@RequestBody @Valid LoginPlayer req) {
         //校验请求参数
         if (req.getAccount() == null) {
             throw new DataException("账号不能同时为空");
@@ -127,7 +126,7 @@ public class WebsiteApi {
         //生成token并返回
         PlayerToken playerToken = GenerateTools.createToken(player);
         String tokenId = GenerateTools.createTokenId(player.getAccount());
-        ehcacheService.getTokenCache().put(tokenId, playerToken);
+        ehcacheService.getPlayerTokenCache().put(tokenId, playerToken);
 
         //删除使用过的验证码缓存
         ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
@@ -137,7 +136,7 @@ public class WebsiteApi {
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
     private void checkLoginCache(String account) {
-        Cache cache = ehcacheService.getTokenCache();
+        Cache cache = ehcacheService.getPlayerTokenCache();
         if (cache == null){
             throw new TokenException();
         }
@@ -146,7 +145,7 @@ public class WebsiteApi {
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(tokenId -> {
                 if (tokenId.contains(String.valueOf(account))) {
-                    ehcacheService.getTokenCache().evict(tokenId);
+                    ehcacheService.getPlayerTokenCache().evict(tokenId);
                 }
             });
         }

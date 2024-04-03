@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.entity.Player;
 import com.ent.happychat.mapper.PlayerMapper;
-import com.ent.happychat.pojo.req.player.PlayerPageReq;
+import com.ent.happychat.pojo.req.player.PlayerPage;
 import com.ent.happychat.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +75,7 @@ public class PlayerServiceImpl extends ServiceImpl<PlayerMapper, Player> impleme
     }
 
     @Override
-    public IPage<Player> page(PlayerPageReq po) {
+    public IPage<Player> page(PlayerPage po) {
         IPage<Player> iPage = new Page<>(po.getPageNum(), po.getPageSize());
         QueryWrapper<Player> queryWrapper = new QueryWrapper<>();
         //网名

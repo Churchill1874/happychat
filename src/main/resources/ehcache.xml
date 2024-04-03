@@ -44,7 +44,7 @@
             memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="token"
+    <cache name="adminToken"
            eternal="false"
            maxElementsInMemory="5000"
            overflowToDisk="false"

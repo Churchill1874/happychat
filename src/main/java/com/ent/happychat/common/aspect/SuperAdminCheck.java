@@ -1,6 +1,7 @@
 package com.ent.happychat.common.aspect;
 
 import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.pojo.dto.AdminToken;
 import com.ent.happychat.pojo.dto.PlayerToken;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -22,7 +23,7 @@ public class SuperAdminCheck {
 
     @Before("superAdminLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-        PlayerToken playerToken = TokenTools.getToken();
+        AdminToken adminToken = TokenTools.getAdminToken();
 /*        if (token.getRole() != RoleEnum.SUPER_ADMIN.getCode()) {
             throw new AuthException();
         }*/

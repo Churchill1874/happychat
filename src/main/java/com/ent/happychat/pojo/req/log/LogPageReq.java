@@ -1,13 +1,13 @@
 package com.ent.happychat.pojo.req.log;
 
-import com.ent.happychat.pojo.req.PageReq;
+import com.ent.happychat.pojo.req.Page;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class LogPageReqReq extends PageReq implements Serializable {
+public class LogPageReq extends Page implements Serializable {
 
     private static final long serialVersionUID = -9102045578940520784L;
 

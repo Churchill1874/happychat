@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
-public class LoginPlayerReq implements Serializable {
+public class LoginPlayer implements Serializable {
 
     private static final long serialVersionUID = -8971765511064660846L;
 

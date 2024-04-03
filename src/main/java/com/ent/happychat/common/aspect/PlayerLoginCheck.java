@@ -22,7 +22,7 @@ public class PlayerLoginCheck {
 
     @Before("playerLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-        PlayerToken playerToken = TokenTools.getToken();
+        PlayerToken playerToken = TokenTools.getPlayerToken();
 /*        if (token.getRole() != RoleEnum.PLAYER.getCode() || token.getStatus() == UserStatusEnum.DISABLE.getCode()) {
             throw new AuthException();
         }*/
