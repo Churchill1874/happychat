@@ -71,8 +71,9 @@ public class WebsiteController {
         //生成token并返回
         AdminToken adminToken = new AdminToken();
         adminToken.setAccount(req.getAccount());
-        adminToken.setLoginTime(LocalDateTime.now());
         adminToken.setName(administrators.getName());
+        adminToken.setRole(administrators.getRole());
+        adminToken.setLoginTime(LocalDateTime.now());
         adminToken.setTokenId(tokenId);
 
         ehcacheService.getAdminTokenCache().put(tokenId, adminToken);
