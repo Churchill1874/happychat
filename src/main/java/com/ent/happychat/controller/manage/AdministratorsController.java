@@ -79,8 +79,12 @@ public class AdministratorsController {
     @SuperAdminLoginCheck
     public R update(@RequestBody @Valid AdministratorsUpdate req) {
         log.info("修改管理员入参:{}", JSONObject.toJSONString(req));
-        Administrators administrators = BeanUtil.toBean(req, Administrators.class);
-        administrators.setCreateTime(LocalDateTime.now());
+
+        Administrators administrators = administratorsService.getById(req.getId());
+        administrators.setRole(req.getRole());
+        administrators.setName(req.getName());
+        administrators.setPassword(req.getPassword());
+
         administratorsService.updateById(administrators);
         return R.ok(null);
     }

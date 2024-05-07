@@ -1,5 +1,6 @@
 package com.ent.happychat.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.RoleEnum;
@@ -18,7 +19,7 @@ public class Administrators extends BaseInfo implements Serializable {
     @ApiModelProperty("角色")
     private RoleEnum role;
 
-    @TableField("password")
+    @TableField(value = "password", strategy = FieldStrategy.NOT_EMPTY)
     @ApiModelProperty("密码")
     private String password;
 
