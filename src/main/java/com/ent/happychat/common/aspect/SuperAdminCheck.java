@@ -4,7 +4,6 @@ import com.ent.happychat.common.constant.enums.RoleEnum;
 import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.pojo.dto.AdminToken;
-import com.ent.happychat.pojo.dto.PlayerToken;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

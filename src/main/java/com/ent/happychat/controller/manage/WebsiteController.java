@@ -67,7 +67,7 @@ public class WebsiteController {
         //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
         //checkLoginCache(administrators.getAccount());
 
-        String tokenId = GenerateTools.createTokenId(administrators.getAccount());
+        String tokenId = GenerateTools.createTokenId();
         //生成token并返回
         AdminToken adminToken = new AdminToken();
         adminToken.setAccount(req.getAccount());

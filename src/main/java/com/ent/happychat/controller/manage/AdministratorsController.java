@@ -10,7 +10,7 @@ import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.pojo.req.Id;
-import com.ent.happychat.pojo.req.Page;
+import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.admin.AdministratorsAdd;
 import com.ent.happychat.pojo.req.admin.AdministratorsUpdate;
 import com.ent.happychat.service.AdministratorsService;
@@ -37,7 +37,7 @@ public class AdministratorsController {
 
     @PostMapping("/list")
     @ApiOperation(value = "分页查询管理员", notes = "分页查询管理员")
-    public R<IPage<Administrators>> list(@RequestBody @Valid Page req) {
+    public R<IPage<Administrators>> list(@RequestBody @Valid PageBase req) {
         log.info("管理员分页查询入参:{}", JSONObject.toJSONString(req));
 
         IPage<Administrators> iPage = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(req.getPageNum(), req.getPageSize());

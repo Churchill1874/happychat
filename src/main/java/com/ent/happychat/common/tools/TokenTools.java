@@ -2,7 +2,6 @@ package com.ent.happychat.common.tools;
 
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.pojo.dto.AdminToken;
-import com.ent.happychat.pojo.dto.PlayerToken;
 import com.ent.happychat.service.EhcacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,19 +21,6 @@ public class TokenTools {
     }
 
     /**
-     * 获取玩家token
-     *
-     * @return
-     */
-    public static PlayerToken getPlayerToken() {
-        PlayerToken playerToken = ehcacheService.getPlayerTokenCache().get(HttpTools.getHeaderToken(), PlayerToken.class);
-        if (playerToken == null) {
-            throw new TokenException();
-        }
-        return playerToken;
-    }
-
-    /**
      * 获取管理员token
      * @return
      */
@@ -46,16 +32,5 @@ public class TokenTools {
         return adminToken;
     }
 
-    /**
-     * 获取账号可以为空
-     * @return
-     */
-    public static String getAccountMayNull(){
-        PlayerToken playerToken = ehcacheService.getPlayerTokenCache().get(HttpTools.getHeaderToken(), PlayerToken.class);
-        if (playerToken != null){
-            return playerToken.getAccount();
-        }
-        return null;
-    }
 
 }

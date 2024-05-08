@@ -1,7 +1,6 @@
 package com.ent.happychat.common.aspect;
 
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.pojo.dto.PlayerToken;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,8 +21,8 @@ public class PlayerLoginCheck {
 
     @Before("playerLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-        PlayerToken playerToken = TokenTools.getPlayerToken();
-/*        if (token.getRole() != RoleEnum.PLAYER.getCode() || token.getStatus() == UserStatusEnum.DISABLE.getCode()) {
+ /*       PlayerToken playerToken = TokenTools.getPlayerToken();
+        if (token.getRole() != RoleEnum.PLAYER.getCode() || token.getStatus() == UserStatusEnum.DISABLE.getCode()) {
             throw new AuthException();
         }*/
     }

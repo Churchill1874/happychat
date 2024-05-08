@@ -2,6 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.entity.base.BaseInfo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

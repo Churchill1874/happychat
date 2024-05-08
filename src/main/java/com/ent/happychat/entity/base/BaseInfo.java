@@ -1,4 +1,4 @@
-package com.ent.happychat.entity;
+package com.ent.happychat.entity.base;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -20,5 +20,10 @@ public class BaseInfo implements Serializable {
     @TableField("create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
+
+
+    @TableField("update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 
 }
