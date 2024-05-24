@@ -2,6 +2,8 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.GenderEnum;
+import com.ent.happychat.common.constant.enums.LevelTypeEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.entity.base.CreatorBaseInfo;
 import io.swagger.annotations.ApiModel;
@@ -16,14 +18,13 @@ import java.time.LocalDate;
 @TableName("player_info")
 public class PlayerInfo extends CreatorBaseInfo implements Serializable {
     private static final long serialVersionUID = 8299446727161357208L;
-
     @TableField("name")
     @ApiModelProperty("昵称")
     private String name;
 
     @TableField("account")
     @ApiModelProperty("账号")
-    private String account;
+    private Integer account;
 
     @TableField("password")
     @ApiModelProperty("密码")
@@ -38,8 +39,8 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
     private String email;
 
     @TableField("gender")
-    @ApiModelProperty("性别 1男 0女")
-    private String gender;
+    @ApiModelProperty("性别")
+    private GenderEnum gender;
 
     @TableField("city")
     @ApiModelProperty("城市")
@@ -51,7 +52,7 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
 
     @TableField("level")
     @ApiModelProperty("等级")
-    private Integer level;
+    private LevelTypeEnum level;
 
     @TableField("self_introduction")
     @ApiModelProperty("自我介绍")
@@ -68,5 +69,9 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
     @TableField("avatar_path")
     @ApiModelProperty("头像路径")
     private String avatarPath;
+
+    @TableField("salt")
+    @ApiModelProperty("盐")
+    private String salt;
 
 }

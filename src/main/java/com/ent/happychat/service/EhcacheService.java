@@ -1,6 +1,9 @@
 package com.ent.happychat.service;
 
+import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import org.springframework.cache.Cache;
+
+import java.util.Set;
 
 /**
  * 缓存服务
@@ -8,52 +11,27 @@ import org.springframework.cache.Cache;
 public interface EhcacheService {
 
     /**
-     * 获取玩家token缓存容器
-     *
+     * 根据类型获取缓存
+     * @param cacheTypeEnum
      * @return
      */
-    Cache getPlayerTokenCache();
+    Cache getCache(CacheTypeEnum cacheTypeEnum);
 
     /**
-     * 获取管理员token
+     * 根据类型和key获取缓存
+     * @param cacheTypeEnum
+     * @param key
      * @return
      */
-    Cache getAdminTokenCache();
+    String getString(CacheTypeEnum cacheTypeEnum, String key);
 
     /**
-     * 获取3秒锁缓存容器
-     *
+     * 获取验证码 并设置每3秒的限制请求次数 和提示语
+     * @param limitCount
+     * @param remarks
      * @return
      */
-    Cache get3SecondLockCache();
-
-    /**
-     * 获取验证码缓存容器
-     *
-     * @return
-     */
-    Cache getVerificationCodeCache();
-
-    /**
-     * 获取短信缓存容器
-     *
-     * @return
-     */
-    Cache getSmsVerificationCodeCache();
-
-    /**
-     * 黑名单缓存容器
-     *
-     * @return
-     */
-    Cache getBlacklistCache();
-
-    /**
-     * 获取足球比赛缓存
-     *
-     * @return
-     */
-    Cache getFootballMatchCache();
+    String getVC(String key, Integer limitCount, String remarks);
 
     /**
      * 校验ip 3秒内频繁点击超过指定次数
@@ -61,6 +39,18 @@ public interface EhcacheService {
      * @param limitCount
      * @return
      */
-    boolean checkIp3SecondsClick(Integer limitCount, String remarks);
+    void checkIp3SecondsClick(Integer limitCount, String remarks);
+
+    /**
+     * 获取黑名单ip集合set
+     * @return
+     */
+    Set<String> getBlacklistIpSetCache();
+
+    /**
+     * 更新设置黑名单ip集合set
+     * @return
+     */
+    void setBlacklistIpSetCache(Set<String> blacklistIpSet);
 
 }

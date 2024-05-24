@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.blacklist;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,6 +16,10 @@ public class BlacklistPage extends PageBase implements Serializable {
     private String ip;
 
     @ApiModelProperty("手机号")
-    private String phoneNumber;
+    private String phone;
+
+    @TableField("device")
+    private String device;
+
 
 }

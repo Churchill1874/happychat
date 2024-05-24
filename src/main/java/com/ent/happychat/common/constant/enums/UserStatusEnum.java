@@ -13,12 +13,12 @@ public enum UserStatusEnum {
     NORMAL("正常",1);
 
     @Getter
+    @EnumValue
     @JsonValue
-    private String name;
+    private Integer code;
 
     @Getter
-    @EnumValue
-    private Integer code;
+    private String name;
 
     UserStatusEnum(String name,Integer code){
         this.name = name;

@@ -22,7 +22,7 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(StringUtils.isNotBlank(playerInfo.getName()), PlayerInfo::getName, playerInfo.getName())
-                .eq(StringUtils.isNotBlank(playerInfo.getAccount()), PlayerInfo::getAccount, playerInfo.getAccount())
+                .eq(playerInfo.getAccount() != null, PlayerInfo::getAccount, playerInfo.getAccount())
                 .eq(StringUtils.isNotBlank(playerInfo.getPhone()), PlayerInfo::getPhone, playerInfo.getPhone())
                 .eq(StringUtils.isNotBlank(playerInfo.getEmail()), PlayerInfo::getEmail, playerInfo.getEmail())
                 .eq(StringUtils.isNotBlank(playerInfo.getCity()), PlayerInfo::getCity, playerInfo.getCity())

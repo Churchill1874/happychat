@@ -3,14 +3,15 @@ package com.ent.happychat.controller.manage;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Administrators;
-import com.ent.happychat.pojo.dto.AdminToken;
 import com.ent.happychat.pojo.req.website.LoginManage;
+import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.service.AdministratorsService;
 import com.ent.happychat.service.EhcacheService;
 import io.swagger.annotations.Api;
@@ -41,11 +42,11 @@ public class WebsiteController {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
-    public R<AdminToken> login(@RequestBody @Valid LoginManage req) {
+    public R<AdminTokenResp> login(@RequestBody @Valid LoginManage req) {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
 
         //校验验证码
-        String verificationCode = ehcacheService.getVerificationCodeCache().get(HttpTools.getIp(), String.class);
+        String verificationCode = ehcacheService.getString(CacheTypeEnum.VERIFICATION_CODE, HttpTools.getIp());
         if (verificationCode == null) {
             return R.failed("验证码有误或已过期");
         }
@@ -69,28 +70,28 @@ public class WebsiteController {
 
         String tokenId = GenerateTools.createTokenId();
         //生成token并返回
-        AdminToken adminToken = new AdminToken();
+        AdminTokenResp adminToken = new AdminTokenResp();
         adminToken.setAccount(req.getAccount());
         adminToken.setName(administrators.getName());
         adminToken.setRole(administrators.getRole());
         adminToken.setLoginTime(LocalDateTime.now());
         adminToken.setTokenId(tokenId);
 
-        ehcacheService.getAdminTokenCache().put(tokenId, adminToken);
+        ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).put(tokenId, adminToken);
 
         //删除使用过的验证码缓存
-        ehcacheService.getVerificationCodeCache().evict(HttpTools.getIp());
+        ehcacheService.getCache(CacheTypeEnum.VERIFICATION_CODE).evict(HttpTools.getIp());
         return R.ok(adminToken);
     }
 
     //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
     private void checkLoginCache(String account) {
-        Cache c = (Cache) ehcacheService.getAdminTokenCache().getNativeCache();
+        Cache c = (Cache) ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).getNativeCache();
         List<String> list = c.getKeys();
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(tokenId -> {
                 if (tokenId.contains(String.valueOf(account))) {
-                    ehcacheService.getAdminTokenCache().evict(tokenId);
+                    ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).evict(tokenId);
                 }
             });
         }
@@ -99,7 +100,7 @@ public class WebsiteController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        ehcacheService.getAdminTokenCache().evict(TokenTools.getAdminToken().getAccount());
+        ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).evict(TokenTools.getAdminToken().getAccount());
         return R.ok(null);
     }
 

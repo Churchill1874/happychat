@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Blacklist;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 黑名单服务
@@ -37,17 +38,21 @@ public interface BlacklistService extends IService<Blacklist> {
      * @param pageNum
      * @param pageSize
      * @param ip
-     * @param phoneNumber
+     * @param phone
      * @return
      */
-    IPage<Blacklist> page(Integer pageNum,Integer pageSize,String ip,String phoneNumber);
+    IPage<Blacklist> queryPage(Integer pageNum,Integer pageSize,String ip,String phone,String device);
 
     /**
      * 通过ip获取黑名单记录
      * @param ip
      * @return
      */
-    List<Blacklist> findByIp(String ip);
+    Blacklist findByIp(String ip);
 
-
+    /**
+     * 获取所有ip集合set
+     * @return
+     */
+    Set<String> getIpSet();
 }

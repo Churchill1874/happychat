@@ -4,25 +4,23 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-/**
- * 角色枚举
- */
-public enum RoleEnum  {
+public enum CacheTypeEnum {
 
-    BOT(0, "机器人"),
-    PLAYER(1, "玩家"),
-    ADMIN(2, "管理员"),
-    SUPER_ADMIN(3, "超级管理员");
+    PLAYER_TOKEN("player_token","玩家Token"),
+    ADMIN_TOKEN("admin_token","管理员token"),
+    LOCK_3_SECOND("lock_3_second","3秒锁"),
+    VERIFICATION_CODE("verification_code","验证码"),
+    BLACKLIST("blacklist","黑名单");
 
     @Getter
     @EnumValue
-    private int code;
+    @JsonValue
+    private String code;
 
     @Getter
-    @JsonValue
     private String name;
 
-    RoleEnum(int code, String name) {
+    CacheTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -31,5 +29,4 @@ public enum RoleEnum  {
     public String toString() {
         return this.name + ":" + this.code;
     }
-
 }

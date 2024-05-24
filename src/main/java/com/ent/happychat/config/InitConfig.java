@@ -1,6 +1,6 @@
 package com.ent.happychat.config;
 
-import com.ent.happychat.common.constant.enums.RoleEnum;
+import com.ent.happychat.common.constant.enums.ManageRoleEnum;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.service.AdministratorsService;
@@ -42,8 +42,8 @@ public class InitConfig {
         if (administrators == null){
             administrators = new Administrators();
             administrators.setAccount(SUPER_ADMIN_ACCOUNT);
-            administrators.setName(RoleEnum.SUPER_ADMIN.getName());
-            administrators.setRole(RoleEnum.SUPER_ADMIN);
+            administrators.setName(ManageRoleEnum.SUPER_ADMIN.getName());
+            administrators.setRole(ManageRoleEnum.SUPER_ADMIN);
             administrators.setPassword(CodeTools.md5AndSalt(PASSWORD));
             administrators.setCreateTime(LocalDateTime.now());
             administratorsService.save(administrators);

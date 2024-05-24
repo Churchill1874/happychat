@@ -1,7 +1,9 @@
 package com.ent.happychat.common.tools;
 
+import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.TokenException;
-import com.ent.happychat.pojo.dto.AdminToken;
+import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,15 +23,28 @@ public class TokenTools {
     }
 
     /**
-     * 获取管理员token
+     * 获取管理员登录信息
      * @return
      */
-    public static AdminToken getAdminToken() {
-        AdminToken adminToken = ehcacheService.getAdminTokenCache().get(HttpTools.getHeaderToken(), AdminToken.class);
-        if (adminToken == null) {
+    public static AdminTokenResp getAdminToken() {
+        AdminTokenResp adminTokenResp = ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).get(HttpTools.getHeaderToken(), AdminTokenResp.class);
+        if (adminTokenResp == null) {
             throw new TokenException();
         }
-        return adminToken;
+        return adminTokenResp;
+    }
+
+
+    /**
+     * 获取管理员登录信息
+     * @return
+     */
+    public static PlayerTokenResp getPlayerToken() {
+        PlayerTokenResp playerTokenResp = ehcacheService.getCache(CacheTypeEnum.PLAYER_TOKEN).get(HttpTools.getHeaderToken(), PlayerTokenResp.class);
+        if (playerTokenResp == null) {
+            throw new TokenException();
+        }
+        return playerTokenResp;
     }
 
 

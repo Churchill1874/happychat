@@ -1,6 +1,6 @@
 package com.ent.happychat.pojo.req.admin;
 
-import com.ent.happychat.common.constant.enums.RoleEnum;
+import com.ent.happychat.common.constant.enums.ManageRoleEnum;
 import com.ent.happychat.pojo.req.Id;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class AdministratorsUpdate extends Id implements Serializable {
 
     @NotNull(message = "角色不能为空")
     @ApiModelProperty(value = "角色", required = true)
-    private RoleEnum role;
+    private ManageRoleEnum role;
 
     @NotBlank(message = "名称不能为空")
     @ApiModelProperty(value = "名称", required = true)

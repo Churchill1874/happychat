@@ -13,10 +13,10 @@ public enum NewsStatusEnum {
 
     @Getter
     @EnumValue
+    @JsonValue
     private int code;
 
     @Getter
-    @JsonValue
     private String name;
 
     NewsStatusEnum(int code, String name) {

@@ -45,18 +45,13 @@ public class PerMinuteTask {
     @Async
     public void reqNewsApiTask(int hour, int minutes) {
         List<News> newsList = new ArrayList<>();
-        //12点 请求育儿新闻
-        if (12 == hour && minutes == 0) {
-            List<News> parentingNews = NewsTools.getNewsData(NewsCategoryEnum.PARENTING, 30);
-            newsList.addAll(parentingNews);
-        }
 
         //8点 和 18点 请求女性新闻 和科技新闻
-        if ((8 == hour && minutes == 0) || (18 == hour && minutes == 0)) {
-            List<News> womanNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 30);
+        if ((8 == hour && minutes == 0)) {
+            List<News> womanNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 10);
             newsList.addAll(womanNews);
 
-            List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 30);
+            List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 10);
             newsList.addAll(scienceNews);
         }
 
@@ -64,25 +59,25 @@ public class PerMinuteTask {
         if (hour >= 6 && hour < 24) {
             //0分时候请求
             if (minutes == 0) {
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 30);
+                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 10);
                 newsList.addAll(headlinesNews);
 
-                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 30);
+                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 10);
                 newsList.addAll(news);
 
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 30);
+                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 10);
                 newsList.addAll(sportsNews);
             }
 
             //30分的时候请求
             if (minutes == 30) {
-                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 30);
+                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 10);
                 newsList.addAll(militaryAffairsNews);
             }
 
             //7,11,17,21点请求娱乐新闻
-            if ((hour == 7 || hour == 11 || hour == 17 || hour == 19 || hour == 21) && minutes == 0) {
-                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 30);
+            if ((hour == 7 || hour == 11 || hour == 18 || hour == 21) && minutes == 0) {
+                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 10);
                 newsList.addAll(entertainmentNews);
             }
         }

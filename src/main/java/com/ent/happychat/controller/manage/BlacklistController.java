@@ -43,8 +43,8 @@ public class BlacklistController {
 
         //校验ip是否已经添加过
         if (StringUtils.isNotBlank(req.getIp())) {
-            List<Blacklist> list = blacklistService.findByIp(req.getIp());
-            if (CollectionUtils.isNotEmpty(list)) {
+            Blacklist list = blacklistService.findByIp(req.getIp());
+            if (list != null) {
                 return R.failed("ip已经添加过");
             }
         }
@@ -68,7 +68,7 @@ public class BlacklistController {
     @PostMapping("/page")
     @ApiOperation(value = "分页黑名单", notes = "分页黑名单")
     public R<IPage<Blacklist>> page(@RequestBody BlacklistPage req) {
-        return R.ok(blacklistService.page(req.getPageNum(), req.getPageSize(), req.getIp(), req.getPhoneNumber()));
+        return R.ok(blacklistService.queryPage(req.getPageNum(), req.getPageSize(), req.getIp(), req.getPhone(), req.getDevice()));
     }
 
 
