@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.entity.base.BaseInfo;
+import com.ent.happychat.entity.base.CreatorBaseInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @TableName("news")
 @ApiModel("新闻")
-public class News extends BaseInfo implements Serializable {
+public class News extends CreatorBaseInfo implements Serializable {
     private static final long serialVersionUID = 2788566232849282370L;
 
     @TableField("title")

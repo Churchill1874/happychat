@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.pojo.req.news.NewsPage;
 
 import java.util.List;
 
@@ -18,12 +19,9 @@ public interface NewsService extends IService<News> {
 
     /**
      * 分页查询新闻
-     * @param number
-     * @param size
-     * @param title
-     * @param categoryEnum
+     * @param newsPage
      */
-    IPage<News> queryPage(Integer number, Integer size, String title, NewsCategoryEnum categoryEnum);
+    IPage<News> queryPage(NewsPage newsPage);
 
     /**
      * 根据新闻状态,获取最近几条新闻

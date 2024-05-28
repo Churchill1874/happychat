@@ -32,7 +32,7 @@ public class NewsApi {
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<News>> page(@RequestBody @Valid NewsPage req) {
-        IPage<News> iPage = newsService.queryPage(req.getPageNum(), req.getPageSize(), req.getTitle(), req.getCategoryEnum());
+        IPage<News> iPage = newsService.queryPage(req);
         return R.ok(iPage);
     }
 
