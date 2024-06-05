@@ -16,7 +16,7 @@ public class PlayerTokenResp implements Serializable {
     @ApiModelProperty("令牌")
     private String tokenId;
     @ApiModelProperty("账号")
-    private Integer account;
+    private String account;
     @ApiModelProperty("昵称")
     private String name;
     @ApiModelProperty("手机")

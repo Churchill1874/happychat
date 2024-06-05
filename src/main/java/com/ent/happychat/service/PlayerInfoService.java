@@ -11,4 +11,8 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
 
     void add(PlayerInfo playerInfo);
 
+    PlayerInfo findByAccount(String account);
+
+    void updateStatus(Long id , Boolean status);
+
 }

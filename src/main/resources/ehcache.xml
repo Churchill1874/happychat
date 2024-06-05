@@ -44,9 +44,9 @@
             memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="adminToken"
+    <cache name="admin_token"
            eternal="false"
-           maxElementsInMemory="5000"
+           maxElementsInMemory="20"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="3600"
@@ -54,9 +54,9 @@
            memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="playerToken"
+    <cache name="player_token"
            eternal="false"
-           maxElementsInMemory="5000"
+           maxElementsInMemory="2000"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="259200"
@@ -64,9 +64,9 @@
            memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="lock3Second"
+    <cache name="lock_3_Second"
            eternal="false"
-           maxElementsInMemory="500"
+           maxElementsInMemory="100"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="3"
@@ -74,19 +74,9 @@
            memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="verificationCode"
+    <cache name="verification_code"
            eternal="false"
-           maxElementsInMemory="100"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="300"
-           memoryStoreEvictionPolicy="LRU"
-    />
-
-    <cache name="smsVerificationCode"
-           eternal="false"
-           maxElementsInMemory="100"
+           maxElementsInMemory="50"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"
@@ -97,16 +87,6 @@
     <cache name="blacklist"
            eternal="false"
            maxElementsInMemory="1000"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="1800"
-           memoryStoreEvictionPolicy="LRU"
-    />
-
-    <cache name="footballMatch"
-           eternal="false"
-           maxElementsInMemory="10"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"

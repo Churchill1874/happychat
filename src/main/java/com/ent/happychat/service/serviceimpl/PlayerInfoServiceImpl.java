@@ -1,9 +1,11 @@
 package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.mapper.PlayerInfoMapper;
 import com.ent.happychat.pojo.req.PageBase;
@@ -11,6 +13,8 @@ import com.ent.happychat.service.PlayerInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -39,7 +43,29 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
 
     @Override
     public void add(PlayerInfo playerInfo) {
+        playerInfo = findByAccount(playerInfo.getAccount());
+        if (playerInfo != null){
+            throw new DataException("该账号已存在");
+        }
+
         save(playerInfo);
+    }
+
+    @Override
+    public PlayerInfo findByAccount(String account) {
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(PlayerInfo::getAccount, account);
+        return getOne(queryWrapper);
+    }
+
+    @Override
+    public void updateStatus(Long id, Boolean status) {
+        UpdateWrapper<PlayerInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+                .set(PlayerInfo::getStatus, status)
+                .set(PlayerInfo::getUpdateTime, LocalDateTime.now())
+                .eq(PlayerInfo::getId, id);
+        update(updateWrapper);
     }
 
 }

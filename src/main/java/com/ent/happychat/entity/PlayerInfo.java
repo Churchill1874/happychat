@@ -24,7 +24,7 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
 
     @TableField("account")
     @ApiModelProperty("账号")
-    private Integer account;
+    private String account;
 
     @TableField("password")
     @ApiModelProperty("密码")
