@@ -55,6 +55,10 @@ public class GenerateTools {
         return playerToken;
     }*/
 
+    public static String getUUID() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
 
     /**
      * 创建tokenId

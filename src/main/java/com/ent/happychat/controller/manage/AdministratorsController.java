@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.common.tools.CodeTools;
+import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
@@ -58,7 +59,9 @@ public class AdministratorsController {
         administrators.setCreateTime(LocalDateTime.now());
 
         //加密密码
-        administrators.setPassword(CodeTools.md5AndSalt(administrators.getPassword()));
+        String salt = GenerateTools.getUUID();
+        administrators.setPassword(CodeTools.md5AndSalt(administrators.getPassword(),salt));
+        administrators.setSalt(salt);
         administratorsService.save(administrators);
         return R.ok(null);
     }
@@ -80,10 +83,13 @@ public class AdministratorsController {
     public R update(@RequestBody @Valid AdministratorsUpdate req) {
         log.info("修改管理员入参:{}", JSONObject.toJSONString(req));
 
+        String salt = GenerateTools.getUUID();
+
         Administrators administrators = administratorsService.getById(req.getId());
         administrators.setRole(req.getRole());
         administrators.setName(req.getName());
-        administrators.setPassword(req.getPassword());
+        administrators.setSalt(salt);
+        administrators.setPassword(CodeTools.md5AndSalt(administrators.getPassword(),salt));
 
         administratorsService.updateById(administrators);
         return R.ok(null);

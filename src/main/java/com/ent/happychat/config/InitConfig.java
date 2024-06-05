@@ -2,6 +2,7 @@ package com.ent.happychat.config;
 
 import com.ent.happychat.common.constant.enums.ManageRoleEnum;
 import com.ent.happychat.common.tools.CodeTools;
+import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.Administrators;
 import com.ent.happychat.service.AdministratorsService;
 import com.ent.happychat.service.NewsService;
@@ -40,11 +41,13 @@ public class InitConfig {
 
         Administrators administrators = administratorsService.findByAccount(SUPER_ADMIN_ACCOUNT);
         if (administrators == null){
+            String salt = GenerateTools.getUUID();
             administrators = new Administrators();
             administrators.setAccount(SUPER_ADMIN_ACCOUNT);
             administrators.setName(ManageRoleEnum.SUPER_ADMIN.getName());
             administrators.setRole(ManageRoleEnum.SUPER_ADMIN);
-            administrators.setPassword(CodeTools.md5AndSalt(PASSWORD));
+            administrators.setPassword(CodeTools.md5AndSalt(PASSWORD,salt));
+            administrators.setSalt(salt);
             administrators.setCreateTime(LocalDateTime.now());
             administratorsService.save(administrators);
         }

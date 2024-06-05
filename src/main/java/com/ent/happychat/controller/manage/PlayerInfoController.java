@@ -4,8 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.tools.CheckReqTools;
 import com.ent.happychat.common.tools.CodeTools;
+import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.Id;
@@ -60,7 +62,11 @@ public class PlayerInfoController {
         if (req.getIsBot() == null) {
             req.setIsBot(true);
         }
-        playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword()));
+
+        String salt = GenerateTools.getUUID();
+        playerInfo.setStatus(UserStatusEnum.NORMAL);
+        playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword(),salt));
+        playerInfo.setSalt(salt);
         playerInfo.setCreateName(TokenTools.getAdminToken().getName());
         playerInfo.setCreateTime(LocalDateTime.now());
         playerInfoService.add(playerInfo);

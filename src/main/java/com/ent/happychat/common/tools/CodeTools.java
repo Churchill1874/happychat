@@ -9,14 +9,14 @@ import org.springframework.util.DigestUtils;
  */
 public class CodeTools {
 
-    private static final String SALT = "fk";
-
-    public static String md5AndSalt(String password){
+    public static String md5AndSalt(String password, String salt){
         if (StringUtils.isBlank(password)){
-            throw new DataException("加盐密码不能为空");
+            throw new DataException("加密的密码不能为空");
         }
-        return DigestUtils.md5DigestAsHex((password + SALT).getBytes());
+        if (StringUtils.isBlank(salt)){
+            throw new DataException("盐值不能为空");
+        }
+        return DigestUtils.md5DigestAsHex((password + salt).getBytes());
     }
-
 
 }

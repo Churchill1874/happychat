@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.mapper.PlayerInfoMapper;
@@ -43,8 +44,8 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
 
     @Override
     public void add(PlayerInfo playerInfo) {
-        playerInfo = findByAccount(playerInfo.getAccount());
-        if (playerInfo != null){
+        PlayerInfo queryInfo = findByAccount(playerInfo.getAccount());
+        if (queryInfo != null){
             throw new DataException("该账号已存在");
         }
 

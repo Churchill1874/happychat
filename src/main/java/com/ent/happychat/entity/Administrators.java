@@ -20,6 +20,10 @@ public class Administrators extends BaseInfo implements Serializable {
     @ApiModelProperty("角色")
     private ManageRoleEnum role;
 
+    @TableField("salt")
+    @ApiModelProperty("盐值")
+    private String salt;
+
     @TableField(value = "password", strategy = FieldStrategy.NOT_EMPTY)
     @ApiModelProperty("密码")
     private String password;

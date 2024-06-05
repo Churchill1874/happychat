@@ -59,7 +59,7 @@ public class WebsiteController {
 
         //对比登录密码和正确密码
         String password = administrators.getPassword();
-        String passwordReq = CodeTools.md5AndSalt(req.getPassword());
+        String passwordReq = CodeTools.md5AndSalt(req.getPassword(), administrators.getSalt());
 
         if (!password.equals(passwordReq)) {
             throw new AccountOrPasswordException();
