@@ -12,8 +12,8 @@ public class CheckReqTools {
     }
 
     public static void name(String name) {
-        if (!name.matches("^[a-zA-Z0-9]+([._ -]?[a-zA-Z0-9]+)*$")) {
-            throw new DataException("昵称仅支持一位.或_或-或空格的特殊符号");
+        if (!name.matches("^(?!.*[._-]{2})(?!.*([._-]).*\\1)[\\u4e00-\\u9fa5a-zA-Z0-9]+[._-]?[\\u4e00-\\u9fa5a-zA-Z0-9]*$")) {
+            throw new DataException("昵称仅支持一位.或_或-的特殊符号");
         }
     }
 
