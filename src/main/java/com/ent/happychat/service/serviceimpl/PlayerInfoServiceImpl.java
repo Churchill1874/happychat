@@ -69,4 +69,22 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         update(updateWrapper);
     }
 
+    @Override
+    public PlayerInfo findByLogin(String account, String name, String phone, String email) {
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(StringUtils.isNotBlank(phone), PlayerInfo::getPhone, phone)
+                .eq(StringUtils.isNotBlank(email), PlayerInfo::getEmail, email)
+                .eq(StringUtils.isNotBlank(name), PlayerInfo::getName, name)
+                .eq(account != null, PlayerInfo::getAccount, account);
+        return getOne(queryWrapper);
+    }
+
+    @Override
+    public PlayerInfo findByName(String name) {
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(PlayerInfo::getName, name);
+        return getOne(queryWrapper);
+    }
+
 }

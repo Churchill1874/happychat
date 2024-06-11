@@ -17,4 +17,10 @@ public class CheckReqTools {
         }
     }
 
+    public static void password(String password) {
+        if (!password.matches("^[a-zA-Z0-9]+$")){
+            throw new DataException("密码只能输入英文和数字");
+        }
+    }
+
 }
