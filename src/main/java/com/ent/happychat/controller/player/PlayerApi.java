@@ -2,7 +2,9 @@ package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.constant.SystemConstant;
 import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
@@ -20,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -38,6 +42,14 @@ public class PlayerApi {
     private PlayerInfoService playerInfoService;
     @Autowired
     private EhcacheService ehcacheService;
+
+    @PostMapping("/onlineCount")
+    @ApiOperation(value = "在线人数", notes = "在线人数")
+    public R<Integer> onlineCount() {
+        Cache cache = ehcacheService.getCache(CacheTypeEnum.PLAYER_TOKEN);
+
+        return R.ok(0);
+    }
 
     @PostMapping("/register")
     @ApiOperation(value = "注册", notes = "注册")

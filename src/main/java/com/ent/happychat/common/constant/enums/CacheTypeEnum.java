@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 public enum CacheTypeEnum {
-
     PLAYER_TOKEN("player_token","玩家Token"),
     ADMIN_TOKEN("admin_token","管理员token"),
     LOCK_3_SECOND("lock_3_second","3秒锁"),

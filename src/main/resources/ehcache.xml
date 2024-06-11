@@ -86,7 +86,17 @@
 
     <cache name="blacklist"
            eternal="false"
-           maxElementsInMemory="1000"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="1800"
+           memoryStoreEvictionPolicy="LRU"
+    />
+
+    <cache name="online_count"
+           eternal="false"
+           maxElementsInMemory="500"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"
