@@ -51,9 +51,6 @@ public class EhcacheServiceImpl implements EhcacheService {
         if (CacheTypeEnum.BLACKLIST == cacheTypeEnum) {
             return cacheManager.getCache("blacklist");
         }
-        if (CacheTypeEnum.ONLINE_COUNT == cacheTypeEnum){
-            return cacheManager.getCache("online_count");
-        }
         return null;
     }
 

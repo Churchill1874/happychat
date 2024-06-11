@@ -94,14 +94,5 @@
            memoryStoreEvictionPolicy="LRU"
     />
 
-    <cache name="online_count"
-           eternal="false"
-           maxElementsInMemory="500"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="1800"
-           memoryStoreEvictionPolicy="LRU"
-    />
 
 </ehcache>
