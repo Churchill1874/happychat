@@ -1,7 +1,8 @@
 package com.ent.happychat.service;
 
-import com.ent.happychat.common.constant.enums.CacheTypeEnum;
-import org.springframework.cache.Cache;
+import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import org.ehcache.Cache;
 
 import java.util.Set;
 
@@ -11,19 +12,36 @@ import java.util.Set;
 public interface EhcacheService {
 
     /**
-     * 根据类型获取缓存
-     * @param cacheTypeEnum
+     * 获取3秒锁缓存容器
      * @return
      */
-    Cache getCache(CacheTypeEnum cacheTypeEnum);
+    Cache<String, Integer> lock3SecondCache();
 
     /**
-     * 根据类型和key获取缓存
-     * @param cacheTypeEnum
-     * @param key
+     * 获取验证码缓存容器
      * @return
      */
-    String getString(CacheTypeEnum cacheTypeEnum, String key);
+    Cache<String, String> verificationCache();
+
+
+    /**
+     * 获取管理员登录token缓存容器
+     * @return
+     */
+    Cache<String, AdminTokenResp> adminTokenCache();
+
+    /**
+     * 获取玩家token缓存容器
+     * @return
+     */
+    Cache<String, PlayerTokenResp> playerTokenCache();
+
+    /**
+     * 获取在线人数缓存容器
+     * @return
+     */
+    Cache<String, PlayerTokenResp> onlineCount();
+
 
     /**
      * 获取验证码 并设置每3秒的限制请求次数 和提示语

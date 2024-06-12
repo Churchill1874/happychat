@@ -2,15 +2,13 @@ package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.SystemConstant;
-import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CheckReqTools;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
+import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
@@ -21,8 +19,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Slf4j
 @RestController
-@Api(tags = "新闻")
+@Api(tags = "玩家")
 @RequestMapping("/player/player")
 public class PlayerApi {
 
@@ -43,18 +43,25 @@ public class PlayerApi {
     @Autowired
     private EhcacheService ehcacheService;
 
-    @PostMapping("/onlineCount")
-    @ApiOperation(value = "在线人数", notes = "在线人数")
-    public R<Integer> onlineCount() {
-        Cache cache = ehcacheService.getCache(CacheTypeEnum.PLAYER_TOKEN);
+    @PostMapping("/onlinePlayerList")
+    @ApiOperation(value = "在线玩家", notes = "在线玩家")
+    public R<List<PlayerTokenResp>> onlinePlayerList() {
+        List<PlayerTokenResp> list = new ArrayList<>();
+        Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCount().iterator();
 
-        return R.ok(0);
+        while (iterator.hasNext()) {
+            Cache.Entry<String, PlayerTokenResp> entry = iterator.next();
+            list.add(entry.getValue());
+        }
+
+        return R.ok(list);
     }
 
     @PostMapping("/register")
     @ApiOperation(value = "注册", notes = "注册")
     public R<PlayerTokenResp> register(@RequestBody @Valid PlayerRegisterReq req) {
         log.info("玩家注册入参:{}", JSONUtil.toJsonStr(req));
+        checkVerificationCode(req.getVerificationCode());
 
         CheckReqTools.account(req.getAccount());
         CheckReqTools.name(req.getName());
@@ -86,15 +93,30 @@ public class PlayerApi {
         playerTokenResp.setTokenId(tokenId);
         playerTokenResp.setLoginTime(LocalDateTime.now());
 
-        ehcacheService.getCache(CacheTypeEnum.PLAYER_TOKEN).put(tokenId, playerTokenResp);
+        ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
         return playerTokenResp;
     }
+
+
+    //校验验证码
+    private void checkVerificationCode(String reqVerificationCode){
+        String verificationCode = ehcacheService.verificationCache().get(HttpTools.getIp());
+        if (verificationCode == null) {
+            throw new DataException("验证码有误或已过期");
+        }
+        if (!verificationCode.equals(reqVerificationCode)){
+            throw new DataException("验证码错误");
+        }
+    }
+
 
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
     public R<PlayerTokenResp> login(@RequestBody @Valid PlayerLoginReq req) {
         log.info("玩家登录入参:{}", JSONUtil.toJsonStr(req));
+        checkVerificationCode(req.getVerificationCode());
+
         CheckReqTools.password(req.getPassword());
         CheckReqTools.account(req.getAccount());
 /*        if (StringUtils.isAnyBlank(req.getPhone(), req.getName(), req.getEmail(), req.getAccount())) {

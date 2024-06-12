@@ -34,5 +34,8 @@ public class PlayerLoginReq implements Serializable {
     @ApiModelProperty(value = "密码", required = true)
     private String password;
 
+    @NotBlank(message = "验证码不能为空")
+    @ApiModelProperty(value = "验证码", required = true)
+    private String verificationCode;
 
 }

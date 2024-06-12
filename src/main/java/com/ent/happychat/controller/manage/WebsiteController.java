@@ -1,9 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
@@ -17,7 +15,6 @@ import com.ent.happychat.service.EhcacheService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -46,9 +42,12 @@ public class WebsiteController {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
 
         //校验验证码
-        String verificationCode = ehcacheService.getString(CacheTypeEnum.VERIFICATION_CODE, HttpTools.getIp());
+        String verificationCode = ehcacheService.verificationCache().get(HttpTools.getIp());
         if (verificationCode == null) {
             return R.failed("验证码有误或已过期");
+        }
+        if (!verificationCode.equals(req.getVerificationCode())){
+            return R.failed("验证码错误");
         }
 
         //判断账号密码是否正确
@@ -77,30 +76,18 @@ public class WebsiteController {
         adminToken.setLoginTime(LocalDateTime.now());
         adminToken.setTokenId(tokenId);
 
-        ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).put(tokenId, adminToken);
+        ehcacheService.adminTokenCache().put(tokenId, adminToken);
 
         //删除使用过的验证码缓存
-        ehcacheService.getCache(CacheTypeEnum.VERIFICATION_CODE).evict(HttpTools.getIp());
+        ehcacheService.verificationCache().remove(HttpTools.getIp());
         return R.ok(adminToken);
     }
 
-    //如果当前登录的账号已经是登陆状态 则删除之前的登录缓存
-    private void checkLoginCache(String account) {
-        Cache c = (Cache) ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).getNativeCache();
-        List<String> list = c.getKeys();
-        if (CollectionUtils.isNotEmpty(list)) {
-            list.forEach(tokenId -> {
-                if (tokenId.contains(String.valueOf(account))) {
-                    ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).evict(tokenId);
-                }
-            });
-        }
-    }
 
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        ehcacheService.getCache(CacheTypeEnum.ADMIN_TOKEN).evict(TokenTools.getAdminToken().getAccount());
+        ehcacheService.adminTokenCache().remove(TokenTools.getAdminToken().getTokenId());
         return R.ok(null);
     }
 

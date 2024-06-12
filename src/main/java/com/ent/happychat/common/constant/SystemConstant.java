@@ -6,6 +6,5 @@ package com.ent.happychat.common.constant;
 public interface SystemConstant {
 
 
-    /*********缓存key********/
-    final String ONLINE_COUNT = "online_count";
+
 }

@@ -42,4 +42,8 @@ public class PlayerRegisterReq implements Serializable {
     @ApiModelProperty(value = "性别", required = true)
     private GenderEnum gender;
 
+    @NotBlank(message = "验证码不能为空")
+    @ApiModelProperty(value = "验证码", required = true)
+    private String verificationCode;
+
 }

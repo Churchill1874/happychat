@@ -1,21 +1,24 @@
 package com.ent.happychat.service.serviceimpl;
 
-import com.ent.happychat.common.constant.enums.CacheTypeEnum;
+import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.IpException;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Blacklist;
+import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
 import lombok.extern.slf4j.Slf4j;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -27,54 +30,16 @@ public class EhcacheServiceImpl implements EhcacheService {
 
     @Autowired
     private BlacklistService blacklistService;
-
     @Autowired
     private CacheManager cacheManager;
-
-
-    private final String BLACKLIST_SET_KEY = "blacklist_set_key";
-
-    @Override
-    public Cache getCache(CacheTypeEnum cacheTypeEnum) {
-        if (CacheTypeEnum.PLAYER_TOKEN == cacheTypeEnum) {
-            return cacheManager.getCache("player_token");
-        }
-        if (CacheTypeEnum.ADMIN_TOKEN == cacheTypeEnum) {
-            return cacheManager.getCache("admin_token");
-        }
-        if (CacheTypeEnum.LOCK_3_SECOND == cacheTypeEnum) {
-            return cacheManager.getCache("lock_3_Second");
-        }
-        if (CacheTypeEnum.VERIFICATION_CODE == cacheTypeEnum) {
-            return cacheManager.getCache("verification_code");
-        }
-        if (CacheTypeEnum.BLACKLIST == cacheTypeEnum) {
-            return cacheManager.getCache("blacklist");
-        }
-        return null;
-    }
-
-    @Override
-    public String getString(CacheTypeEnum cacheTypeEnum, String key) {
-        Cache cache = getCache(cacheTypeEnum);
-        if (cache == null) {
-            return null;
-        }
-        return cache.get(key, String.class);
-    }
 
     @Override
     public void checkIp3SecondsClick(Integer limitCount, String remarks) {
         String ip = HttpTools.getIp();
-
-
-        Cache cache = this.getCache(CacheTypeEnum.LOCK_3_SECOND);
-        Integer reqCount = cache.get(ip, Integer.class);
-
+        Cache<String, Integer> cache = lock3SecondCache();
+        Integer reqCount =  cache.get(ip);
 
         if (reqCount != null) {
-
-
             if (reqCount >= limitCount) {
                 //如果ip存在黑名单就更新时间
                 Blacklist blacklist = blacklistService.findByIp(ip);
@@ -93,13 +58,36 @@ public class EhcacheServiceImpl implements EhcacheService {
             } else {
                 cache.put(ip, reqCount + 1);
             }
-
-
         } else {
             cache.put(ip, 1);
         }
     }
 
+
+    @Override
+    public Cache<String, Integer> lock3SecondCache() {
+        return cacheManager.getCache(CacheKeyConstant.LOCK_3_SECOND, String.class, Integer.class);
+    }
+
+    @Override
+    public Cache<String, String> verificationCache() {
+        return cacheManager.getCache(CacheKeyConstant.VERIFICATION_CODE, String.class, String.class);
+    }
+
+    @Override
+    public Cache<String, AdminTokenResp> adminTokenCache() {
+        return cacheManager.getCache(CacheKeyConstant.ADMIN_TOKEN, String.class, AdminTokenResp.class);
+    }
+
+    @Override
+    public Cache<String, PlayerTokenResp> playerTokenCache() {
+        return cacheManager.getCache(CacheKeyConstant.PLAYER_TOKEN, String.class, PlayerTokenResp.class);
+    }
+
+    @Override
+    public Cache<String, PlayerTokenResp> onlineCount() {
+        return cacheManager.getCache(CacheKeyConstant.ONLINE_COUNT, String.class, PlayerTokenResp.class);
+    }
 
     @Override
     public String getVC(String key, Integer limitCount, String remarks) {
@@ -117,22 +105,20 @@ public class EhcacheServiceImpl implements EhcacheService {
             throw new DataException(e.getMessage());
         }
 
-        this.getCache(CacheTypeEnum.VERIFICATION_CODE).put(key, code);
-
+        verificationCache().put(key, code);
         return codeImageStream;
     }
 
     @Override
     public Set<String> getBlacklistIpSetCache() {
-        Cache cache = getCache(CacheTypeEnum.BLACKLIST);
-        return cache.get(BLACKLIST_SET_KEY, Set.class);
+        Cache<String, Set<String>> cache = cacheManager.getCache(CacheKeyConstant.BLACKLIST, String.class, (Class<Set<String>>)(Class<?>)Set.class);
+        return cache.get(CacheKeyConstant.BLACKLIST_SET_KEY);
     }
-
 
     @Override
     public void setBlacklistIpSetCache(Set<String> blacklistIpSet) {
-        Cache cache = getCache(CacheTypeEnum.BLACKLIST);
-        cache.put(BLACKLIST_SET_KEY, blacklistIpSet);
+        cacheManager.getCache(CacheKeyConstant.BLACKLIST, String.class, (Class<Set<String>>)(Class<?>)Set.class)
+                .put(CacheKeyConstant.BLACKLIST_SET_KEY, blacklistIpSet);
     }
 
 }

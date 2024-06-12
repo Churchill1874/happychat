@@ -8,9 +8,9 @@ server:
 
 spring:
   cache:
-    ehcache:
+    jcache:
       config: classpath:/ehcache.xml
-    type: ehcache
+
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

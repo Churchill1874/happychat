@@ -1,7 +1,5 @@
 package com.ent.happychat.common.aspect;
 
-import com.ent.happychat.common.constant.SystemConstant;
-import com.ent.happychat.common.constant.enums.CacheTypeEnum;
 import com.ent.happychat.common.exception.IpException;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.service.BlacklistService;

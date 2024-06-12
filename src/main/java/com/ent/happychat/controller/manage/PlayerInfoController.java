@@ -16,11 +16,14 @@ import com.ent.happychat.pojo.req.UpdateStatusBase;
 import com.ent.happychat.pojo.req.player.PlayerInfoAddReq;
 import com.ent.happychat.pojo.req.player.PlayerInfoPageReq;
 import com.ent.happychat.pojo.req.player.PlayerInfoUpdateReq;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerInfoService;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +43,23 @@ import java.util.List;
 public class PlayerInfoController {
 
     @Autowired
+    private EhcacheService ehcacheService;
+    @Autowired
     private PlayerInfoService playerInfoService;
+
+    @PostMapping("/onlinePlayerList")
+    @ApiOperation(value = "在线玩家信息", notes = "在线玩家信息")
+    public R<List<PlayerTokenResp>> onlinePlayerList() {
+        List<PlayerTokenResp> list = new ArrayList<>();
+        Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCount().iterator();
+
+        while (iterator.hasNext()) {
+            Cache.Entry<String, PlayerTokenResp> entry = iterator.next();
+            list.add(entry.getValue());
+        }
+
+        return R.ok(list);
+    }
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
