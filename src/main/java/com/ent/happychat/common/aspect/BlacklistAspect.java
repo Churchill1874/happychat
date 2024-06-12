@@ -33,7 +33,8 @@ public class BlacklistAspect {
         String ip = HttpTools.getIp();
         Set<String> blacklistIpSet = blacklistService.getIpSet();
         if (blacklistIpSet.contains(ip)) {
-            throw new IpException();
+            log.error("黑名单ip访问异常:{}", ip);
+            throw new IpException(ip);
         }
     }
 

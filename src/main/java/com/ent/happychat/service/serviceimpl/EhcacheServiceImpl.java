@@ -54,7 +54,7 @@ public class EhcacheServiceImpl implements EhcacheService {
                     blacklist.setCreateName("系统");
                     blacklistService.insert(blacklist);
                 }
-                throw new IpException();
+                throw new IpException(ip);
             } else {
                 cache.put(ip, reqCount + 1);
             }

@@ -92,7 +92,7 @@ public class GenerateTools {
 
         // 绘制干扰线
         graphics.setColor(Color.LIGHT_GRAY);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int x2 = random.nextInt(width);
@@ -101,7 +101,7 @@ public class GenerateTools {
         }
 
         // 绘制验证码字符
-        graphics.setFont(new Font("Arial", Font.BOLD, 24));
+        graphics.setFont(new Font("Arial", Font.BOLD, 38));
         for (int i = 0; i < captchaText.length(); i++) {
             graphics.setColor(new Color(random.nextInt(128), random.nextInt(128), random.nextInt(128)));
             graphics.drawString(String.valueOf(captchaText.charAt(i)), 20 + i * 20, 30);
