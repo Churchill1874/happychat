@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CheckReqTools;
@@ -82,6 +83,7 @@ public class PlayerApi {
         playerInfo.setBirth(req.getBirth());
         playerInfo.setGender(req.getGender());
         playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
+        playerInfo.setStatus(UserStatusEnum.NORMAL);
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
