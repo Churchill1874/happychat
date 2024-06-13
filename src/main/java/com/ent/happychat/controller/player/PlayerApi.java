@@ -3,6 +3,7 @@ package com.ent.happychat.controller.player;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.constant.enums.LevelTypeEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CheckReqTools;
@@ -70,6 +71,7 @@ public class PlayerApi {
         String salt = GenerateTools.getUUID();
 
         PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setIsBot(false);
         playerInfo.setAccount(req.getAccount());
         playerInfo.setName(req.getName());
         playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword(), salt));
@@ -79,7 +81,8 @@ public class PlayerApi {
         playerInfo.setCreateTime(LocalDateTime.now());
         playerInfo.setBirth(req.getBirth());
         playerInfo.setGender(req.getGender());
-        playerInfoService.save(playerInfo);
+        playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
+        playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
         return R.ok(playerTokenResp);
