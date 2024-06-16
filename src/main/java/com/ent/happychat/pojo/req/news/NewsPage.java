@@ -22,16 +22,16 @@ public class NewsPage extends PageBase implements Serializable {
     private NewsStatusEnum newsStatus;
 
     @ApiModelProperty("是否按照浏览量降序")
-    private Boolean viewSort;
+    private Boolean viewSort=false;
 
     @ApiModelProperty("是否按照被赞量降序")
-    private Boolean likesSort;
+    private Boolean likesSort=false;
 
     @ApiModelProperty("是否按照差评量降序")
-    private Boolean badSort;
+    private Boolean badSort=false;
 
     @ApiModelProperty("是否按照评论数量降序")
-    private Boolean commentsSort;
+    private Boolean commentsSort=false;
 
 
 

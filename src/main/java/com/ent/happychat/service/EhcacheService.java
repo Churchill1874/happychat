@@ -1,6 +1,7 @@
 package com.ent.happychat.service;
 
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
+import com.ent.happychat.pojo.resp.news.HomeNews;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.ehcache.Cache;
 
@@ -40,8 +41,13 @@ public interface EhcacheService {
      * 获取在线人数缓存容器
      * @return
      */
-    Cache<String, PlayerTokenResp> onlineCount();
+    Cache<String, PlayerTokenResp> onlineCountCache();
 
+    /**
+     * 首页新闻
+     * @return
+     */
+    Cache<String, HomeNews> homeNewsCache();
 
     /**
      * 获取验证码 并设置每3秒的限制请求次数 和提示语

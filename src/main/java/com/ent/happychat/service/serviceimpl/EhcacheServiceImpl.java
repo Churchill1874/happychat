@@ -7,6 +7,7 @@ import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Blacklist;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
+import com.ent.happychat.pojo.resp.news.HomeNews;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
@@ -85,8 +86,13 @@ public class EhcacheServiceImpl implements EhcacheService {
     }
 
     @Override
-    public Cache<String, PlayerTokenResp> onlineCount() {
+    public Cache<String, PlayerTokenResp> onlineCountCache() {
         return cacheManager.getCache(CacheKeyConstant.ONLINE_COUNT, String.class, PlayerTokenResp.class);
+    }
+
+    @Override
+    public Cache<String, HomeNews> homeNewsCache() {
+        return cacheManager.getCache(CacheKeyConstant.HOME_NEWS, String.class, HomeNews.class);
     }
 
     @Override

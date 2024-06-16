@@ -51,7 +51,7 @@ public class PlayerInfoController {
     @ApiOperation(value = "在线玩家信息", notes = "在线玩家信息")
     public R<List<PlayerTokenResp>> onlinePlayerList() {
         List<PlayerTokenResp> list = new ArrayList<>();
-        Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCount().iterator();
+        Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCountCache().iterator();
 
         while (iterator.hasNext()) {
             Cache.Entry<String, PlayerTokenResp> entry = iterator.next();

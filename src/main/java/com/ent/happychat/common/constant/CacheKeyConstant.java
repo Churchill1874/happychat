@@ -35,6 +35,16 @@ public interface CacheKeyConstant {
      */
     String BLACKLIST = "blacklist";
 
+    /**
+     * 首页新闻
+     */
+    String HOME_NEWS = "home_news";
+
+    /**
+     * 首页新闻Key
+     */
+    String HOME_NEWS_KEY = "home_news_key";
+
     String BLACKLIST_SET_KEY = "blacklist_set_key";
 
 

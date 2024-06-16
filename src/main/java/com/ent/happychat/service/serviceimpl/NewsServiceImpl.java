@@ -38,8 +38,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         boolean createTimeSort = !newsPage.getBadSort() && !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
         if (createTimeSort){
             queryNews.lambda().orderByDesc(News::getCreateTime);
-        }
-        if (!createTimeSort){
+        } else {
             if (newsPage.getBadSort()){
                 queryNews.lambda().orderByDesc(News::getBadCount);
             }
