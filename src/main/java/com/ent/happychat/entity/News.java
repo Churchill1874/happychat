@@ -36,8 +36,12 @@ public class News extends CreatorBaseInfo implements Serializable {
     private NewsCategoryEnum category;
 
     @TableField("photo_path")
-    @ApiModelProperty("图片路径")
+    @ApiModelProperty("三方图片路径")
     private String photoPath;
+
+    @TableField("content_image_path")
+    @ApiModelProperty("提取内容的图片路径")
+    private String contentImagePath;
 
     @TableField("url")
     @ApiModelProperty("原新闻地址,跳转地址")
@@ -66,5 +70,4 @@ public class News extends CreatorBaseInfo implements Serializable {
     @TableField("news_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime newsTime;
-
 }

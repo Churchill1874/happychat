@@ -6,6 +6,9 @@ import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 定时任务类
@@ -46,11 +50,8 @@ public class PerMinuteTask {
     public void reqNewsApiTask(int hour, int minutes) {
         List<News> newsList = new ArrayList<>();
 
-        //8点 和 18点 请求女性新闻 和科技新闻
+        //8点 和 18点 科技新闻
         if ((8 == hour && minutes == 0)) {
-            List<News> womanNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 10);
-            newsList.addAll(womanNews);
-
             List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 10);
             newsList.addAll(scienceNews);
         }
@@ -84,6 +85,21 @@ public class PerMinuteTask {
 
         if (CollectionUtils.isNotEmpty(newsList)) {
             log.info("执行新闻定时任务,处理新闻数据{}条", newsList.size());
+
+            //遍历过滤掉三方返回的html标签 ,并且抽取图片路径拼在一起保存
+            for(News news: newsList){
+                Document document = Jsoup.parse(news.getContent());
+                news.setContent(document.text());
+
+                //获取三方返回的新闻内容里面的图片路径
+                Elements images = document.select("img");
+                //将所有图片拼在一起用逗号隔开
+                String contentImagePath = images.stream()
+                        .map(img -> img.attr("src"))
+                        .collect(Collectors.joining(","));
+                news.setContentImagePath(contentImagePath);
+            }
+
             newsService.saveList(newsList);
         }
     }
