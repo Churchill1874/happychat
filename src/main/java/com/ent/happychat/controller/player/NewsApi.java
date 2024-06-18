@@ -65,7 +65,6 @@ public class NewsApi {
         IPage<News> iPage = newsService.queryPage(newsPage);
         homeNews.setNewsList(iPage.getRecords());
 
-
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);
     }

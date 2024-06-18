@@ -7,10 +7,7 @@ import com.ent.happychat.common.constant.enums.LevelTypeEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.common.tools.CheckReqTools;
-import com.ent.happychat.common.tools.CodeTools;
-import com.ent.happychat.common.tools.GenerateTools;
-import com.ent.happychat.common.tools.HttpTools;
+import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
@@ -59,6 +56,19 @@ public class PlayerApi {
         return R.ok(list);
     }
 
+
+    @PostMapping("/playerInfo")
+    @ApiOperation(value = "玩家信息", notes = "玩家信息")
+    public R<PlayerInfo> playerInfo() {
+        String account = TokenTools.getPlayerToken().getAccount();
+        PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
+        if (playerInfo == null){
+            playerInfo = playerInfoService.findByAccount(account);
+            ehcacheService.playerInfoCache().put(account, playerInfo);
+        }
+        return R.ok(playerInfo);
+    }
+
     @PostMapping("/register")
     @ApiOperation(value = "注册", notes = "注册")
     public R<PlayerTokenResp> register(@RequestBody @Valid PlayerRegisterReq req) {
@@ -99,6 +109,7 @@ public class PlayerApi {
         playerTokenResp.setLoginTime(LocalDateTime.now());
 
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
+        ehcacheService.playerInfoCache().put(playerInfo.getAccount(), playerInfo);
         return playerTokenResp;
     }
 

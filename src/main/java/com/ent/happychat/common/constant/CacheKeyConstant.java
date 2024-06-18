@@ -16,6 +16,11 @@ public interface CacheKeyConstant {
     String PLAYER_TOKEN = "player_token";
 
     /**
+     * 玩家信息
+     */
+    String PLAYER_INFO = "player_info";
+
+    /**
      *管理员token
      */
     String ADMIN_TOKEN = "admin_token";

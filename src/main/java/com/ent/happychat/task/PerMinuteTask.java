@@ -1,11 +1,15 @@
 package com.ent.happychat.task;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.pojo.resp.news.HomeNews;
+import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.ehcache.Cache;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -28,6 +32,8 @@ public class PerMinuteTask {
 
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private EhcacheService ehcacheService;
 
     /**
      * 每分钟执行定时任务
@@ -52,7 +58,7 @@ public class PerMinuteTask {
 
         //8点 和 18点 科技新闻
         if ((8 == hour && minutes == 0)) {
-            List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 10);
+            List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 5);
             newsList.addAll(scienceNews);
         }
 
@@ -60,25 +66,22 @@ public class PerMinuteTask {
         if (hour >= 6 && hour < 24) {
             //0分时候请求
             if (minutes == 0) {
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 10);
+                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 5);
                 newsList.addAll(headlinesNews);
 
-                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 10);
+                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 3);
                 newsList.addAll(news);
 
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 10);
+                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 3);
                 newsList.addAll(sportsNews);
-            }
 
-            //30分的时候请求
-            if (minutes == 30) {
-                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 10);
+                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 3);
                 newsList.addAll(militaryAffairsNews);
             }
 
             //7,11,17,21点请求娱乐新闻
             if ((hour == 7 || hour == 11 || hour == 18 || hour == 21) && minutes == 0) {
-                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 10);
+                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 3);
                 newsList.addAll(entertainmentNews);
             }
         }
@@ -101,6 +104,9 @@ public class PerMinuteTask {
             }
 
             newsService.saveList(newsList);
+
+            //清理首页的新闻列表缓存
+            ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
         }
     }
 
