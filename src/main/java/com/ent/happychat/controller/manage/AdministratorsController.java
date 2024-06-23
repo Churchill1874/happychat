@@ -18,6 +18,7 @@ import com.ent.happychat.service.AdministratorsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,13 +84,15 @@ public class AdministratorsController {
     public R update(@RequestBody @Valid AdministratorsUpdate req) {
         log.info("修改管理员入参:{}", JSONObject.toJSONString(req));
 
-        String salt = GenerateTools.getUUID();
-
         Administrators administrators = administratorsService.getById(req.getId());
         administrators.setRole(req.getRole());
         administrators.setName(req.getName());
-        administrators.setSalt(salt);
-        administrators.setPassword(CodeTools.md5AndSalt(administrators.getPassword(),salt));
+
+        if (StringUtils.isNotBlank(req.getPassword())){
+            String salt = GenerateTools.getUUID();
+            administrators.setSalt(salt);
+            administrators.setPassword(CodeTools.md5AndSalt(req.getPassword(), salt));
+        }
 
         administratorsService.updateById(administrators);
         return R.ok(null);

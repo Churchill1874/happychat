@@ -1,5 +1,6 @@
 package com.ent.happychat.controller.player;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -61,13 +63,19 @@ public class NewsApi {
         //获取排名前十新闻
         NewsPage newsPage = new NewsPage();
         newsPage.setPageNum(1);
-        newsPage.setPageSize(10);
+        newsPage.setPageSize(11);
         IPage<News> iPage = newsService.queryPage(newsPage);
+        if (CollectionUtils.isNotEmpty(iPage.getRecords())){
+            //排名第一个的就头条热门
+            homeNews.setHotNews(iPage.getRecords().get(0));
+            //然后从排名里面移除第一条
+            iPage.getRecords().remove(0);
+        }
+
         homeNews.setNewsList(iPage.getRecords());
 
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);
     }
-
 
 }

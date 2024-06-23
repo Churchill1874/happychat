@@ -97,9 +97,12 @@ public class PerMinuteTask {
                 //获取三方返回的新闻内容里面的图片路径
                 Elements images = document.select("img");
                 //将所有图片拼在一起用逗号隔开
-                String contentImagePath = images.stream()
+                List<String> imagePaths = images.stream()
                         .map(img -> img.attr("src"))
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.toList());
+
+                String contentImagePath = String.join(",", imagePaths);
+
                 news.setContentImagePath(contentImagePath);
             }
 

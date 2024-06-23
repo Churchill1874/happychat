@@ -2,7 +2,11 @@ package com.ent.happychat.common.constant.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
+
+import java.io.Serializable;
 
 public enum LevelTypeEnum {
     LEVEL_0(0,"暗中观察",0,0,0),
@@ -53,6 +57,21 @@ public enum LevelTypeEnum {
     @Override
     public String toString() {
         return this.name + ":" + this.code;
+    }
+
+    @Data
+    public static class LevelType implements Serializable {
+        private static final long serialVersionUID = -2379684223221026388L;
+        @ApiModelProperty("等级")
+        private int code;
+        @ApiModelProperty("等级名称")
+        private String name;
+        @ApiModelProperty("评论数量")
+        private int commentCount;
+        @ApiModelProperty("被赞数量")
+        private int likesReceivedCount;
+        @ApiModelProperty("下注猜中数量")
+        private int correctCount;
     }
 
 }

@@ -118,8 +118,19 @@ public class PlayerInfoController {
 
     @PostMapping("/levelTypeList")
     @ApiOperation(value = "枚举类型列表", notes = "枚举类型列表")
-    public R<List<LevelTypeEnum>> levelTypeList() {
-        return R.ok(Lists.newArrayList(LevelTypeEnum.values()));
+    public R<List<LevelTypeEnum.LevelType>> levelTypeList() {
+        List<LevelTypeEnum.LevelType> list = new ArrayList<>();
+        for(LevelTypeEnum levelTypeEnum: LevelTypeEnum.values()){
+            LevelTypeEnum.LevelType levelType = new LevelTypeEnum.LevelType();
+            levelType.setCode(levelTypeEnum.getCode());
+            levelType.setName(levelTypeEnum.getName());
+            levelType.setCommentCount(levelTypeEnum.getCommentCount());
+            levelType.setCorrectCount(levelTypeEnum.getCorrectCount());
+            levelType.setLikesReceivedCount(levelTypeEnum.getLikesReceivedCount());
+            list.add(levelType);
+        }
+
+        return R.ok(list);
     }
 
     @PostMapping("/delete")
