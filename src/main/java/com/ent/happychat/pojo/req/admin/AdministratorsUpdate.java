@@ -21,7 +21,6 @@ public class AdministratorsUpdate extends Id implements Serializable {
     @ApiModelProperty(value = "名称", required = true)
     private String name;
 
-    @NotBlank(message = "密码不能为空")
     @ApiModelProperty(value = "密码", required = true)
     private String password;
 

@@ -19,7 +19,6 @@ import com.ent.happychat.pojo.req.player.PlayerInfoUpdateReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerInfoService;
-import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +85,7 @@ public class PlayerInfoController {
 
         String salt = GenerateTools.getUUID();
         playerInfo.setStatus(UserStatusEnum.NORMAL);
-        playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword(),salt));
+        playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword(), salt));
         playerInfo.setSalt(salt);
         playerInfo.setCreateName(TokenTools.getAdminToken().getName());
         playerInfo.setCreateTime(LocalDateTime.now());
@@ -120,7 +119,7 @@ public class PlayerInfoController {
     @ApiOperation(value = "枚举类型列表", notes = "枚举类型列表")
     public R<List<LevelTypeEnum.LevelType>> levelTypeList() {
         List<LevelTypeEnum.LevelType> list = new ArrayList<>();
-        for(LevelTypeEnum levelTypeEnum: LevelTypeEnum.values()){
+        for (LevelTypeEnum levelTypeEnum : LevelTypeEnum.values()) {
             LevelTypeEnum.LevelType levelType = new LevelTypeEnum.LevelType();
             levelType.setCode(levelTypeEnum.getCode());
             levelType.setName(levelTypeEnum.getName());

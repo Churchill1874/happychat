@@ -6,6 +6,7 @@ import lombok.Getter;
 
 /**
  * 角色枚举
+ * @author admin
  */
 public enum ManageRoleEnum {
     ADMIN(1, "管理员"),

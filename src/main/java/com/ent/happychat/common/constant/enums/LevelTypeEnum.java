@@ -8,6 +8,9 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
+/**
+ * @author Churchill
+ */
 public enum LevelTypeEnum {
     LEVEL_0(0,"暗中观察",0,0,0),
     LEVEL_1(1,"新人小白",1, 10,0),
@@ -26,23 +29,35 @@ public enum LevelTypeEnum {
     LEVEL_14(14,"王佐",3000,50000000,3000),
     LEVEL_15(15,"领袖",10000,100000000,5000);
 
+    /**
+     *级别编码
+     */
     @Getter
     @EnumValue
     @JsonValue
     private int code;
 
+    /**
+     * 名称
+     */
     @Getter
     private String name;
 
-    //新闻评论次数
+    /**
+     *新闻评论次数
+     */
     @Getter
     private int commentCount;
 
-    //评论被点赞次数
+    /**
+     *评论被点赞次数
+     */
     @Getter
     private int likesReceivedCount;
 
-    //新闻正确下注猜对结果次数
+    /**
+     *新闻正确下注猜对结果次数
+     */
     @Getter
     private int correctCount;
 
