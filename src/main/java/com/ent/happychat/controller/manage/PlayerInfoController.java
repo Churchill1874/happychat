@@ -3,8 +3,10 @@ package com.ent.happychat.controller.manage;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.constant.enums.LevelTypeEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CheckReqTools;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
@@ -70,6 +72,7 @@ public class PlayerInfoController {
     }
 
     @PostMapping("/add")
+    @AdminLoginCheck
     @ApiOperation(value = "新增", notes = "新增")
     public R add(@RequestBody @Valid PlayerInfoAddReq req) {
         CheckReqTools.account(req.getAccount());
@@ -77,10 +80,10 @@ public class PlayerInfoController {
 
         PlayerInfo playerInfo = BeanUtil.toBean(req, PlayerInfo.class);
         if (req.getLevel() == null) {
-            req.setLevel(LevelTypeEnum.LEVEL_0);
+            playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
         }
         if (req.getIsBot() == null) {
-            req.setIsBot(true);
+            playerInfo.setIsBot(true);
         }
 
         String salt = GenerateTools.getUUID();
@@ -94,13 +97,28 @@ public class PlayerInfoController {
     }
 
     @PostMapping("/update")
+    @AdminLoginCheck
     @ApiOperation(value = "更新", notes = "更新")
     public R update(@RequestBody @Valid PlayerInfoUpdateReq req) {
         CheckReqTools.name(req.getName());
 
-        PlayerInfo playerInfo = BeanUtil.toBean(req, PlayerInfo.class);
+        PlayerInfo playerInfo = playerInfoService.getById(req.getId());
+        if (playerInfo == null){
+            throw new DataException("数据异常");
+        }
+
+        playerInfo.setName(req.getName());
+        playerInfo.setPhone(req.getPhone());
+        playerInfo.setEmail(req.getEmail());
+        playerInfo.setGender(req.getGender());
+        playerInfo.setCity(req.getCity());
+        playerInfo.setBirth(req.getBirth());
+        playerInfo.setLevel(req.getLevel());
+        playerInfo.setSelfIntroduction(req.getSelfIntroduction());
+        playerInfo.setAvatarPath(req.getAvatarPath());
+
         if (req.getLevel() == null) {
-            req.setLevel(LevelTypeEnum.LEVEL_0);
+            playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
         }
         playerInfo.setUpdateName(TokenTools.getAdminToken().getName());
         playerInfo.setUpdateTime(LocalDateTime.now());
@@ -133,6 +151,7 @@ public class PlayerInfoController {
     }
 
     @PostMapping("/delete")
+    @AdminLoginCheck
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid Id req) {
         playerInfoService.removeById(req.getId());

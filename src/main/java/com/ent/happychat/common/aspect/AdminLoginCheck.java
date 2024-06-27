@@ -1,5 +1,10 @@
 package com.ent.happychat.common.aspect;
 
+import com.ent.happychat.common.constant.enums.ManageRoleEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
+import com.ent.happychat.common.exception.AuthException;
+import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,11 +25,7 @@ public class AdminLoginCheck {
 
     @Before("adminLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-/*        Token token = TokenTools.getToken();
-        if ((token.getRole() != RoleEnum.ADMIN.getCode() && token.getRole() != RoleEnum.SUPER_ADMIN.getCode())
-                || token.getStatus() == UserStatusEnum.DISABLE.getCode()) {
-            throw new AuthException();
-        }*/
+        TokenTools.getAdminToken();
     }
 
 /*    @After("loginCheck()")

@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class PlayerInfoUpdateReq implements Serializable {
     private String email;
 
     @ApiModelProperty(value = "性别 1男 0女", required = false)
-    private String gender;
+    private GenderEnum gender;
 
     @ApiModelProperty(value = "城市", required = false)
     private String city;

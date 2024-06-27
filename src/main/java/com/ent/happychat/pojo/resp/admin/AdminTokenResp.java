@@ -1,6 +1,8 @@
 package com.ent.happychat.pojo.resp.admin;
 
 import com.ent.happychat.common.constant.enums.ManageRoleEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

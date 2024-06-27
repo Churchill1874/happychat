@@ -66,17 +66,16 @@ spring:
 
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: true
-    auto-mapping-behavior: full
-    #打印sql
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:mapper/*.xml
+    map-underscore-to-camel-case: true  # 将数据库表字段名中的下划线自动映射到Java对象属性的驼峰命名法
+    auto-mapping-behavior: full  # 启用全自动映射，将数据库字段自动映射到Java对象
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 配置日志实现，使用标准输出打印SQL
+  mapper-locations: classpath*:mapper/*.xml  # 指定MyBatis Mapper XML文件的位置
   global-config:
     db-config:
-      logic-not-delete-value: 1
-      logic-delete-value: 0
-      field-strategy: IGNORED
-  type-enums-package: com.ent.happychat.common.constant.enums
+      logic-not-delete-value: 1  # 配置逻辑删除，未删除的值为1
+      logic-delete-value: 0  # 配置逻辑删除，删除的值为0
+      field-strategy: IGNORED  # 配置字段策略，忽略字段策略
+  type-enums-package: com.ent.happychat.common.constant.enums  # 指定枚举类型所在的包路径
 
 logging:
   config: classpath:log/logback.xml
