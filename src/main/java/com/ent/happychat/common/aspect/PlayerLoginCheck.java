@@ -24,7 +24,7 @@ public class PlayerLoginCheck {
 
     @Before("playerLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-        PlayerTokenResp playerToken = TokenTools.getPlayerToken();
+        PlayerTokenResp playerToken = TokenTools.getPlayerToken(true);
         if (playerToken.getStatus() == null || playerToken.getStatus() == UserStatusEnum.DISABLE) {
             throw new AuthException();
         }

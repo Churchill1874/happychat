@@ -60,7 +60,7 @@ public class PlayerApi {
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
     public R<PlayerInfo> playerInfo() {
-        String account = TokenTools.getPlayerToken().getAccount();
+        String account = TokenTools.getPlayerToken(true).getAccount();
         PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
         if (playerInfo == null){
             playerInfo = playerInfoService.findByAccount(account);
