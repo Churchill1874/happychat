@@ -87,7 +87,7 @@ public class WebsiteController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        ehcacheService.adminTokenCache().remove(TokenTools.getAdminToken().getTokenId());
+        ehcacheService.adminTokenCache().remove(TokenTools.getAdminToken(true).getTokenId());
         return R.ok(null);
     }
 

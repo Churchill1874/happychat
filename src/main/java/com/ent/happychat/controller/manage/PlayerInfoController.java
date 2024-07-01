@@ -90,7 +90,7 @@ public class PlayerInfoController {
         playerInfo.setStatus(UserStatusEnum.NORMAL);
         playerInfo.setPassword(CodeTools.md5AndSalt(req.getPassword(), salt));
         playerInfo.setSalt(salt);
-        playerInfo.setCreateName(TokenTools.getAdminToken().getName());
+        playerInfo.setCreateName(TokenTools.getAdminToken(true).getName());
         playerInfo.setCreateTime(LocalDateTime.now());
         playerInfoService.add(playerInfo);
         return R.ok(null);
@@ -120,7 +120,7 @@ public class PlayerInfoController {
         if (req.getLevel() == null) {
             playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
         }
-        playerInfo.setUpdateName(TokenTools.getAdminToken().getName());
+        playerInfo.setUpdateName(TokenTools.getAdminToken(true).getName());
         playerInfo.setUpdateTime(LocalDateTime.now());
         playerInfoService.updateById(playerInfo);
         return R.ok(null);
