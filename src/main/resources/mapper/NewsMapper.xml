@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ent.happychat.mapper.NewsMapper">
+
+    <insert id="insertBatchIgnore">
+        INSERT IGNORE INTO news
+        (title, content, source, category, photo_path, content_image_path, url, view_count, likes_count, bad_count, comments_count, news_status, news_time, create_name, update_name, create_time, update_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.title}, #{item.content}, #{item.source}, #{item.category}, #{item.photoPath}, #{item.contentImagePath}, #{item.url}, #{item.viewCount}, #{item.likesCount}, #{item.badCount}, #{item.commentsCount}, #{item.newsStatus}, #{item.newsTime}, #{item.createName}, #{item.updateName}, #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+</mapper>

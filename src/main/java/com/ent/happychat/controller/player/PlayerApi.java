@@ -135,18 +135,7 @@ public class PlayerApi {
 
         CheckReqTools.password(req.getPassword());
         CheckReqTools.account(req.getAccount());
-/*        if (StringUtils.isAnyBlank(req.getPhone(), req.getName(), req.getEmail(), req.getAccount())) {
-            throw new DataException("登录方式不能为空");
-        }
-        if (StringUtils.isNotBlank(req.getEmail()) && req.getEmail().length() > 50) {
-            throw new DataException("邮箱长度输入过长");
-        }
-        if (StringUtils.isNotBlank(req.getPhone()) && req.getPhone().length() > 20) {
-            throw new DataException("手机号输入过长");
-        }
-        if (StringUtils.isNotBlank(req.getName()) && req.getName().length() > 20) {
-            throw new DataException("昵称输入过长");
-        }*/
+
         if (StringUtils.isNotBlank(req.getAccount()) && req.getAccount().length() > 20) {
             throw new DataException("账号输入过长");
         }

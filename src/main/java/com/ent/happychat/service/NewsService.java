@@ -6,6 +6,7 @@ import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.news.NewsPage;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NewsService extends IService<News> {
@@ -31,6 +32,11 @@ public interface NewsService extends IService<News> {
      * @return
      */
     List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size);
+
+    /**
+     * 删除两个月之前的数据
+     */
+    void clean2MonthsAgo(LocalDateTime currentTime);
 
 
 }

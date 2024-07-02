@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -69,6 +70,10 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
     @TableField("avatar_path")
     @ApiModelProperty("头像路径")
     private String avatarPath;
+
+    @TableField("balance")
+    @ApiModelProperty("余额")
+    private BigDecimal balance;
 
     @TableField("salt")
     @ApiModelProperty("盐")

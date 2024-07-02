@@ -18,7 +18,4 @@ public class HomeNews implements Serializable {
     @ApiModelProperty("置顶新闻")
     private News topNews;
 
-    @ApiModelProperty("热门头条")
-    private News hotNews;
-
 }

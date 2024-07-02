@@ -13,6 +13,8 @@ import com.ent.happychat.service.NewsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -65,6 +67,16 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
                 .last("LIMIT " + size);
 
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public void clean2MonthsAgo(LocalDateTime currentTime) {
+        LocalDateTime twoMonthsAgo = currentTime.minus(2, ChronoUnit.MONTHS);
+
+        QueryWrapper<News> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().le(News::getCreateTime, twoMonthsAgo);
+
+        remove(queryWrapper);
     }
 
 }
