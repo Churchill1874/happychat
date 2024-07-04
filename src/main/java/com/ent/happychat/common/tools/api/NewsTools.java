@@ -70,10 +70,10 @@ public class NewsTools {
                         String time = obj.getStr("time");
                         if (StringUtils.isNotBlank(time)){
                             if (time.contains(" ")){
-                                news.setNewsTime(LocalDateTime.parse(time.replace(" ","T")));
+                                news.setCreateTime(LocalDateTime.parse(time.replace(" ","T")));
                             }
                             if (!time.contains(" ")){
-                                news.setNewsTime(LocalDate.parse(time).atStartOfDay());
+                                news.setCreateTime(LocalDate.parse(time).atStartOfDay());
                             }
                         }
                         news.setCreateTime(LocalDateTime.now());
@@ -91,8 +91,5 @@ public class NewsTools {
         return newsList;
     }
 
-/*
-    public static void main(String[] args) {
-        getNewsData(NewsCategoryEnum.NEWS, 20);
-    }*/
+
 }

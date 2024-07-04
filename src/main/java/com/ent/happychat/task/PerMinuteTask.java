@@ -59,38 +59,42 @@ public class PerMinuteTask {
         int minutes = currentTime.getMinute();
         List<News> newsList = new ArrayList<>();
 
-        //只保留2个月的新闻数据
+        //只保留2个月的新闻数据 超过的删除
         if (hour == 0 && minutes ==0){
             newsService.clean2MonthsAgo(currentTime);
         }
 
-        //8点 科技新闻
-        if ((8 == hour && minutes == 0)) {
-            List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 5);
-            newsList.addAll(scienceNews);
-        }
-
         //6点 到晚上 23点 之间 每小时获取一次 军事,头条,新闻,体育,娱乐新闻
-        if (hour >= 6 && hour < 24) {
+        if (hour >= 6) {
             //0分时候请求
             if (minutes == 0) {
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 10);
+                //头条
+                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 11);
                 newsList.addAll(headlinesNews);
 
-                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 3);
-                newsList.addAll(news);
-
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 10);
+                //新闻
+                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 5);
                 newsList.addAll(sportsNews);
 
+                //体育
+                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 5);
+                newsList.addAll(news);
+
+                //军事
                 List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 5);
                 newsList.addAll(militaryAffairsNews);
-            }
 
-            //7,11,17,21点请求娱乐新闻
-            if (hour == 7 || hour == 11 || hour == 18 || hour == 21) {
-                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 5);
+                //科技
+                List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 2);
+                newsList.addAll(scienceNews);
+
+                //娱乐
+                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 1);
                 newsList.addAll(entertainmentNews);
+
+                //女性
+                List<News> womenNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 1);
+                newsList.addAll(womenNews);
             }
         }
 

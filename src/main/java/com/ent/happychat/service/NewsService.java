@@ -39,4 +39,11 @@ public interface NewsService extends IService<News> {
     void clean2MonthsAgo(LocalDateTime currentTime);
 
 
+    /**
+     * 修改新闻
+     * @param news
+     */
+    void updateNews(News news);
+
+
 }

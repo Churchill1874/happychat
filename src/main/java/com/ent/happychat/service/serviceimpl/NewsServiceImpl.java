@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.NewsMapper;
 import com.ent.happychat.pojo.req.news.NewsPage;
@@ -77,6 +79,38 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         queryWrapper.lambda().le(News::getCreateTime, twoMonthsAgo);
 
         remove(queryWrapper);
+    }
+
+    @Override
+    public void updateNews(News news) {
+        News record = getById(news.getId());
+        if (record == null){
+            throw new DataException("内容不存在或已删除");
+        }
+        if (news.getNewsStatus() != null){
+            record.setNewsStatus(news.getNewsStatus());
+        }
+        if (news.getLikesCount() != null){
+            record.setLikesCount(news.getLikesCount());
+        }
+        if (news.getBadCount() != null){
+            record.setBadCount(news.getBadCount());
+        }
+        if (news.getContent() != null){
+            record.setContent(news.getContent());
+        }
+        if (news.getTitle() != null){
+            record.setTitle(news.getTitle());
+        }
+        if (news.getViewCount() != null){
+            record.setViewCount(news.getViewCount());
+        }
+        if (news.getContentImagePath() != null){
+            record.setContentImagePath(news.getContentImagePath());
+        }
+        record.setUpdateName(TokenTools.getAdminToken(true).getName());
+        record.setUpdateTime(LocalDateTime.now());
+        updateById(record);
     }
 
 }

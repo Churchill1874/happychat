@@ -11,6 +11,7 @@ import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
+import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerInfoService;
@@ -59,14 +60,16 @@ public class PlayerApi {
 
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
-    public R<PlayerInfo> playerInfo() {
+    public R<PlayerInfoResp> playerInfo() {
         String account = TokenTools.getPlayerToken(true).getAccount();
         PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
         if (playerInfo == null){
             playerInfo = playerInfoService.findByAccount(account);
             ehcacheService.playerInfoCache().put(account, playerInfo);
         }
-        return R.ok(playerInfo);
+
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        return R.ok(playerInfoResp);
     }
 
     @PostMapping("/register")
@@ -94,6 +97,7 @@ public class PlayerApi {
         playerInfo.setGender(req.getGender());
         playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
         playerInfo.setStatus(UserStatusEnum.NORMAL);
+        playerInfo.setAvatarPath("1");
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
@@ -152,4 +156,14 @@ public class PlayerApi {
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
         return R.ok(playerTokenResp);
     }
+
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    public R logout() {
+        ehcacheService.playerTokenCache().remove(TokenTools.getPlayerToken(true).getTokenId());
+        return R.ok(null);
+    }
+
+
 }
