@@ -97,6 +97,11 @@ public class EhcacheServiceImpl implements EhcacheService {
     }
 
     @Override
+    public Cache<String, Integer> playerOnlineCount() {
+        return cacheManager.getCache(CacheKeyConstant.PLAYER_ONLINE_COUNT, String.class, Integer.class);
+    }
+
+    @Override
     public Cache<String, HomeNews> homeNewsCache() {
         return cacheManager.getCache(CacheKeyConstant.HOME_NEWS, String.class, HomeNews.class);
     }

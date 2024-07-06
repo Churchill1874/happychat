@@ -1,6 +1,5 @@
 package com.ent.happychat.controller.player;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,7 +46,7 @@ public class NewsApi {
     public R<HomeNews> headNews() {
         Cache<String, HomeNews> cache = ehcacheService.homeNewsCache();
         HomeNews homeNews = cache.get(CacheKeyConstant.HOME_NEWS_KEY);
-        if (homeNews != null){
+        if (homeNews != null) {
             return R.ok(homeNews);
         }
 
@@ -66,6 +64,7 @@ public class NewsApi {
         newsPage.setPageSize(10);
         IPage<News> iPage = newsService.queryPage(newsPage);
         homeNews.setNewsList(iPage.getRecords());
+
 
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);

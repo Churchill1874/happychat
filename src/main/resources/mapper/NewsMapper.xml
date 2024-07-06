@@ -6,10 +6,14 @@
 
     <insert id="insertBatchIgnore">
         INSERT IGNORE INTO news
-        (title, content, source, category, photo_path, content_image_path, url, view_count, likes_count, bad_count, comments_count, news_status, news_time, create_name, update_name, create_time, update_time)
+        (title, content, filter_content, source, category, photo_path, content_image_path, url, view_count, likes_count,
+        bad_count, comments_count, news_status, create_name, update_name, create_time, update_time)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.title}, #{item.content}, #{item.source}, #{item.category}, #{item.photoPath}, #{item.contentImagePath}, #{item.url}, #{item.viewCount}, #{item.likesCount}, #{item.badCount}, #{item.commentsCount}, #{item.newsStatus}, #{item.newsTime}, #{item.createName}, #{item.updateName}, #{item.createTime}, #{item.updateTime})
+            (#{item.title}, #{item.content},#{item.filterContent}, #{item.source}, #{item.category}, #{item.photoPath},
+            #{item.contentImagePath}, #{item.url}, #{item.viewCount}, #{item.likesCount}, #{item.badCount},
+            #{item.commentsCount}, #{item.newsStatus}, #{item.createName}, #{item.updateName}, #{item.createTime},
+            #{item.updateTime})
         </foreach>
     </insert>
 

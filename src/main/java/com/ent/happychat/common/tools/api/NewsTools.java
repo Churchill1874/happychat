@@ -9,6 +9,9 @@ import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -16,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class NewsTools {
@@ -57,15 +61,35 @@ public class NewsTools {
                 JSONArray list = resultarr.getJSONArray("list");
                 if (CollectionUtils.isNotEmpty(list)) {
                     for (int i = 0; i < list.size(); i++) {
+
                         JSONObject obj = list.getJSONObject(i);
                         News news = new News();
                         news.setTitle(obj.getStr("title"));
-                        news.setContent(obj.getStr("content"));
+
                         news.setSource(obj.getStr("src"));
                         news.setCategory(categoryEnum);
                         news.setPhotoPath(obj.getStr("pic"));
                         news.setUrl(obj.getStr("url"));
                         news.setNewsStatus(NewsStatusEnum.NORMAL);
+
+                        if (StringUtils.isNotBlank(obj.getStr("content"))){
+                            news.setContent(obj.getStr("content"));
+                            //从新闻内容中过滤出来无标签样式新闻内容
+                            Document document = Jsoup.parse(news.getContent());
+                            news.setFilterContent(document.text());
+
+                            //获取三方返回的新闻内容里面的图片路径
+                            Elements images = document.select("img");
+                            //将所有图片拼在一起用逗号隔开
+                            List<String> imagePaths = images.stream()
+                                    .map(img -> img.attr("src"))
+                                    .collect(Collectors.toList());
+
+                            //从新闻内容中获取图片
+                            String contentImagePath = String.join(",", imagePaths);
+                            news.setContentImagePath(contentImagePath);
+                        }
+
                         //将返回的新闻发生时间转换成localdatetime格式
                         String time = obj.getStr("time");
                         if (StringUtils.isNotBlank(time)){
@@ -76,6 +100,7 @@ public class NewsTools {
                                 news.setCreateTime(LocalDate.parse(time).atStartOfDay());
                             }
                         }
+                        news.setCreateName("平台");
                         news.setCreateTime(LocalDateTime.now());
                         newsList.add(news);
                     }

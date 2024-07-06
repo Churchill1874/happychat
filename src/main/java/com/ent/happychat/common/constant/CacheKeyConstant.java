@@ -11,6 +11,11 @@ public interface CacheKeyConstant {
     String ONLINE_COUNT = "online_count";
 
     /**
+     * 玩家在线随机人数
+     */
+    String PLAYER_ONLINE_COUNT = "player_online_count";
+
+    /**
      * 玩家token
      */
     String PLAYER_TOKEN = "player_token";

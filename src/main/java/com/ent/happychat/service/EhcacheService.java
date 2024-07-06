@@ -45,10 +45,16 @@ public interface EhcacheService {
     Cache<String, PlayerInfo> playerInfoCache();
 
     /**
-     * 获取在线人数缓存容器
+     * 获取真实在线人数缓存容器
      * @return
      */
     Cache<String, PlayerTokenResp> onlineCountCache();
+
+    /**
+     * 获取随机在线人数缓存
+     * @return
+     */
+    Cache<String, Integer> playerOnlineCount();
 
     /**
      * 首页新闻

@@ -91,4 +91,15 @@
         </resources>
     </cache>
 
+    <cache alias="player_online_count">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.Integer</value-type>
+        <expiry>
+            <ttl unit="seconds">300</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
+
 </config>

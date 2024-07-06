@@ -16,10 +16,10 @@ import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,9 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -43,7 +40,7 @@ public class PlayerApi {
     @Autowired
     private EhcacheService ehcacheService;
 
-    @PostMapping("/onlinePlayerList")
+/*    @PostMapping("/onlinePlayerList")
     @ApiOperation(value = "在线玩家", notes = "在线玩家")
     public R<List<PlayerTokenResp>> onlinePlayerList() {
         List<PlayerTokenResp> list = new ArrayList<>();
@@ -55,6 +52,13 @@ public class PlayerApi {
         }
 
         return R.ok(list);
+    }*/
+
+    @PostMapping
+    @ApiModelProperty(value = "随机在线人数", notes = "随机在线人数")
+    public R<Integer> playerOnlineCount() {
+        int playerOnlineCount = TokenTools.onlineCountRandom();
+        return R.ok(playerOnlineCount);
     }
 
 
@@ -63,7 +67,7 @@ public class PlayerApi {
     public R<PlayerInfoResp> playerInfo() {
         String account = TokenTools.getPlayerToken(true).getAccount();
         PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
-        if (playerInfo == null){
+        if (playerInfo == null) {
             playerInfo = playerInfoService.findByAccount(account);
             ehcacheService.playerInfoCache().put(account, playerInfo);
         }
@@ -119,16 +123,15 @@ public class PlayerApi {
 
 
     //校验验证码
-    private void checkVerificationCode(String reqVerificationCode){
+    private void checkVerificationCode(String reqVerificationCode) {
         String verificationCode = ehcacheService.verificationCache().get(HttpTools.getIp());
         if (verificationCode == null) {
             throw new DataException("验证码有误或已过期");
         }
-        if (!verificationCode.equals(reqVerificationCode)){
+        if (!verificationCode.equals(reqVerificationCode)) {
             throw new DataException("验证码错误");
         }
     }
-
 
 
     @PostMapping("/login")
