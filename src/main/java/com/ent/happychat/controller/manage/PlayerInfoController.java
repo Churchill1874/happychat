@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -92,6 +93,7 @@ public class PlayerInfoController {
         playerInfo.setSalt(salt);
         playerInfo.setCreateName(TokenTools.getAdminToken(true).getName());
         playerInfo.setCreateTime(LocalDateTime.now());
+        playerInfo.setBalance(BigDecimal.ZERO);
         playerInfoService.add(playerInfo);
         return R.ok(null);
     }
@@ -116,6 +118,7 @@ public class PlayerInfoController {
         playerInfo.setLevel(req.getLevel());
         playerInfo.setSelfIntroduction(req.getSelfIntroduction());
         playerInfo.setAvatarPath(req.getAvatarPath());
+        playerInfo.setBalance(req.getBalance());
 
         if (req.getLevel() == null) {
             playerInfo.setLevel(LevelTypeEnum.LEVEL_0);

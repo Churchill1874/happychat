@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -47,5 +48,8 @@ public class PlayerInfoUpdateReq implements Serializable {
 
     @ApiModelProperty(value = "头像路径", required = false)
     private String avatarPath;
+
+    @ApiModelProperty(value = "余额", required = false)
+    private BigDecimal balance;
 
 }
