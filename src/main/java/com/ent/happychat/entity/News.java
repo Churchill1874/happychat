@@ -27,6 +27,10 @@ public class News extends CreatorBaseInfo implements Serializable {
     @ApiModelProperty("内容")
     private String content;
 
+    @TableField("filter_content")
+    @ApiModelProperty("过滤内容")
+    private String filterContent;
+
     @TableField("source")
     @ApiModelProperty("来源")
     private String source;

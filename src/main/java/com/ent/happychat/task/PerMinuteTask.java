@@ -69,11 +69,11 @@ public class PerMinuteTask {
             //0分时候请求
             if (minutes == 0) {
                 //头条
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 11);
+                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 5);
                 newsList.addAll(headlinesNews);
 
                 //新闻
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 5);
+                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 11);
                 newsList.addAll(sportsNews);
 
                 //体育
@@ -104,7 +104,7 @@ public class PerMinuteTask {
             //遍历过滤掉三方返回的html标签 ,并且抽取图片路径拼在一起保存
             for(News news: newsList){
                 Document document = Jsoup.parse(news.getContent());
-                news.setContent(document.text());
+                news.setFilterContent(document.text());
 
                 //获取三方返回的新闻内容里面的图片路径
                 Elements images = document.select("img");
