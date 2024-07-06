@@ -55,7 +55,7 @@ public class PlayerApi {
     }*/
 
     @PostMapping
-    @ApiModelProperty(value = "随机在线人数", notes = "随机在线人数")
+    @ApiOperation(value = "随机在线人数", notes = "随机在线人数")
     public R<Integer> playerOnlineCount() {
         int playerOnlineCount = TokenTools.onlineCountRandom();
         return R.ok(playerOnlineCount);

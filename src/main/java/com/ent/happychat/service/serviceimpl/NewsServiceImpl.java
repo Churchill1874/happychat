@@ -171,37 +171,37 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (CollectionUtils.isNotEmpty(newsCategoryEnums)) {
             if (newsCategoryEnums.contains(NewsCategoryEnum.HEADLINES)) {
                 //头条
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 5);
+                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 10);
                 newsList.addAll(headlinesNews);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.SPORTS)) {
                 //体育
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 11);
+                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 10);
                 newsList.addAll(sportsNews);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.NEWS)) {
                 //新闻
-                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 5);
+                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 10);
                 newsList.addAll(news);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.MILITARY_AFFAIRS)) {
                 //军事
-                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 5);
+                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 7);
                 newsList.addAll(militaryAffairsNews);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.SCIENCE)) {
                 //科技
-                List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 2);
+                List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 5);
                 newsList.addAll(scienceNews);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.ENTERTAINMENT)) {
                 //娱乐
-                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 1);
+                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 5);
                 newsList.addAll(entertainmentNews);
             }
             if (newsCategoryEnums.contains(NewsCategoryEnum.WOMAN)) {
                 //女性
-                List<News> womenNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 1);
+                List<News> womenNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 3);
                 newsList.addAll(womenNews);
             }
         }

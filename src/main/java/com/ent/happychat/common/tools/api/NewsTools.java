@@ -90,16 +90,6 @@ public class NewsTools {
                             news.setContentImagePath(contentImagePath);
                         }
 
-                        //将返回的新闻发生时间转换成localdatetime格式
-                        String time = obj.getStr("time");
-                        if (StringUtils.isNotBlank(time)){
-                            if (time.contains(" ")){
-                                news.setCreateTime(LocalDateTime.parse(time.replace(" ","T")));
-                            }
-                            if (!time.contains(" ")){
-                                news.setCreateTime(LocalDate.parse(time).atStartOfDay());
-                            }
-                        }
                         news.setCreateName("平台");
                         news.setCreateTime(LocalDateTime.now());
                         newsList.add(news);
