@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.news.NewsPage;
 import com.ent.happychat.pojo.resp.news.HomeNews;
@@ -50,6 +51,7 @@ public class NewsApi {
             return R.ok(homeNews);
         }
 
+        //重新拼装首页数据
         homeNews = new HomeNews();
 
         //获取1条最近置顶新闻
@@ -65,6 +67,9 @@ public class NewsApi {
         IPage<News> iPage = newsService.queryPage(newsPage);
         homeNews.setNewsList(iPage.getRecords());
 
+
+        //获取随机的在线人数
+        homeNews.setOnlinePlayerCount(TokenTools.onlineCountRandom());
 
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);

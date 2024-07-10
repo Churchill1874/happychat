@@ -3,7 +3,6 @@ package com.ent.happychat.pojo.resp.news;
 import com.ent.happychat.entity.News;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,5 +16,11 @@ public class HomeNews implements Serializable {
 
     @ApiModelProperty("置顶新闻")
     private News topNews;
+
+    @ApiModelProperty("在线人数")
+    private int onlinePlayerCount;
+
+    @ApiModelProperty("轮播图列表")
+    private List<String> bannerPathList;
 
 }

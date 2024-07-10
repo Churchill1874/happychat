@@ -2,7 +2,7 @@ package com.ent.happychat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.news.NewsPage;
@@ -42,6 +42,7 @@ public interface NewsService extends IService<News> {
 
     /**
      * 修改新闻
+     *
      * @param news
      */
     void updateNews(News news);
@@ -50,7 +51,7 @@ public interface NewsService extends IService<News> {
     /**
      * 拉取新闻
      */
-    void pullNews(LocalDateTime currentTime, List<NewsCategoryEnum> newsCategoryEnums, boolean isTask);
+    void pullNews(LocalDateTime currentTime, List<JuHeNewsCategoryEnum> newsCategoryEnums, boolean isTask);
 
 
 }

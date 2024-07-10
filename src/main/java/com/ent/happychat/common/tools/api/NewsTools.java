@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
@@ -15,7 +16,6 @@ import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class NewsTools {
     public static final String URL = "https://api.jisuapi.com/news/get";
     public static final String CATEGORY = "头条";// utf8  新闻频道(头条,财经,体育,娱乐,军事,教育,科技,NBA,股票,星座,女性,健康,育儿)
 
-    public static List<News> getNewsData(NewsCategoryEnum categoryEnum, int size) {
+    public static List<News> getNewsData(JuHeNewsCategoryEnum categoryEnum, int size) {
         List<News> newsList = new ArrayList<>();
 
         //请求极速新闻的响应结果
@@ -65,14 +65,13 @@ public class NewsTools {
                         JSONObject obj = list.getJSONObject(i);
                         News news = new News();
                         news.setTitle(obj.getStr("title"));
-
                         news.setSource(obj.getStr("src"));
-                        news.setCategory(categoryEnum);
+                        news.setCategory(NewsCategoryEnum.convertJuHeNewsType(categoryEnum));
                         news.setPhotoPath(obj.getStr("pic"));
                         news.setUrl(obj.getStr("url"));
                         news.setNewsStatus(NewsStatusEnum.NORMAL);
 
-                        if (StringUtils.isNotBlank(obj.getStr("content"))){
+                        if (StringUtils.isNotBlank(obj.getStr("content"))) {
                             news.setContent(obj.getStr("content"));
                             //从新闻内容中过滤出来无标签样式新闻内容
                             Document document = Jsoup.parse(news.getContent());
@@ -82,8 +81,8 @@ public class NewsTools {
                             Elements images = document.select("img");
                             //将所有图片拼在一起用逗号隔开
                             List<String> imagePaths = images.stream()
-                                    .map(img -> img.attr("src"))
-                                    .collect(Collectors.toList());
+                                .map(img -> img.attr("src"))
+                                .collect(Collectors.toList());
 
                             //从新闻内容中获取图片
                             String contentImagePath = String.join(",", imagePaths);

@@ -1,6 +1,6 @@
 package com.ent.happychat.pojo.req.news;
 
-import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -14,5 +14,5 @@ public class NewsPullReq implements Serializable {
 
     @NotNull(message = "拉取新闻类型不能为空")
     @ApiModelProperty("拉取的新闻类型")
-    private List<NewsCategoryEnum> newsCategoryEnum;
+    private List<JuHeNewsCategoryEnum> newsCategoryEnum;
 }

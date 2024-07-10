@@ -1,8 +1,9 @@
-package com.ent.happychat.controller.player;
+package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.exception.DataException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +19,11 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@Api(tags = "验证码")
-@RequestMapping("/player/tools")
+@Api(tags = "工具")
+@RequestMapping("/manage/tools")
 public class ToolsController {
+
+    @ApiOperation("上传图片")
 
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
@@ -30,7 +33,7 @@ public class ToolsController {
             }
 
             // 获取Linux服务器上保存文件的目录
-            String uploadDir = "/image/";
+            String uploadDir = "/bignews/image/";
 
             // 获取文件后缀
             String originalFilename = file.getOriginalFilename();
@@ -45,6 +48,9 @@ public class ToolsController {
             // 构建文件的保存路径
             Path filePath = Paths.get(uploadDir, imageName);
 
+            // 创建目录（如果目录不存在）
+            Files.createDirectories(filePath.getParent());
+
             // 将文件保存到指定目录
             Files.write(filePath, file.getBytes());
 
@@ -54,7 +60,5 @@ public class ToolsController {
             return R.failed("上传失败");
         }
     }
-
-
-
 }
+

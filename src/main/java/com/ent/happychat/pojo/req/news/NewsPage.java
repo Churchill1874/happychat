@@ -1,6 +1,6 @@
 package com.ent.happychat.pojo.req.news;
 
-import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,23 +16,22 @@ public class NewsPage extends PageBase implements Serializable {
     private String title;
 
     @ApiModelProperty("新闻类别")
-    private NewsCategoryEnum categoryEnum;
+    private JuHeNewsCategoryEnum categoryEnum;
 
     @ApiModelProperty("新闻状态")
     private NewsStatusEnum newsStatus;
 
     @ApiModelProperty("是否按照浏览量降序")
-    private Boolean viewSort=false;
+    private Boolean viewSort = false;
 
     @ApiModelProperty("是否按照被赞量降序")
-    private Boolean likesSort=false;
+    private Boolean likesSort = false;
 
     @ApiModelProperty("是否按照差评量降序")
-    private Boolean badSort=false;
+    private Boolean badSort = false;
 
     @ApiModelProperty("是否按照评论数量降序")
-    private Boolean commentsSort=false;
-
+    private Boolean commentsSort = false;
 
 
 }

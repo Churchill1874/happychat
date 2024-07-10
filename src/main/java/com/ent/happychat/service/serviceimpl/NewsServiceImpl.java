@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.exception.DataException;
@@ -18,9 +19,6 @@ import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -51,10 +48,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<News> queryNews = new QueryWrapper<>();
         queryNews.lambda()
-                .eq(newsPage.getCategoryEnum() != null, News::getCategory, newsPage.getCategoryEnum())
-                .eq(newsPage.getNewsStatus() != null, News::getNewsStatus, newsPage.getNewsStatus())
-                .like(StringUtils.isNotBlank(newsPage.getTitle()), News::getTitle, newsPage.getTitle())
-                .orderByDesc(News::getCreateTime);
+            .eq(newsPage.getCategoryEnum() != null, News::getCategory, newsPage.getCategoryEnum())
+            .eq(newsPage.getNewsStatus() != null, News::getNewsStatus, newsPage.getNewsStatus())
+            .like(StringUtils.isNotBlank(newsPage.getTitle()), News::getTitle, newsPage.getTitle())
+            .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
         boolean createTimeSort = !newsPage.getBadSort() && !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
@@ -82,9 +79,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     public List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size) {
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(News::getNewsStatus, newsStatusEnum)
-                .orderByDesc(News::getCreateTime)
-                .last("LIMIT " + size);
+            .eq(News::getNewsStatus, newsStatusEnum)
+            .orderByDesc(News::getCreateTime)
+            .last("LIMIT " + size);
 
         return this.list(queryWrapper);
     }
@@ -133,7 +130,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Async
     @Override
-    public void pullNews(LocalDateTime currentTime, List<NewsCategoryEnum> newsCategoryEnums, boolean isTask) {
+    public void pullNews(LocalDateTime currentTime, List<JuHeNewsCategoryEnum> newsCategoryEnums, boolean isTask) {
         //请求新闻定时任务
         int hour = currentTime.getHour();
         int minutes = currentTime.getMinute();
@@ -165,44 +162,44 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
 
     //拉取新闻数据
-    private List<News> pullNewsData(List<NewsCategoryEnum> newsCategoryEnums) {
+    private List<News> pullNewsData(List<JuHeNewsCategoryEnum> newsCategoryEnums) {
         List<News> newsList = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(newsCategoryEnums)) {
-            if (newsCategoryEnums.contains(NewsCategoryEnum.HEADLINES)) {
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.HEADLINES)) {
                 //头条
-                List<News> headlinesNews = NewsTools.getNewsData(NewsCategoryEnum.HEADLINES, 10);
+                List<News> headlinesNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.HEADLINES, 10);
                 newsList.addAll(headlinesNews);
             }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.SPORTS)) {
-                //体育
-                List<News> sportsNews = NewsTools.getNewsData(NewsCategoryEnum.SPORTS, 10);
-                newsList.addAll(sportsNews);
-            }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.NEWS)) {
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.NEWS)) {
                 //新闻
-                List<News> news = NewsTools.getNewsData(NewsCategoryEnum.NEWS, 10);
+                List<News> news = NewsTools.getNewsData(JuHeNewsCategoryEnum.NEWS, 10);
                 newsList.addAll(news);
             }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.MILITARY_AFFAIRS)) {
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.SPORTS)) {
+                //体育
+                List<News> sportsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SPORTS, 10);
+                newsList.addAll(sportsNews);
+            }
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.MILITARY_AFFAIRS)) {
                 //军事
-                List<News> militaryAffairsNews = NewsTools.getNewsData(NewsCategoryEnum.MILITARY_AFFAIRS, 7);
+                List<News> militaryAffairsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.MILITARY_AFFAIRS, 10);
                 newsList.addAll(militaryAffairsNews);
             }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.SCIENCE)) {
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.SCIENCE)) {
                 //科技
-                List<News> scienceNews = NewsTools.getNewsData(NewsCategoryEnum.SCIENCE, 5);
+                List<News> scienceNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SCIENCE, 5);
                 newsList.addAll(scienceNews);
             }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.ENTERTAINMENT)) {
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.ENTERTAINMENT)) {
                 //娱乐
-                List<News> entertainmentNews = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT, 5);
+                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 7);
                 newsList.addAll(entertainmentNews);
             }
-            if (newsCategoryEnums.contains(NewsCategoryEnum.WOMAN)) {
-                //女性
-                List<News> womenNews = NewsTools.getNewsData(NewsCategoryEnum.WOMAN, 3);
-                newsList.addAll(womenNews);
+            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.WOMAN)) {
+                //人情
+                List<News> womanNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.WOMAN, 7);
+                newsList.addAll(womanNews);
             }
         }
         return newsList;

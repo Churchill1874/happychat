@@ -1,8 +1,6 @@
 package com.ent.happychat.task;
 
-import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
-import com.ent.happychat.mapper.NewsMapper;
-import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.service.NewsService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +26,7 @@ public class PerMinuteTask {
     @Scheduled(cron = "0 */1 * * * ?")
     public void perMinute() {
         LocalDateTime currentTime = LocalDateTime.now();
-        newsService.pullNews(currentTime, Lists.newArrayList(NewsCategoryEnum.values()), true);
+        newsService.pullNews(currentTime, Lists.newArrayList(JuHeNewsCategoryEnum.values()), true);
     }
 
 }

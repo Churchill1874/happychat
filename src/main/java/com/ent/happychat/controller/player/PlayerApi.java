@@ -40,28 +40,6 @@ public class PlayerApi {
     @Autowired
     private EhcacheService ehcacheService;
 
-/*    @PostMapping("/onlinePlayerList")
-    @ApiOperation(value = "在线玩家", notes = "在线玩家")
-    public R<List<PlayerTokenResp>> onlinePlayerList() {
-        List<PlayerTokenResp> list = new ArrayList<>();
-        Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCountCache().iterator();
-
-        while (iterator.hasNext()) {
-            Cache.Entry<String, PlayerTokenResp> entry = iterator.next();
-            list.add(entry.getValue());
-        }
-
-        return R.ok(list);
-    }*/
-
-    @PostMapping
-    @ApiOperation(value = "随机在线人数", notes = "随机在线人数")
-    public R<Integer> playerOnlineCount() {
-        int playerOnlineCount = TokenTools.onlineCountRandom();
-        return R.ok(playerOnlineCount);
-    }
-
-
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
     public R<PlayerInfoResp> playerInfo() {

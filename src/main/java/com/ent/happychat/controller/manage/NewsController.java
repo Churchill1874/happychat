@@ -91,8 +91,8 @@ public class NewsController {
     }
 
     @AdminLoginCheck
-    @PostMapping("/pullNews")
-    @ApiOperation(value = "拉取新闻", notes = "拉取新闻")
+    @PostMapping("/pullJuHeNews")
+    @ApiOperation(value = "拉取聚合新闻", notes = "拉取聚合新闻")
     public R pullNews(@RequestBody @Valid NewsPullReq req) {
         newsService.pullNews(LocalDateTime.now(), req.getNewsCategoryEnum(), false);
 
