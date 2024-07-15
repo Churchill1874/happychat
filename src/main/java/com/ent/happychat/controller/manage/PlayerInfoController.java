@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
-import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.CheckReqTools;
@@ -81,7 +81,7 @@ public class PlayerInfoController {
 
         PlayerInfo playerInfo = BeanUtil.toBean(req, PlayerInfo.class);
         if (req.getLevel() == null) {
-            playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
+            playerInfo.setLevel(LevelEnum.LEVEL_0);
         }
         if (req.getIsBot() == null) {
             playerInfo.setIsBot(true);
@@ -121,7 +121,7 @@ public class PlayerInfoController {
         playerInfo.setBalance(req.getBalance());
 
         if (req.getLevel() == null) {
-            playerInfo.setLevel(LevelTypeEnum.LEVEL_0);
+            playerInfo.setLevel(LevelEnum.LEVEL_0);
         }
         playerInfo.setUpdateName(TokenTools.getAdminToken(true).getName());
         playerInfo.setUpdateTime(LocalDateTime.now());
@@ -138,15 +138,15 @@ public class PlayerInfoController {
 
     @PostMapping("/levelTypeList")
     @ApiOperation(value = "枚举类型列表", notes = "枚举类型列表")
-    public R<List<LevelTypeEnum.LevelType>> levelTypeList() {
-        List<LevelTypeEnum.LevelType> list = new ArrayList<>();
-        for (LevelTypeEnum levelTypeEnum : LevelTypeEnum.values()) {
-            LevelTypeEnum.LevelType levelType = new LevelTypeEnum.LevelType();
-            levelType.setCode(levelTypeEnum.getCode());
-            levelType.setName(levelTypeEnum.getName());
-            levelType.setCommentCount(levelTypeEnum.getCommentCount());
-            levelType.setCorrectCount(levelTypeEnum.getCorrectCount());
-            levelType.setLikesReceivedCount(levelTypeEnum.getLikesReceivedCount());
+    public R<List<LevelEnum.LevelType>> levelTypeList() {
+        List<LevelEnum.LevelType> list = new ArrayList<>();
+        for (LevelEnum levelEnum : LevelEnum.values()) {
+            LevelEnum.LevelType levelType = new LevelEnum.LevelType();
+            levelType.setCode(levelEnum.getCode());
+            levelType.setName(levelEnum.getName());
+            levelType.setCommentCount(levelEnum.getCommentCount());
+            levelType.setCorrectCount(levelEnum.getCorrectCount());
+            levelType.setLikesReceivedCount(levelEnum.getLikesReceivedCount());
             list.add(levelType);
         }
 

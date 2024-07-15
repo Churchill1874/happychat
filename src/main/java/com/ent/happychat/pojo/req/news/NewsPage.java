@@ -1,6 +1,6 @@
 package com.ent.happychat.pojo.req.news;
 
-import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,7 +16,7 @@ public class NewsPage extends PageBase implements Serializable {
     private String title;
 
     @ApiModelProperty("新闻类别")
-    private JuHeNewsCategoryEnum categoryEnum;
+    private NewsCategoryEnum categoryEnum;
 
     @ApiModelProperty("新闻状态")
     private NewsStatusEnum newsStatus;

@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * @author Churchill
  */
-public enum LevelTypeEnum {
+public enum LevelEnum {
     LEVEL_0(0,"暗中观察",0,0,0),
     LEVEL_1(1,"新人小白",1, 10,0),
     LEVEL_2(2,"围观群众",50,100,0),
@@ -61,7 +61,7 @@ public enum LevelTypeEnum {
     @Getter
     private int correctCount;
 
-    LevelTypeEnum(int code, String name, int commentCount, int likesReceivedCount, int correctCount) {
+    LevelEnum(int code, String name, int commentCount, int likesReceivedCount, int correctCount) {
         this.code = code;
         this.name = name;
         this.commentCount = commentCount;

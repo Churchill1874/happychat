@@ -1,7 +1,7 @@
 package com.ent.happychat.pojo.resp.player;
 
 import com.ent.happychat.common.constant.enums.GenderEnum;
-import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,7 +43,7 @@ public class PlayerInfoResp implements Serializable {
     private LocalDate birth;
 
     @ApiModelProperty("等级")
-    private LevelTypeEnum level;
+    private LevelEnum level;
 
     @ApiModelProperty("自我介绍")
     private String selfIntroduction;

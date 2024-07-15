@@ -7,6 +7,7 @@ import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.news.NewsPage;
 import com.ent.happychat.pojo.resp.news.HomeNews;
 import com.ent.happychat.service.EhcacheService;
@@ -35,6 +36,13 @@ public class NewsApi {
     @Autowired
     private EhcacheService ehcacheService;
 
+    @PostMapping("/find")
+    @ApiOperation(value = "新闻详情", notes = "新闻详情")
+    public R<News> find(@RequestBody @Valid Id req) {
+        News news = newsService.getById(req.getId());
+        return R.ok(news);
+    }
+
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<News>> page(@RequestBody @Valid NewsPage req) {
@@ -51,7 +59,6 @@ public class NewsApi {
             return R.ok(homeNews);
         }
 
-        //重新拼装首页数据
         homeNews = new HomeNews();
 
         //获取1条最近置顶新闻
@@ -60,17 +67,18 @@ public class NewsApi {
             homeNews.setTopNews(topList.get(0));
         }
 
-        //获取排名前十新闻
         NewsPage newsPage = new NewsPage();
         newsPage.setPageNum(1);
         newsPage.setPageSize(10);
+        newsPage.setViewSort(true);
+        newsPage.setCommentsSort(true);
         IPage<News> iPage = newsService.queryPage(newsPage);
         homeNews.setNewsList(iPage.getRecords());
-
 
         //获取随机的在线人数
         homeNews.setOnlinePlayerCount(TokenTools.onlineCountRandom());
 
+        //更新缓存
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);
     }

@@ -6,6 +6,7 @@ import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.news.NewsPage;
+import com.ent.happychat.pojo.resp.news.HomeNews;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
-import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,7 +38,7 @@ public class PlayerInfoPageReq extends PageBase implements Serializable {
     private LocalDate birth;
 
     @ApiModelProperty("等级")
-    private LevelTypeEnum level;
+    private LevelEnum level;
 
     @ApiModelProperty("是否机器人")
     private Boolean isBot;

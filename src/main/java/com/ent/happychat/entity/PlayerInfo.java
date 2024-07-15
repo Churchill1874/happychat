@@ -3,7 +3,7 @@ package com.ent.happychat.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.GenderEnum;
-import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.entity.base.CreatorBaseInfo;
 import io.swagger.annotations.ApiModel;
@@ -53,7 +53,7 @@ public class PlayerInfo extends CreatorBaseInfo implements Serializable {
 
     @TableField("level")
     @ApiModelProperty("等级")
-    private LevelTypeEnum level;
+    private LevelEnum level;
 
     @TableField("self_introduction")
     @ApiModelProperty("自我介绍")

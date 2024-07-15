@@ -1,11 +1,16 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.constant.enums.FileTypeEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.common.tools.api.FileTools;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,17 +28,16 @@ import java.util.UUID;
 @RequestMapping("/manage/tools")
 public class ToolsController {
 
-    @ApiOperation("上传图片")
+    @Autowired
+    private UploadRecordService uploadRecordService;
 
+    @ApiOperation("上传图片")
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
         try {
             if (file.isEmpty()){
                 throw new DataException("上传图片是空");
             }
-
-            // 获取Linux服务器上保存文件的目录
-            String uploadDir = "/bignews/image/";
 
             // 获取文件后缀
             String originalFilename = file.getOriginalFilename();
@@ -42,6 +46,12 @@ public class ToolsController {
             }
 
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+
+            // 获取Linux服务器上保存文件的目录
+            FileTypeEnum fileTypeEnum = FileTools.getFileType(fileExtension);
+
+            String uploadDir = "/bignews/" + fileTypeEnum.getName();
 
             String imageName = UUID.randomUUID().toString() + fileExtension;
 
@@ -54,7 +64,9 @@ public class ToolsController {
             // 将文件保存到指定目录
             Files.write(filePath, file.getBytes());
 
-            return R.ok(uploadDir + imageName);
+            String path = uploadDir + imageName;
+            uploadRecordService.insertRecord(path, fileTypeEnum, TokenTools.getAdminToken(true).getName());
+            return R.ok(path);
         } catch (Exception e) {
             e.printStackTrace();
             return R.failed("上传失败");

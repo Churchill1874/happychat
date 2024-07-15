@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class BaseInfo implements Serializable {
-
     private static final long serialVersionUID = -7036552473267502409L;
 
     @TableId(value = "id",type = IdType.AUTO)

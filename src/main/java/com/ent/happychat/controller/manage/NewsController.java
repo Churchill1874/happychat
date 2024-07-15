@@ -95,9 +95,6 @@ public class NewsController {
     @ApiOperation(value = "拉取聚合新闻", notes = "拉取聚合新闻")
     public R pullNews(@RequestBody @Valid NewsPullReq req) {
         newsService.pullNews(LocalDateTime.now(), req.getNewsCategoryEnum(), false);
-
-        //清理首页的新闻列表缓存
-        ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
         return R.ok(null);
     }
 

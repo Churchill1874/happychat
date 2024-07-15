@@ -1,7 +1,7 @@
 package com.ent.happychat.pojo.req.player;
 
 import com.ent.happychat.common.constant.enums.GenderEnum;
-import com.ent.happychat.common.constant.enums.LevelTypeEnum;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -41,7 +41,7 @@ public class PlayerInfoUpdateReq implements Serializable {
     private LocalDate birth;
 
     @ApiModelProperty(value = "等级", required = false)
-    private LevelTypeEnum level;
+    private LevelEnum level;
 
     @ApiModelProperty(value = "自我介绍", required = false)
     private String selfIntroduction;

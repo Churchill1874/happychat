@@ -15,10 +15,12 @@ import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.NewsMapper;
 import com.ent.happychat.pojo.req.news.NewsPage;
+import com.ent.happychat.pojo.resp.news.HomeNews;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -55,9 +57,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
         boolean createTimeSort = !newsPage.getBadSort() && !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
-        if (createTimeSort) {
-            queryNews.lambda().orderByDesc(News::getCreateTime);
-        } else {
+        if (!createTimeSort) {
             if (newsPage.getBadSort()) {
                 queryNews.lambda().orderByDesc(News::getBadCount);
             }
@@ -136,7 +136,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         int minutes = currentTime.getMinute();
         List<News> newsList = null;
 
-        //只保留2个月的新闻数据 超过的删除
+        //每天12点检测一次 只保留2个月的新闻数据 超过的删除
         if (hour == 0 && minutes == 0) {
             clean2MonthsAgo(currentTime);
         }
@@ -188,19 +188,19 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.SCIENCE)) {
                 //科技
-                List<News> scienceNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SCIENCE, 5);
+                List<News> scienceNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SCIENCE, 10);
                 newsList.addAll(scienceNews);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.ENTERTAINMENT)) {
                 //娱乐
-                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 7);
+                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 10);
                 newsList.addAll(entertainmentNews);
             }
-            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.WOMAN)) {
+/*            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.WOMAN)) {
                 //人情
                 List<News> womanNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.WOMAN, 7);
                 newsList.addAll(womanNews);
-            }
+            }*/
         }
         return newsList;
     }
