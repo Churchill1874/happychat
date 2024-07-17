@@ -27,9 +27,6 @@ public class NewsPage extends PageBase implements Serializable {
     @ApiModelProperty("是否按照被赞量降序")
     private Boolean likesSort = false;
 
-    @ApiModelProperty("是否按照差评量降序")
-    private Boolean badSort = false;
-
     @ApiModelProperty("是否按照评论数量降序")
     private Boolean commentsSort = false;
 

@@ -32,9 +32,6 @@ public class NewsUpdateReq extends Id implements Serializable {
     @ApiModelProperty("浏览量")
     private Integer viewCount = 0;
 
-    @ApiModelProperty("点坏数量")
-    private Integer badCount = 0;
-
 
 
 }

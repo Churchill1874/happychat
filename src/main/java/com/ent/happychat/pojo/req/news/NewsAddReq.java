@@ -40,10 +40,6 @@ public class NewsAddReq implements Serializable {
     @ApiModelProperty("点赞数量")
     private Integer likesCount = 0;
 
-    @NotNull(message = "点坏数量不能空")
-    @ApiModelProperty("点坏数量")
-    private Integer badCount = 0;
-
     @ApiModelProperty("新闻状态 如果为空 默认为普通")
     private NewsStatusEnum newsStatus;
 

@@ -56,11 +56,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
-        boolean createTimeSort = !newsPage.getBadSort() && !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
+        boolean createTimeSort = !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
         if (!createTimeSort) {
-            if (newsPage.getBadSort()) {
-                queryNews.lambda().orderByDesc(News::getBadCount);
-            }
             if (newsPage.getLikesSort()) {
                 queryNews.lambda().orderByDesc(News::getLikesCount);
             }
@@ -107,9 +104,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
         if (news.getLikesCount() != null) {
             record.setLikesCount(news.getLikesCount());
-        }
-        if (news.getBadCount() != null) {
-            record.setBadCount(news.getBadCount());
         }
         if (news.getContent() != null) {
             record.setContent(news.getContent());

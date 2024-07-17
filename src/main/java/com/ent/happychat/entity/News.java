@@ -59,10 +59,6 @@ public class News extends CreatorBaseInfo implements Serializable {
     @ApiModelProperty("点赞数量")
     private Integer likesCount = 0;
 
-    @TableField("bad_count")
-    @ApiModelProperty("点坏数量")
-    private Integer badCount = 0;
-
     @TableField("comments_count")
     @ApiModelProperty("评论数量")
     private Integer commentsCount = 0;

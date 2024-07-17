@@ -12,13 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -79,10 +82,13 @@ public class NewsTools {
 
                             //获取三方返回的新闻内容里面的图片路径
                             Elements images = document.select("img");
-                            //将所有图片拼在一起用逗号隔开
-                            List<String> imagePaths = images.stream()
-                                .map(img -> img.attr("src"))
-                                .collect(Collectors.toList());
+                            Set<String> imagePaths = new HashSet<>();
+                            for(Element img: images){
+                                String imgSrc = img.attr("src");
+                                if (StringUtils.isNotBlank(imgSrc) && !imgSrc.endsWith("empty.png")){
+                                    imagePaths.add(imgSrc);
+                                }
+                            }
 
                             //从新闻内容中获取图片
                             String contentImagePath = String.join(",", imagePaths);
