@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.FileTypeEnum;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.UploadRecord;
 import com.ent.happychat.mapper.UploadRecordMapper;
 import com.ent.happychat.service.UploadRecordService;
@@ -63,6 +64,21 @@ public class UploadRecordServiceImpl extends ServiceImpl<UploadRecordMapper, Upl
         QueryWrapper<UploadRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UploadRecord::getPath, path);
         remove(queryWrapper);
+    }
+
+    @Override
+    public void cleanRemoveFile(String path) {
+        Path filePath = Paths.get(path);
+        boolean result = false;
+        try {
+            result = Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //如果删除成功
+        if (!result){
+            throw new DataException("删除文件异常");
+        }
     }
 
 }

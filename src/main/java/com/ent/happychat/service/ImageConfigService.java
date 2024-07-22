@@ -9,4 +9,8 @@ public interface ImageConfigService extends IService<ImageConfig> {
 
     IPage<ImageConfig> queryPage(ImageConfigPageReq po);
 
+    void add(ImageConfig imageConfig);
+
+    void deleteById(Long id);
+
 }

@@ -24,4 +24,10 @@ public interface UploadRecordService extends IService<UploadRecord> {
      * @param path
      */
     void cleanByPath(String path);
+
+    /**
+     * 根据服务器地址 清理系统中不用了的图片 不论后台或者客户端
+     * @param path
+     */
+    void cleanRemoveFile(String path);
 }

@@ -12,11 +12,11 @@ public class ImageConfigUpdateReq extends Id implements Serializable {
     private static final long serialVersionUID = 4940749544856105886L;
 
     @NotNull(message = "排序不能为空")
-    @ApiModelProperty("排序")
+    @ApiModelProperty(value = "排序", required = true)
     private Integer sort;
 
     @NotNull(message = "使用状态不能为空")
-    @ApiModelProperty("使用状态")
+    @ApiModelProperty(value = "使用状态", required = true)
     private Boolean status;
 
 }

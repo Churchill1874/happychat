@@ -12,6 +12,7 @@ import com.ent.happychat.pojo.req.image.ImageConfigAddReq;
 import com.ent.happychat.pojo.req.image.ImageConfigPageReq;
 import com.ent.happychat.pojo.req.image.ImageConfigUpdateReq;
 import com.ent.happychat.service.ImageConfigService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class ImageConfigController {
 
     @Autowired
     private ImageConfigService imageConfigService;
+    @Autowired
+    private UploadRecordService uploadRecordService;
 
     @PostMapping("/add")
     @ApiOperation(value = "图片添加", notes = "图片添加")
@@ -40,7 +43,7 @@ public class ImageConfigController {
         ImageConfig imageConfig = BeanUtil.toBean(req, ImageConfig.class);
         imageConfig.setCreateTime(LocalDateTime.now());
         imageConfig.setCreateName(TokenTools.getAdminToken(true).getName());
-        imageConfigService.save(imageConfig);
+        imageConfigService.add(imageConfig);
         return R.ok(null);
     }
 
@@ -61,13 +64,13 @@ public class ImageConfigController {
     @ApiOperation(value = "图片删除", notes = "图片删除")
     @AdminLoginCheck
     public R delete(@RequestBody @Valid Id req) {
-        imageConfigService.removeById(req.getId());
+        imageConfigService.deleteById(req.getId());
         return R.ok(null);
     }
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R page(@RequestBody @Valid ImageConfigPageReq req) {
+    public R page(@RequestBody ImageConfigPageReq req) {
         return R.ok(imageConfigService.queryPage(req));
     }
 

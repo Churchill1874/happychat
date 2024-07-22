@@ -9,6 +9,7 @@ import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
@@ -44,11 +45,13 @@ public class PlayerApi {
     public R<PlayerInfoResp> playerInfo() {
         String account = TokenTools.getPlayerToken(true).getAccount();
         PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
-        if (playerInfo == null) {
-            playerInfo = playerInfoService.findByAccount(account);
-            ehcacheService.playerInfoCache().put(account, playerInfo);
+        if (playerInfo != null) {
+            PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+            return R.ok(playerInfoResp);
         }
 
+        playerInfo = playerInfoService.findByAccount(account);
+        ehcacheService.playerInfoCache().put(account, playerInfo);
         PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
         return R.ok(playerInfoResp);
     }
@@ -145,5 +148,30 @@ public class PlayerApi {
         return R.ok(null);
     }
 
+    @PostMapping("/update")
+    @ApiOperation(value = "更新", notes = "更新")
+    public R update(@RequestBody @Valid PersonalInfoUpdateReq req) {
+        CheckReqTools.name(req.getName());
 
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
+        PlayerInfo playerInfo = playerInfoService.findByAccount(playerTokenResp.getAccount());
+        if (playerInfo == null) {
+            throw new DataException("数据异常");
+        }
+
+        playerInfo.setName(req.getName());
+        playerInfo.setCity(req.getCity());
+        playerInfo.setPhone(req.getPhone());
+        playerInfo.setEmail(req.getEmail());
+        playerInfo.setSelfIntroduction(req.getSelfIntroduction());
+        playerInfo.setAvatarPath(req.getAvatarPath());
+        playerInfo.setUpdateName(playerTokenResp.getName());
+        playerInfo.setUpdateTime(LocalDateTime.now());
+        playerInfoService.updateById(playerInfo);
+
+        //更新缓存
+        ehcacheService.playerInfoCache().remove(playerInfo.getAccount());
+        return R.ok(null);
+    }
 }

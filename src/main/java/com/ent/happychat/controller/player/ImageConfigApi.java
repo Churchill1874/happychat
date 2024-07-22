@@ -31,7 +31,7 @@ public class ImageConfigApi {
 
     @PostMapping("/图片查询")
     @ApiOperation(value = "图片查询", notes = "图片查询")
-    public R<List<ImageConfig>> page(@RequestBody @Valid ImageConfigPageReq req) {
+    public R<List<ImageConfig>> page(@RequestBody ImageConfigPageReq req) {
         QueryWrapper<ImageConfig> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(ImageConfig::getStatus,true)
@@ -39,7 +39,6 @@ public class ImageConfigApi {
             .orderByDesc(ImageConfig::getSort).orderByDesc(ImageConfig::getCreateTime);
 
         return R.ok(imageConfigService.list(queryWrapper));
-
     }
 
 

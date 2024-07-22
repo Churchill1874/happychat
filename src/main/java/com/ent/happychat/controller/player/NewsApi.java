@@ -3,15 +3,24 @@ package com.ent.happychat.controller.player;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.constant.CacheKeyConstant;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.CheckReqTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.news.NewsPage;
+import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
+import com.ent.happychat.pojo.req.player.PlayerInfoUpdateReq;
 import com.ent.happychat.pojo.resp.news.HomeNews;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -35,6 +45,8 @@ public class NewsApi {
     private NewsService newsService;
     @Autowired
     private EhcacheService ehcacheService;
+    @Autowired
+    private PlayerInfoService playerInfoService;
 
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
@@ -82,5 +94,7 @@ public class NewsApi {
         cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
         return R.ok(homeNews);
     }
+
+
 
 }
