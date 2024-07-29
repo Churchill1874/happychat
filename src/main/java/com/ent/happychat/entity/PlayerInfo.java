@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
-import com.ent.happychat.entity.base.CreatorBaseInfo;
+import com.ent.happychat.entity.base.UpdateBaseInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 @ApiModel("玩家")
 @TableName("player_info")
-public class PlayerInfo extends CreatorBaseInfo implements Serializable {
+public class PlayerInfo extends UpdateBaseInfo implements Serializable {
     private static final long serialVersionUID = 8299446727161357208L;
     @TableField("name")
     @ApiModelProperty("昵称")

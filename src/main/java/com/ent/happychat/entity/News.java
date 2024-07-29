@@ -4,19 +4,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.entity.base.CreatorBaseInfo;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ent.happychat.entity.base.UpdateBaseInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @TableName("news")
 @ApiModel("新闻")
-public class News extends CreatorBaseInfo implements Serializable {
+public class News extends UpdateBaseInfo implements Serializable {
     private static final long serialVersionUID = 2788566232849282370L;
 
     @TableField("title")
@@ -60,7 +58,7 @@ public class News extends CreatorBaseInfo implements Serializable {
     private Integer likesCount = 0;
 
     @TableField("comments_count")
-    @ApiModelProperty("评论数量")
+    @ApiModelProperty("被评论数量")
     private Integer commentsCount = 0;
 
     @TableField("news_status")

@@ -2,7 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ent.happychat.entity.base.CreatorBaseInfo;
+import com.ent.happychat.entity.base.UpdateBaseInfo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @TableName("blacklist")
 @ApiModel("黑名单")
-public class Blacklist extends CreatorBaseInfo implements Serializable {
+public class Blacklist extends UpdateBaseInfo implements Serializable {
 
     private static final long serialVersionUID = -3324921096334389678L;
 
