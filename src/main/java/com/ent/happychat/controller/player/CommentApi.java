@@ -1,0 +1,129 @@
+package com.ent.happychat.controller.player;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.entity.Comment;
+import com.ent.happychat.entity.News;
+import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.pojo.req.comment.CommentPageReq;
+import com.ent.happychat.pojo.resp.comment.CommentResp;
+import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
+import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
+import com.ent.happychat.service.CommentService;
+import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.PlayerInfoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Slf4j
+@RestController
+@Api(tags = "评论")
+@RequestMapping("/player/comment")
+public class CommentApi {
+
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private PlayerInfoService playerInfoService;
+
+
+    @PostMapping("/findComments")
+    @ApiOperation(value = "根据新闻id查询新闻评论", notes = "根据新闻id查询新闻评论")
+    public R<NewsCommentPageResp> findComments(@RequestBody @Valid CommentPageReq req) {
+        if (req.getNewsId() == null){
+            throw new DataException("搜索新闻数据异常");
+        }
+
+        //待返回的新闻评论对象
+        NewsCommentPageResp newsCommentRespPage = new NewsCommentPageResp();
+
+
+        //查顶部新闻评论分页
+        CommentPageReq commentPageReq = new CommentPageReq();
+        commentPageReq.setNewsId(req.getNewsId());
+        commentPageReq.setPageNum(req.getPageNum());
+        commentPageReq.setPageSize(req.getPageSize());
+        IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);
+        if (CollectionUtils.isEmpty(topPage.getRecords())){
+            return R.ok(newsCommentRespPage);
+        }
+
+
+        //所有 顶层评论 和 回复评论 涉及到的用户id
+        Set<Long> playerIdSet = topPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toSet());
+
+
+        //根据分页出来的顶层评论记录id 找到每个评论下面的回复记录
+        List<Long> topIdList = topPage.getRecords().stream().map(Comment::getTopId).collect(Collectors.toList());
+        //该新闻所有顶层评论下的回复记录
+        List<Comment> replyList = commentService.replyList(topIdList);
+        //根据顶层评论id分组
+        Map<Long, List<Comment>> replyGroup = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(replyList)){
+            //将所有回复评论的用户id也放入用户id集合
+            playerIdSet.addAll(replyList.stream().map(Comment::getPlayerId).collect(Collectors.toSet()));
+            replyGroup = replyList.stream().collect(Collectors.groupingBy(Comment::getTopId));
+        }
+
+
+        //查询出所有该新闻评论人的信息
+        Map<Long, PlayerInfo> playerInfoMap = playerInfoService.mapByIds(new ArrayList<>(playerIdSet));
+
+
+        //以顶层评论为单位 每组评论集合
+        List<NewsCommentResp> list = new ArrayList<>();
+        for(Comment top: topPage.getRecords()){
+            //获取顶层评论人的信息
+            PlayerInfo topPlayer = playerInfoMap.get(top.getPlayerId());
+            NewsCommentResp newsCommentResp = new NewsCommentResp();
+            CommentResp topResp = BeanUtil.toBean(top, CommentResp.class);
+            topResp.setCommentator(topPlayer.getName());
+            topResp.setAvatarPath(topPlayer.getAvatarPath());
+            topResp.setLevel(topPlayer.getLevel());
+            newsCommentResp.setTopComment(topResp);
+
+            //存入该顶层评论的回复记录
+            List<Comment> replyListOfTop = replyGroup.get(topResp.getTopId());
+            if (CollectionUtils.isNotEmpty(replyListOfTop)){
+                List<CommentResp> replyRespListOfTop = new ArrayList<>();
+                for(Comment reply: replyListOfTop){
+                    PlayerInfo replyPlayer = playerInfoMap.get(reply.getPlayerId());
+                    CommentResp replyResp = BeanUtil.toBean(reply, CommentResp.class);
+                    replyResp.setCommentator(replyPlayer.getName());
+                    replyResp.setAvatarPath(replyPlayer.getAvatarPath());
+                    replyResp.setLevel(replyPlayer.getLevel());
+                    replyRespListOfTop.add(replyResp);
+                }
+                newsCommentResp.setReplyCommentList(replyRespListOfTop);
+            }
+
+
+            list.add(newsCommentResp);
+        }
+
+        //存入该新闻 顶层和回复的评论组 列表
+        newsCommentRespPage.setList(list);
+        return R.ok(newsCommentRespPage);
+    }
+
+}
+
+
+
+
+

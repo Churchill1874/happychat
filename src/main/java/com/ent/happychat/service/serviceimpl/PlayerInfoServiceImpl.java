@@ -3,6 +3,7 @@ package com.ent.happychat.service.serviceimpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
@@ -16,6 +17,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -85,6 +91,23 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(PlayerInfo::getName, name);
         return getOne(queryWrapper);
+    }
+
+    @Override
+    public Map<Long, PlayerInfo> mapByIds(List<Long> idList) {
+        Map<Long, PlayerInfo> map = new HashMap<>();
+
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(PlayerInfo::getId, idList);
+        List<PlayerInfo> list = list(queryWrapper);
+
+        if (CollectionUtils.isEmpty(list)){
+            return map;
+        }
+
+        map = list.stream().collect(Collectors.toMap(PlayerInfo::getId, playerInfo -> playerInfo));
+
+        return map;
     }
 
 }

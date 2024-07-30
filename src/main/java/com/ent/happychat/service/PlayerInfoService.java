@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.PageBase;
 
+import java.util.List;
+import java.util.Map;
+
 public interface PlayerInfoService extends IService<PlayerInfo> {
 
     IPage<PlayerInfo> queryPage(PlayerInfo playerInfo, PageBase pageBase);
@@ -18,4 +21,6 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
     PlayerInfo findByLogin(String account, String name, String phone, String email);
 
     PlayerInfo findByName(String name);
+
+    Map<Long, PlayerInfo> mapByIds(List<Long> idList);
 }

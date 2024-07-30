@@ -1,14 +1,13 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.entity.Blacklist;
 import com.ent.happychat.pojo.req.IdList;
-import com.ent.happychat.pojo.req.blacklist.BlacklistAdd;
-import com.ent.happychat.pojo.req.blacklist.BlacklistPage;
+import com.ent.happychat.pojo.req.blacklist.BlacklistAddReq;
+import com.ent.happychat.pojo.req.blacklist.BlacklistPageReq;
 import com.ent.happychat.service.BlacklistService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -36,7 +34,7 @@ public class BlacklistController {
     @AdminLoginCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加黑名单", notes = "添加黑名单")
-    public R add(@RequestBody @Valid BlacklistAdd req) {
+    public R add(@RequestBody @Valid BlacklistAddReq req) {
         if (StringUtils.isBlank(req.getIp()) && StringUtils.isBlank(req.getPhoneNumber())) {
             return R.failed("ip和手机号不能同时为空");
         }
@@ -67,7 +65,7 @@ public class BlacklistController {
     @AdminLoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页黑名单", notes = "分页黑名单")
-    public R<IPage<Blacklist>> page(@RequestBody BlacklistPage req) {
+    public R<IPage<Blacklist>> page(@RequestBody BlacklistPageReq req) {
         return R.ok(blacklistService.queryPage(req.getPageNum(), req.getPageSize(), req.getIp(), req.getPhone(), req.getDevice()));
     }
 

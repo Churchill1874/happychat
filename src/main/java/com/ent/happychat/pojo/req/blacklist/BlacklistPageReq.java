@@ -8,7 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class BlacklistPage extends PageBase implements Serializable {
+public class BlacklistPageReq extends PageBase implements Serializable {
 
     private static final long serialVersionUID = 8526224475627286219L;
 

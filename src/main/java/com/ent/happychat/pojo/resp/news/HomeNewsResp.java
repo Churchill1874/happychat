@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class HomeNews implements Serializable {
+public class HomeNewsResp implements Serializable {
     private static final long serialVersionUID = -8655985577245382380L;
 
     @ApiModelProperty("滚动新闻")

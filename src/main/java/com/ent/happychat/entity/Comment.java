@@ -20,13 +20,17 @@ public class Comment extends BaseInfo implements Serializable {
     @ApiModelProperty("新闻id")
     private Long newsId;
 
-    @TableField("replay_id")
-    @ApiModelProperty("回复id")
-    private Long replayId;
+    @TableField("top_comment_id")
+    @ApiModelProperty("顶层评论id")
+    private Long topId;
 
-    @TableField("account")
-    @ApiModelProperty("账号")
-    private String account;
+    @TableField("reply_id")
+    @ApiModelProperty("回复id")
+    private Long replyId;
+
+    @TableField("player_id")
+    @ApiModelProperty("玩家id")
+    private Long playerId;
 
     @TableField("content")
     @ApiModelProperty("评论内容")

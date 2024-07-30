@@ -8,7 +8,7 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Blacklist;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
-import com.ent.happychat.pojo.resp.news.HomeNews;
+import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -102,8 +101,8 @@ public class EhcacheServiceImpl implements EhcacheService {
     }
 
     @Override
-    public Cache<String, HomeNews> homeNewsCache() {
-        return cacheManager.getCache(CacheKeyConstant.HOME_NEWS, String.class, HomeNews.class);
+    public Cache<String, HomeNewsResp> homeNewsCache() {
+        return cacheManager.getCache(CacheKeyConstant.HOME_NEWS, String.class, HomeNewsResp.class);
     }
 
     @Override

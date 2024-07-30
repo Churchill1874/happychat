@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class BlacklistAdd implements Serializable {
+public class BlacklistAddReq implements Serializable {
 
     private static final long serialVersionUID = 181783539421590989L;
 

@@ -1,12 +1,9 @@
 package com.ent.happychat.controller.player;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.entity.ImageConfig;
-import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.image.ImageConfigPageReq;
-import com.ent.happychat.pojo.req.news.NewsPage;
 import com.ent.happychat.service.ImageConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j

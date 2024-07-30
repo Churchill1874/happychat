@@ -7,20 +7,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
-import com.ent.happychat.common.constant.enums.NewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.NewsMapper;
-import com.ent.happychat.pojo.req.news.NewsPage;
-import com.ent.happychat.pojo.resp.news.HomeNews;
+import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -45,26 +42,26 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     }
 
     @Override
-    public IPage<News> queryPage(NewsPage newsPage) {
-        IPage<News> iPage = new Page<>(newsPage.getPageNum(), newsPage.getPageSize());
+    public IPage<News> queryPage(NewsPageReq newsPageReq) {
+        IPage<News> iPage = new Page<>(newsPageReq.getPageNum(), newsPageReq.getPageSize());
 
         QueryWrapper<News> queryNews = new QueryWrapper<>();
         queryNews.lambda()
-            .eq(newsPage.getCategoryEnum() != null, News::getCategory, newsPage.getCategoryEnum())
-            .eq(newsPage.getNewsStatus() != null, News::getNewsStatus, newsPage.getNewsStatus())
-            .like(StringUtils.isNotBlank(newsPage.getTitle()), News::getTitle, newsPage.getTitle())
+            .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
+            .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
+            .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
             .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
-        boolean createTimeSort = !newsPage.getLikesSort() && !newsPage.getViewSort() && !newsPage.getCommentsSort();
+        boolean createTimeSort = !newsPageReq.getLikesSort() && !newsPageReq.getViewSort() && !newsPageReq.getCommentsSort();
         if (!createTimeSort) {
-            if (newsPage.getLikesSort()) {
+            if (newsPageReq.getLikesSort()) {
                 queryNews.lambda().orderByDesc(News::getLikesCount);
             }
-            if (newsPage.getViewSort()) {
+            if (newsPageReq.getViewSort()) {
                 queryNews.lambda().orderByDesc(News::getViewCount);
             }
-            if (newsPage.getCommentsSort()) {
+            if (newsPageReq.getCommentsSort()) {
                 queryNews.lambda().orderByDesc(News::getCommentsCount);
             }
         }

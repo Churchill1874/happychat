@@ -10,7 +10,7 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.news.NewsAddReq;
-import com.ent.happychat.pojo.req.news.NewsPage;
+import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.news.NewsPullReq;
 import com.ent.happychat.pojo.req.news.NewsUpdateReq;
 import com.ent.happychat.service.EhcacheService;
@@ -41,7 +41,7 @@ public class NewsController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
-    public R<IPage<News>> queryPage(@RequestBody @Valid NewsPage req) {
+    public R<IPage<News>> queryPage(@RequestBody @Valid NewsPageReq req) {
         IPage<News> iPage = newsService.queryPage(req);
         return R.ok(iPage);
     }

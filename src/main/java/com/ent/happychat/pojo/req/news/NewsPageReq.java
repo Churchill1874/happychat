@@ -9,7 +9,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class NewsPage extends PageBase implements Serializable {
+public class NewsPageReq extends PageBase implements Serializable {
     private static final long serialVersionUID = -3968897108907540868L;
 
     @ApiModelProperty("标题")

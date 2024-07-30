@@ -82,7 +82,7 @@
 
     <cache alias="home_news">
         <key-type>java.lang.String</key-type>
-        <value-type>com.ent.happychat.pojo.resp.news.HomeNews</value-type>
+        <value-type>com.ent.happychat.pojo.resp.news.HomeNewsResp</value-type>
         <expiry>
             <ttl unit="hours">1</ttl>
         </expiry>

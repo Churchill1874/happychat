@@ -3,21 +3,13 @@ package com.ent.happychat.controller.player;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.constant.CacheKeyConstant;
-import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.common.tools.CheckReqTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
-import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.Id;
-import com.ent.happychat.pojo.req.news.NewsPage;
-import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
-import com.ent.happychat.pojo.req.player.PlayerInfoUpdateReq;
-import com.ent.happychat.pojo.resp.news.HomeNews;
-import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import com.ent.happychat.service.PlayerInfoService;
@@ -32,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -57,42 +48,42 @@ public class NewsApi {
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R<IPage<News>> page(@RequestBody @Valid NewsPage req) {
+    public R<IPage<News>> page(@RequestBody @Valid NewsPageReq req) {
         IPage<News> iPage = newsService.queryPage(req);
         return R.ok(iPage);
     }
 
     @PostMapping("/homeNews")
     @ApiOperation(value = "首页新闻 置顶和前几十排名新闻", notes = "首页新闻 置顶和前几十排名新闻")
-    public R<HomeNews> headNews() {
-        Cache<String, HomeNews> cache = ehcacheService.homeNewsCache();
-        HomeNews homeNews = cache.get(CacheKeyConstant.HOME_NEWS_KEY);
-        if (homeNews != null) {
-            return R.ok(homeNews);
+    public R<HomeNewsResp> headNews() {
+        Cache<String, HomeNewsResp> cache = ehcacheService.homeNewsCache();
+        HomeNewsResp homeNewsResp = cache.get(CacheKeyConstant.HOME_NEWS_KEY);
+        if (homeNewsResp != null) {
+            return R.ok(homeNewsResp);
         }
 
-        homeNews = new HomeNews();
+        homeNewsResp = new HomeNewsResp();
 
         //获取1条最近置顶新闻
         List<News> topList = newsService.findByNewsStatus(NewsStatusEnum.TOP, 1);
         if (CollectionUtils.isNotEmpty(topList)) {
-            homeNews.setTopNews(topList.get(0));
+            homeNewsResp.setTopNews(topList.get(0));
         }
 
-        NewsPage newsPage = new NewsPage();
-        newsPage.setPageNum(1);
-        newsPage.setPageSize(10);
-        newsPage.setViewSort(true);
-        newsPage.setCommentsSort(true);
-        IPage<News> iPage = newsService.queryPage(newsPage);
-        homeNews.setNewsList(iPage.getRecords());
+        NewsPageReq newsPageReq = new NewsPageReq();
+        newsPageReq.setPageNum(1);
+        newsPageReq.setPageSize(10);
+        newsPageReq.setViewSort(true);
+        newsPageReq.setCommentsSort(true);
+        IPage<News> iPage = newsService.queryPage(newsPageReq);
+        homeNewsResp.setNewsList(iPage.getRecords());
 
         //获取随机的在线人数
-        homeNews.setOnlinePlayerCount(TokenTools.onlineCountRandom());
+        homeNewsResp.setOnlinePlayerCount(TokenTools.onlineCountRandom());
 
         //更新缓存
-        cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNews);
-        return R.ok(homeNews);
+        cache.put(CacheKeyConstant.HOME_NEWS_KEY, homeNewsResp);
+        return R.ok(homeNewsResp);
     }
 
 
