@@ -22,5 +22,17 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
 
     PlayerInfo findByName(String name);
 
+    /**
+     * 根据玩家id列表 转化map
+     * @param idList
+     * @return
+     */
     Map<Long, PlayerInfo> mapByIds(List<Long> idList);
+
+    /**
+     * 根据玩家id只查询基本字段
+     * @param id
+     * @return
+     */
+    PlayerInfo getBaseInfoById(Long id);
 }

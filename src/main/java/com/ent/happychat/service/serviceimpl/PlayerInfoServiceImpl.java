@@ -110,4 +110,13 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         return map;
     }
 
+    @Override
+    public PlayerInfo getBaseInfoById(Long id) {
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .select(PlayerInfo::getName, PlayerInfo::getAccount, PlayerInfo::getLevel, PlayerInfo::getAvatarPath)
+                .eq(PlayerInfo::getId, id);
+        return getOne(queryWrapper);
+    }
+
 }

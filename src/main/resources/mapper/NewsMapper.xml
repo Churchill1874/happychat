@@ -16,4 +16,16 @@
         </foreach>
     </insert>
 
+    <update id="increaseCommentsCount">
+        UPDATE news SET comments_count = comments_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="increaseViewsCount">
+        UPDATE news SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="increaseLikesCount">
+        UPDATE news SET likes_count = likes_count + 1 WHERE id = #{id}
+    </update>
+
 </mapper>

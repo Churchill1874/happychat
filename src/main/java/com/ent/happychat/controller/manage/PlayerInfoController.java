@@ -144,7 +144,6 @@ public class PlayerInfoController {
             LevelEnum.LevelType levelType = new LevelEnum.LevelType();
             levelType.setCode(levelEnum.getCode());
             levelType.setName(levelEnum.getName());
-            levelType.setCommentCount(levelEnum.getCommentCount());
             levelType.setCorrectCount(levelEnum.getCorrectCount());
             levelType.setLikesReceivedCount(levelEnum.getLikesReceivedCount());
             list.add(levelType);

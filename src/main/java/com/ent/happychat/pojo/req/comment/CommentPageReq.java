@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.comment;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +19,12 @@ public class CommentPageReq extends PageBase implements Serializable {
 
     @ApiModelProperty("回复id")
     private Long replyId;
+
+    @ApiModelProperty("评论人id")
+    private Long playerId;
+
+    @ApiModelProperty("评论目标的玩家id 也就是 被评论玩家的id")
+    private Long targetPlayerId;
 
 
 }

@@ -32,8 +32,6 @@ import java.util.List;
 public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements NewsService {
 
     @Autowired
-    private NewsMapper newsMapper;
-    @Autowired
     private EhcacheService ehcacheService;
 
     @Override
@@ -144,11 +142,29 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         if (CollectionUtils.isNotEmpty(newsList)) {
             log.info("执行新闻定时任务,处理新闻数据{}条", newsList.size());
-            newsMapper.insertBatchIgnore(newsList);
+            baseMapper.insertBatchIgnore(newsList);
 
             //清理首页的新闻列表缓存
             ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
         }
+    }
+
+    @Override
+    @Async
+    public void increaseCommentsCount(Long id) {
+        baseMapper.increaseCommentsCount(id);
+    }
+
+    @Override
+    @Async
+    public void increaseViewsCount(Long id) {
+        baseMapper.increaseViewsCount(id);
+    }
+
+    @Override
+    @Async
+    public void increaseLikesCount(Long id) {
+        baseMapper.increaseLikesCount(id);
     }
 
 

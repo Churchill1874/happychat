@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 public class PlayerTokenResp implements Serializable {
     private static final long serialVersionUID = -773689514264864093L;
 
+    @ApiModelProperty("玩家id")
+    private Long id;
     @ApiModelProperty("令牌")
     private String tokenId;
     @ApiModelProperty("账号")

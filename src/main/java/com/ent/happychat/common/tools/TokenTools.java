@@ -68,8 +68,8 @@ public class TokenTools {
             }
         }
 
-        PlayerTokenResp playerTokenResp = ehcacheService.playerTokenCache().get(HttpTools.getHeaderToken());
-        if (playerTokenResp == null) {
+        PlayerTokenResp playerTokenResp = ehcacheService.playerTokenCache().get(headerToken);
+        if (needCheck && playerTokenResp == null) {
             throw new TokenException();
         }
         return playerTokenResp;

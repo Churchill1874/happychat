@@ -29,8 +29,12 @@ public class Comment extends BaseInfo implements Serializable {
     private Long replyId;
 
     @TableField("player_id")
-    @ApiModelProperty("玩家id")
+    @ApiModelProperty("评论人id")
     private Long playerId;
+
+    @TableField("target_player_id")
+    @ApiModelProperty("评论目标的玩家id 也就是被评论玩家id")
+    private Long targetPlayerId;
 
     @TableField("content")
     @ApiModelProperty("评论内容")
@@ -47,5 +51,9 @@ public class Comment extends BaseInfo implements Serializable {
     @TableField("comments_count")
     @ApiModelProperty("被评论数量")
     private Integer commentsCount = 0;
+
+    @TableField("read_status")
+    @ApiModelProperty("读取状态")
+    private Boolean readStatus;
 
 }

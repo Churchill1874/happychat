@@ -1,6 +1,5 @@
 package com.ent.happychat.pojo.resp.comment;
 
-import com.ent.happychat.entity.Comment;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

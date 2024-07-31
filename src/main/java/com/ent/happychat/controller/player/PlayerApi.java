@@ -95,6 +95,7 @@ public class PlayerApi {
         PlayerTokenResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerTokenResp.class);
         playerTokenResp.setTokenId(tokenId);
         playerTokenResp.setLoginTime(LocalDateTime.now());
+        playerTokenResp.setId(playerInfo.getId());
 
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
         ehcacheService.playerInfoCache().put(playerInfo.getAccount(), playerInfo);

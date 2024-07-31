@@ -1,21 +1,23 @@
 package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
-import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
+import com.ent.happychat.pojo.req.comment.CommentSendReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
-import com.ent.happychat.service.NewsService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,9 +45,9 @@ public class CommentApi {
     private PlayerInfoService playerInfoService;
 
 
-    @PostMapping("/findComments")
-    @ApiOperation(value = "根据新闻id查询新闻评论", notes = "根据新闻id查询新闻评论")
-    public R<NewsCommentPageResp> findComments(@RequestBody @Valid CommentPageReq req) {
+    @PostMapping("/findNewsComments")
+    @ApiOperation(value = "根据新闻id分页查询新闻评论", notes = "根据新闻id分页查询新闻评论")
+    public R<NewsCommentPageResp> findNewsComments(@RequestBody @Valid CommentPageReq req) {
         if (req.getNewsId() == null){
             throw new DataException("搜索新闻数据异常");
         }
@@ -121,7 +124,88 @@ public class CommentApi {
         return R.ok(newsCommentRespPage);
     }
 
+    @PostMapping("/sendComment")
+    @ApiOperation(value = "发表新闻评论", notes = "发表新闻评论")
+    public R sendComment(@RequestBody @Valid CommentSendReq req) {
+        if ( req.getTopId() == null && req.getReplyId() != null){
+            log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
+            throw new DataException("顶层评论不存在或已删除");
+        }
+
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        Comment comment = new Comment();
+        comment.setNewsId(req.getNewsId());
+        comment.setTopId(req.getTopId());
+        comment.setReplyId(req.getReplyId());
+        comment.setPlayerId(playerTokenResp.getId());
+        comment.setInfoType(InfoEnum.NEWS);
+        comment.setCreateTime(LocalDateTime.now());
+        comment.setCreateName(playerTokenResp.getName());
+        comment.setContent(req.getContent());
+        commentService.sendComment(comment);
+        return R.ok(null);
+    }
+
+    @PostMapping("/receivedCommentsPage")
+    @ApiOperation(value = "分页查看收到的评论", notes = "分页查看收到的评论")
+    public R<List<CommentResp>> receivedCommentsPage(@RequestBody @Valid PageBase req) {
+        CommentPageReq commentPageReq = new CommentPageReq();
+        commentPageReq.setPageNum(req.getPageNum());
+        commentPageReq.setPageSize(req.getPageSize());
+        commentPageReq.setTargetPlayerId(TokenTools.getPlayerToken(true).getId());
+        IPage<Comment> commentPage = commentService.queryPage(commentPageReq);
+
+        //如果没有收到过任何的评论
+        if (CollectionUtils.isEmpty(commentPage.getRecords())){
+            return R.ok(null);
+        }
+
+        //获取所有对自己评论的玩家id集合
+        List<Long> idList = commentPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toList());
+        //查询所有评论自己的玩家信息集合
+        Map<Long, PlayerInfo> playerInfoMap = playerInfoService.mapByIds(idList);
+
+        List<CommentResp> list = new ArrayList<>();
+        commentPage.getRecords().forEach(comment -> {
+            PlayerInfo commentator = playerInfoMap.get(comment.getPlayerId());
+            CommentResp commentResp = BeanUtil.toBean(comment, CommentResp.class);
+            commentResp.setCommentator(commentator.getName());
+            commentResp.setAvatarPath(commentator.getAvatarPath());
+            commentResp.setLevel(commentator.getLevel());
+            list.add(commentResp);
+        });
+
+        return R.ok(list);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
