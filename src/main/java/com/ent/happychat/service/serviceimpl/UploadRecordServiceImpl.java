@@ -51,6 +51,8 @@ public class UploadRecordServiceImpl extends ServiceImpl<UploadRecordMapper, Upl
 
     @Override
     public void insertRecord(String path, FileTypeEnum fileTypeEnum, String createName) {
+
+        log.info("插入图片记录path:{},fileType:{},createName:{}", path, fileTypeEnum, createName);
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setPath(path);
         uploadRecord.setFileType(fileTypeEnum);

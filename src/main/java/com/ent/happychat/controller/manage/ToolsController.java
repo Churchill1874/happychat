@@ -55,7 +55,7 @@ public class ToolsController {
             // 获取Linux服务器上保存文件的目录
             FileTypeEnum fileTypeEnum = FileTools.getFileType(fileExtension);
 
-            String uploadDir = "/bignews/" + fileTypeEnum.getName();
+            String uploadDir = "/bignews/" + fileTypeEnum.getName() + "/";
 
             String imageName = UUID.randomUUID().toString() + fileExtension;
 

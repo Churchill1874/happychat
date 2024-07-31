@@ -10,8 +10,6 @@ spring:
   cache:
     jcache:
       config: classpath:/ehcache.xml
-
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://8.141.144.73:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
@@ -23,7 +21,7 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
-  mvc:
+
     pathmatch:
       matching-strategy: ant_path_matcher
     druid:
