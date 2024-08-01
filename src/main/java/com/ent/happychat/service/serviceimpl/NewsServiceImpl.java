@@ -149,22 +149,28 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
     }
 
-    @Override
     @Async
+    @Override
     public void increaseCommentsCount(Long id) {
+        //todo 插入评论记录
+
         baseMapper.increaseCommentsCount(id);
     }
 
-    @Override
     @Async
-    public void increaseViewsCount(Long id) {
-        baseMapper.increaseViewsCount(id);
+    @Override
+    public void increaseLikesCount(Long id) {
+        //todo 插入点赞记录
+
+        baseMapper.increaseLikesCount(id);
     }
 
     @Override
-    @Async
-    public void increaseLikesCount(Long id) {
-        baseMapper.increaseLikesCount(id);
+    public News findByIdAndInsertRecord(Long id) {
+        News news = getById(id);
+        //todo 插入浏览记录
+
+        return news;
     }
 
 

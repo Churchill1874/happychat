@@ -10,6 +10,7 @@ import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.comment.CommentSendReq;
@@ -43,7 +44,6 @@ public class CommentApi {
     private CommentService commentService;
     @Autowired
     private PlayerInfoService playerInfoService;
-
 
     @PostMapping("/findNewsComments")
     @ApiOperation(value = "根据新闻id分页查询新闻评论", notes = "根据新闻id分页查询新闻评论")
@@ -176,6 +176,13 @@ public class CommentApi {
         });
 
         return R.ok(list);
+    }
+
+    @PostMapping("/increaseLikesCount")
+    @ApiOperation(value = "点赞评论", notes = "点赞评论")
+    public R increaseLikesCount(@RequestBody @Valid Id req) {
+        commentService.increaseLikesCount(req.getId());
+        return R.ok(null);
     }
 
 }

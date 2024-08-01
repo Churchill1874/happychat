@@ -8,6 +8,7 @@ import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.service.EhcacheService;
@@ -36,13 +37,11 @@ public class NewsApi {
     private NewsService newsService;
     @Autowired
     private EhcacheService ehcacheService;
-    @Autowired
-    private PlayerInfoService playerInfoService;
 
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
     public R<News> find(@RequestBody @Valid Id req) {
-        News news = newsService.getById(req.getId());
+        News news = newsService.findByIdAndInsertRecord(req.getId());
         return R.ok(news);
     }
 
@@ -86,6 +85,11 @@ public class NewsApi {
         return R.ok(homeNewsResp);
     }
 
-
+    @PostMapping("/increaseLikesCount")
+    @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
+    public R increaseLikesCount(@RequestBody @Valid Id req) {
+        newsService.increaseLikesCount(req.getId());
+        return R.ok(null);
+    }
 
 }

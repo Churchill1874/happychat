@@ -23,21 +23,18 @@ public interface NewsMapper extends BaseMapper<News> {
      * 增加评论数量
      * @param id
      */
-    @Async
     void increaseCommentsCount(@Param("id") Long id);
 
     /**
      * 增加浏览数量
      * @param id
      */
-    @Async
     void increaseViewsCount(@Param("id") Long id);
 
     /**
      * 增加点赞数量
      * @param id
      */
-    @Async
     void increaseLikesCount(@Param("id") Long id);
 
 }

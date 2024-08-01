@@ -4,6 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ent.happychat.mapper.CommentMapper">
 
+    <update id="increaseCommentsCount">
+        UPDATE comment SET comments_count = comments_count + 1 WHERE id = #{id}
+    </update>
 
+    <update id="increaseLikesCount">
+        UPDATE comment SET likes_count = likes_count + 1 WHERE id = #{id}
+    </update>
 
 </mapper>
