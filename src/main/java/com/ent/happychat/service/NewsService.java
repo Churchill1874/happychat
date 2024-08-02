@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface NewsService extends IService<News> {
 
@@ -73,6 +74,13 @@ public interface NewsService extends IService<News> {
      * @return
      */
     News findByIdAndInsertRecord(Long id);
+
+    /**
+     * 根据id集合获取新闻集合map
+     * @param ids
+     * @return
+     */
+    Map<Long, News> mapByIds(List<Long> ids);
 
 
 }

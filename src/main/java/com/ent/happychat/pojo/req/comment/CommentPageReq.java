@@ -1,6 +1,5 @@
 package com.ent.happychat.pojo.req.comment;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,6 +9,9 @@ import java.io.Serializable;
 @Data
 public class CommentPageReq extends PageBase implements Serializable {
     private static final long serialVersionUID = 1244117646578208790L;
+
+    @ApiModelProperty("新闻标题")
+    private String title;
 
     @ApiModelProperty("新闻id")
     private Long newsId;

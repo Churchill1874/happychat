@@ -25,7 +25,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -152,8 +154,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Async
     @Override
     public void increaseCommentsCount(Long id) {
-        //todo 插入评论记录
-
         baseMapper.increaseCommentsCount(id);
     }
 
@@ -171,6 +171,24 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         //todo 插入浏览记录
 
         return news;
+    }
+
+    @Override
+    public Map<Long, News> mapByIds(List<Long> ids) {
+        Map<Long, News> map = new HashMap<>();
+
+        QueryWrapper<News> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(News::getId, ids);
+
+        List<News> list = list(queryWrapper);
+
+        if (CollectionUtils.isNotEmpty(list)){
+            list.forEach(news -> {
+                map.put(news.getId(), news);
+            });
+        }
+
+        return map;
     }
 
 

@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.Comment;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.service.CommentService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -90,6 +92,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public IPage<Comment> queryPage(CommentPageReq po) {
+        if (StringUtils.isNotBlank(po.getTitle())) {
+            QueryWrapper<News> newsQuery = new QueryWrapper<>();
+            newsQuery.lambda().eq(News::getTitle, po.getTitle());
+            News news = newsService.getOne(newsQuery);
+            if (po.getNewsId() != null && po.getNewsId().compareTo(news.getId()) != 0){
+                throw new DataException("您搜索的新闻id和新闻标题归属的新闻记录id不一致");
+            }
+            po.setNewsId(news.getId());
+        }
+
         IPage<Comment> iPage = new Page<>(po.getPageNum(), po.getPageSize());
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
