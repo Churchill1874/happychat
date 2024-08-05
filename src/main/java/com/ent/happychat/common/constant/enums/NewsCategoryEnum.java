@@ -13,7 +13,9 @@ public enum NewsCategoryEnum {
     MILITARY_AFFAIRS(4,"军事"),
     SCIENCE(5,"科技"),
     FAVOR(6,"人情"),
-    PLAYER(7,"网友");
+    PLAYER(7,"网友"),
+    SOUTHEAST_ASIA(8, "东南亚"),
+    YOUTUBE(9, "youtube");
 
 
     @Getter
