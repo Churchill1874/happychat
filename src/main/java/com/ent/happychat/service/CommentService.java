@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
+import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -51,13 +52,13 @@ public interface CommentService extends IService<Comment> {
      * 增加评论数量
      * @param id
      */
-    void increaseCommentsCount(@Param("id") Long id);
+    void increaseCommentsCount(Long id);
 
     /**
      * 增加点赞数量
-     * @param id
+     * @param po
      */
-    void increaseLikesCount(@Param("id") Long id);
+    void increaseLikesCount(LikesClickReq po);
 
 
 

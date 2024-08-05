@@ -61,7 +61,6 @@ public class ViewsRecordController {
             viewsRecordPageRespList.add(viewsRecordPageResp);
         });
 
-
         viewsRecordPageRespPage.setRecords(viewsRecordPageRespList);
         return R.ok(viewsRecordPageRespPage);
     }

@@ -1,6 +1,8 @@
 package com.ent.happychat.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.mapper.ViewsRecordMapper;
@@ -13,9 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, ViewsRecord> implements ViewsRecordService {
 
-
     @Override
     public IPage<ViewsRecord> queryPage(ViewsRecordPageReq po) {
-        return null;
+        IPage<ViewsRecord> iPage = new Page<>(po.getPageNum(), po.getPageSize());
+        QueryWrapper<ViewsRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(po.getPlayerId() != null, ViewsRecord::getPlayerId, po.getPlayerId())
+                .eq(po.getViewsId() != null, ViewsRecord::getViewsId, po.getViewsId())
+                .eq(po.getViewsType() != null, ViewsRecord::getViewsType, po.getViewsType())
+                .eq(po.getContent() != null, ViewsRecord::getContent, po.getContent())
+                .orderByDesc(ViewsRecord::getCreateTime);
+        return page(iPage, queryWrapper);
     }
+
 }

@@ -9,7 +9,9 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
@@ -40,8 +42,8 @@ public class NewsApi {
 
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
-    public R<News> find(@RequestBody @Valid Id req) {
-        News news = newsService.findByIdAndInsertRecord(req.getId());
+    public R<News> find(@RequestBody @Valid ViewsAddReq req) {
+        News news = newsService.findByIdAndInsertRecord(req);
         return R.ok(news);
     }
 
@@ -87,8 +89,8 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R increaseLikesCount(@RequestBody @Valid Id req) {
-        newsService.increaseLikesCount(req.getId());
+    public R increaseLikesCount(@RequestBody @Valid LikesClickReq req) {
+        newsService.increaseLikesCount(req);
         return R.ok(null);
     }
 
