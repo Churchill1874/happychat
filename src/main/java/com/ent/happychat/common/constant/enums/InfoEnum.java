@@ -10,11 +10,9 @@ import lombok.Getter;
 public enum InfoEnum {
 
     NEWS(1,"新闻"),
-    YOUTUBE(2,"youtube"),
-    ABROAD(3,"境外"),
-    WORK(4,"工作"),
-    APPLICANT(5,"人才"),
-    CHAT_GIRL(6,"聊妹");
+    WORK(2,"工作"),
+    APPLICANT(3,"人才"),
+    CHAT_GIRL(4,"聊妹");
 
     @Getter
     @EnumValue

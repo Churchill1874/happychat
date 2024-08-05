@@ -125,9 +125,9 @@ public class CommentApi {
         return R.ok(newsCommentRespPage);
     }
 
-    @PostMapping("/sendComment")
+    @PostMapping("/sendNewsComment")
     @ApiOperation(value = "发表新闻评论", notes = "发表新闻评论")
-    public R sendComment(@RequestBody @Valid CommentSendReq req) {
+    public R sendNewsComment(@RequestBody @Valid CommentSendReq req) {
         if ( req.getTopId() == null && req.getReplyId() != null){
             log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
             throw new DataException("顶层评论不存在或已删除");
