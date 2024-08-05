@@ -34,20 +34,5 @@ public class LikesRecordApi {
     @Autowired
     private LikesRecordService likesRecordService;
 
-    @PostMapping("/click")
-    @ApiOperation(value = "点击", notes = "点击")
-    public R click(@RequestBody @Valid LikesClickReq req) {
-        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-
-        LikesRecord likesRecord = new LikesRecord();
-        likesRecord.setPlayerId(playerTokenResp.getId());
-        likesRecord.setLikesId(req.getLikesId());
-        likesRecord.setLikesType(req.getLikesType());
-        likesRecord.setCreateTime(LocalDateTime.now());
-        likesRecord.setCreateName(playerTokenResp.getName());
-        likesRecord.setContent(req.getContent());
-        likesRecordService.save(likesRecord);
-        return R.ok(null);
-    }
 
 }
