@@ -31,10 +31,6 @@ public class ToolsController {
     @Autowired
     private UploadRecordService uploadRecordService;
 
-    public static void main(String[] args) {
-        log.warn("123.jpg".substring("123.jpg".lastIndexOf(".")));
-    }
-
     @ApiOperation("上传图片")
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
