@@ -7,20 +7,30 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
+import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.mapper.NewsMapper;
+import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.req.views.ViewsAddReq;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.ViewsRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,6 +45,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Autowired
     private EhcacheService ehcacheService;
+    @Autowired
+    private LikesRecordService likesRecordService;
+    @Autowired
+    private ViewsRecordService viewsRecordService;
 
     @Override
     public void saveList(List<News> newsList) {
@@ -159,18 +173,35 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Async
     @Override
-    public void increaseLikesCount(Long id) {
-        //todo 插入点赞记录
-
-        baseMapper.increaseLikesCount(id);
+    @Transactional(rollbackFor = Exception.class)
+    public void increaseLikesCount(LikesClickReq req) {
+        //插入点赞记录
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        LikesRecord likesRecord = new LikesRecord();
+        likesRecord.setPlayerId(playerTokenResp.getId());
+        likesRecord.setLikesId(req.getLikesId());
+        likesRecord.setLikesType(LikesEnum.NEWS);
+        likesRecord.setContent(req.getContent());
+        likesRecord.setCreateTime(LocalDateTime.now());
+        likesRecord.setCreateName(playerTokenResp.getName());
+        likesRecordService.save(likesRecord);
+        baseMapper.increaseLikesCount(req.getLikesId());
     }
 
     @Override
-    public News findByIdAndInsertRecord(Long id) {
-        News news = getById(id);
-        //todo 插入浏览记录
+    public News findByIdAndInsertRecord(ViewsAddReq po) {
+        // 插入浏览记录
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        ViewsRecord viewsRecord = new ViewsRecord();
+        viewsRecord.setPlayerId(playerTokenResp.getId());
+        viewsRecord.setViewsId(po.getViewsId());
+        viewsRecord.setViewsType(ViewsEnum.NEWS);
+        viewsRecord.setContent(po.getContent());
+        viewsRecord.setCreateTime(LocalDateTime.now());
+        viewsRecord.setCreateName(playerTokenResp.getName());
+        viewsRecordService.save(viewsRecord);
 
-        return news;
+        return getById(po.getViewsId());
     }
 
     @Override

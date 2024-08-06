@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-/**
- * 信息类型枚举
- */
-public enum InfoEnum {
+public enum ViewsEnum {
 
-    NEWS(1,"新闻");
+    NEWS(1,"新闻"),
+    WORK(2,"工作"),
+    APPLICANT(3,"人才"),
+    CHAT_GIRL(4,"女孩"),
+    BET(5,"投注");
+
 
     @Getter
     @EnumValue
@@ -19,7 +21,7 @@ public enum InfoEnum {
     @Getter
     private String name;
 
-    InfoEnum(int code, String name) {
+    ViewsEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -28,5 +30,6 @@ public enum InfoEnum {
     public String toString() {
         return this.name + ":" + this.code;
     }
+
 
 }

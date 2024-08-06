@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.scheduling.annotation.Async;
 
@@ -60,20 +62,20 @@ public interface NewsService extends IService<News> {
      * 增加评论数量
      * @param id
      */
-    void increaseCommentsCount(@Param("id") Long id);
+    void increaseCommentsCount( Long id);
 
     /**
      * 增加点赞数量
-     * @param id
+     * @param po
      */
-    void increaseLikesCount(@Param("id") Long id);
+    void increaseLikesCount(LikesClickReq po);
 
     /**
      * 查看新闻并插入浏览记录
-     * @param id
+     * @param po
      * @return
      */
-    News findByIdAndInsertRecord(Long id);
+    News findByIdAndInsertRecord(ViewsAddReq po);
 
     /**
      * 根据id集合获取新闻集合map

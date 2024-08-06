@@ -19,9 +19,6 @@ import java.util.Set;
 public class BlacklistAspect {
 
     @Autowired
-    private EhcacheService ehcacheService;
-
-    @Autowired
     private BlacklistService blacklistService;
 
     @Pointcut("execution(* com.ent.happychat.controller.manage.*.*(..))")

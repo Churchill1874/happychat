@@ -14,6 +14,7 @@ import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.comment.CommentSendReq;
+import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
@@ -124,9 +125,9 @@ public class CommentApi {
         return R.ok(newsCommentRespPage);
     }
 
-    @PostMapping("/sendComment")
+    @PostMapping("/sendNewsComment")
     @ApiOperation(value = "发表新闻评论", notes = "发表新闻评论")
-    public R sendComment(@RequestBody @Valid CommentSendReq req) {
+    public R sendNewsComment(@RequestBody @Valid CommentSendReq req) {
         if ( req.getTopId() == null && req.getReplyId() != null){
             log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
             throw new DataException("顶层评论不存在或已删除");
@@ -180,8 +181,8 @@ public class CommentApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞评论", notes = "点赞评论")
-    public R increaseLikesCount(@RequestBody @Valid Id req) {
-        commentService.increaseLikesCount(req.getId());
+    public R increaseLikesCount(@RequestBody @Valid LikesClickReq req) {
+        commentService.increaseLikesCount(req);
         return R.ok(null);
     }
 
