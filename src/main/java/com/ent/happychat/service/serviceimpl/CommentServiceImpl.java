@@ -45,7 +45,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //如果topId 也是空 那证明当前评论就顶层评论 什么都不用做
 
         //如果评论的是顶层评论
-        if (po.getTopId() != null && po.getReplyId() == null) {//有顶层评论Id 但是没有内嵌评论id 那发布的就是对顶层评论的评论
+        //有顶层评论Id 但是没有内嵌评论id 那发布的就是对顶层评论的评论
+        if (po.getTopId() != null && po.getReplyId() == null) {
             Comment targetComment = getById(po.getTopId());
             if (targetComment == null) {
                 throw new DataException("您评论的内容已删除或不存在");
@@ -54,7 +55,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
         //如果评论的是内嵌的评论
-        if (po.getTopId() != null && po.getReplyId() != null) {//有顶层评论 也有内嵌评论id 发布的就是对内嵌评论的评论
+        //有顶层评论 也有内嵌评论id 发布的就是对内嵌评论的评论
+        if (po.getTopId() != null && po.getReplyId() != null) {
             Comment targetComment = getById(po.getReplyId());
             if (targetComment == null) {
                 throw new DataException("您评论的内容已删除或不存在");

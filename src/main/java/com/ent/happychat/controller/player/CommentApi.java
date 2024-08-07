@@ -69,11 +69,15 @@ public class CommentApi {
 
 
         //所有 顶层评论 和 回复评论 涉及到的用户id
-        Set<Long> playerIdSet = topPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toSet());
-
-
+        Set<Long> playerIdSet = new HashSet<>();
         //根据分页出来的顶层评论记录id 找到每个评论下面的回复记录
-        List<Long> topIdList = topPage.getRecords().stream().map(Comment::getTopId).collect(Collectors.toList());
+        List<Long> topIdList = new ArrayList<>();
+
+        topPage.getRecords().forEach(comment -> {
+            playerIdSet.add(comment.getPlayerId());
+            topIdList.add(comment.getId());
+        });
+
         //该新闻所有顶层评论下的回复记录
         List<Comment> replyList = commentService.replyList(topIdList);
         //根据顶层评论id分组
@@ -102,7 +106,7 @@ public class CommentApi {
             newsCommentResp.setTopComment(topResp);
 
             //存入该顶层评论的回复记录
-            List<Comment> replyListOfTop = replyGroup.get(topResp.getTopId());
+            List<Comment> replyListOfTop = replyGroup.get(topResp.getId());
             if (CollectionUtils.isNotEmpty(replyListOfTop)){
                 List<CommentResp> replyRespListOfTop = new ArrayList<>();
                 for(Comment reply: replyListOfTop){
