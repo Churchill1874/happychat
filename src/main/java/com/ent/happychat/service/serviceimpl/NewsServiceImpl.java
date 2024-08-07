@@ -183,14 +183,16 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     @Async
-    public void increaseViewsCount(ViewsAddReq po) {
-        viewsRecordService.addViewsRecord(po);
+    public void increaseViewsCount(ViewsAddReq po, Long playerId, String playerName) {
+        viewsRecordService.addViewsRecord(po, playerId, playerName);
         baseMapper.increaseViewsCount(po.getViewsId());
     }
 
     @Override
-    public News findByIdAndInsertRecord(ViewsAddReq po) {
-        increaseViewsCount(po);
+    public News findByIdAndInsertRecord(ViewsAddReq po, Long playerId, String playerName) {
+        if (playerId != null && StringUtils.isNotBlank(playerName)){
+            increaseViewsCount(po, playerId, playerName);
+        }
         return getById(po.getViewsId());
     }
 

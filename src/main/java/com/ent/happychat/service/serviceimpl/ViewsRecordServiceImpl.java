@@ -36,16 +36,16 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
     }
 
     @Override
-    public void addViewsRecord(ViewsAddReq po) {
+    public void addViewsRecord(ViewsAddReq po, Long playerId, String playerName) {
         // 插入浏览记录
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         ViewsRecord viewsRecord = new ViewsRecord();
-        viewsRecord.setPlayerId(playerTokenResp.getId());
+        viewsRecord.setPlayerId(playerId);
         viewsRecord.setViewsId(po.getViewsId());
         viewsRecord.setViewsType(ViewsEnum.NEWS);
         viewsRecord.setContent(po.getContent());
         viewsRecord.setCreateTime(LocalDateTime.now());
-        viewsRecord.setCreateName(playerTokenResp.getName());
+        viewsRecord.setCreateName(playerName);
         save(viewsRecord);
     }
 

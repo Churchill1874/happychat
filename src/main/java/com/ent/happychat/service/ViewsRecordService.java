@@ -14,6 +14,6 @@ public interface ViewsRecordService extends IService<ViewsRecord> {
      * 添加浏览记录
      * @param po
      */
-    void addViewsRecord(ViewsAddReq po);
+    void addViewsRecord(ViewsAddReq po, Long playerId, String playerName);
 
 }
