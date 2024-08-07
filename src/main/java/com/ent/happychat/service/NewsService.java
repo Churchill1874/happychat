@@ -71,6 +71,12 @@ public interface NewsService extends IService<News> {
     void increaseLikesCount(LikesClickReq po);
 
     /**
+     * 增加浏览数量
+     * @param po
+     */
+    void increaseViewsCount(ViewsAddReq po);
+
+    /**
      * 查看新闻并插入浏览记录
      * @param po
      * @return
@@ -83,6 +89,9 @@ public interface NewsService extends IService<News> {
      * @return
      */
     Map<Long, News> mapByIds(List<Long> ids);
+
+
+
 
 
 }

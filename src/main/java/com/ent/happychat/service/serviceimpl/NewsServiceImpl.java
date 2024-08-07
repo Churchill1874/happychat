@@ -177,30 +177,20 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     public void increaseLikesCount(LikesClickReq req) {
         //插入点赞记录
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        LikesRecord likesRecord = new LikesRecord();
-        likesRecord.setPlayerId(playerTokenResp.getId());
-        likesRecord.setLikesId(req.getLikesId());
-        likesRecord.setLikesType(LikesEnum.NEWS);
-        likesRecord.setContent(req.getContent());
-        likesRecord.setCreateTime(LocalDateTime.now());
-        likesRecord.setCreateName(playerTokenResp.getName());
-        likesRecordService.save(likesRecord);
+        likesRecordService.increaseLikesCount(playerTokenResp.getId(), playerTokenResp.getName(), req.getLikesId(), req.getContent());
         baseMapper.increaseLikesCount(req.getLikesId());
     }
 
     @Override
-    public News findByIdAndInsertRecord(ViewsAddReq po) {
-        // 插入浏览记录
-        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        ViewsRecord viewsRecord = new ViewsRecord();
-        viewsRecord.setPlayerId(playerTokenResp.getId());
-        viewsRecord.setViewsId(po.getViewsId());
-        viewsRecord.setViewsType(ViewsEnum.NEWS);
-        viewsRecord.setContent(po.getContent());
-        viewsRecord.setCreateTime(LocalDateTime.now());
-        viewsRecord.setCreateName(playerTokenResp.getName());
-        viewsRecordService.save(viewsRecord);
+    @Async
+    public void increaseViewsCount(ViewsAddReq po) {
+        viewsRecordService.addViewsRecord(po);
+        baseMapper.increaseViewsCount(po.getViewsId());
+    }
 
+    @Override
+    public News findByIdAndInsertRecord(ViewsAddReq po) {
+        increaseViewsCount(po);
         return getById(po.getViewsId());
     }
 
@@ -210,7 +200,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().in(News::getId, ids);
-
         List<News> list = list(queryWrapper);
 
         if (CollectionUtils.isNotEmpty(list)){
@@ -218,7 +207,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
                 map.put(news.getId(), news);
             });
         }
-
         return map;
     }
 
