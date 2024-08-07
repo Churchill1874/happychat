@@ -14,4 +14,12 @@ public interface LikesRecordService extends IService<LikesRecord> {
      */
     IPage<LikesRecord> queryPage(LikesRecordPageReq po);
 
+    /**
+     * 点赞
+     * @param playerId
+     * @param playerName
+     * @param likesId
+     * @param content
+     */
+    void increaseLikesCount(Long playerId, String playerName, Long likesId, String content);
 }

@@ -71,11 +71,17 @@ public interface NewsService extends IService<News> {
     void increaseLikesCount(LikesClickReq po);
 
     /**
+     * 增加浏览数量
+     * @param po
+     */
+    void increaseViewsCount(ViewsAddReq po, Long playerId, String playerName);
+
+    /**
      * 查看新闻并插入浏览记录
      * @param po
      * @return
      */
-    News findByIdAndInsertRecord(ViewsAddReq po);
+    News findByIdAndInsertRecord(ViewsAddReq po, Long playerId, String playerName);
 
     /**
      * 根据id集合获取新闻集合map
@@ -83,6 +89,9 @@ public interface NewsService extends IService<News> {
      * @return
      */
     Map<Long, News> mapByIds(List<Long> ids);
+
+
+
 
 
 }

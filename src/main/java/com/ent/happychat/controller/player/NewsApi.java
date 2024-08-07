@@ -11,6 +11,7 @@ import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import io.swagger.annotations.Api;
@@ -40,7 +41,14 @@ public class NewsApi {
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
     public R<News> find(@RequestBody @Valid ViewsAddReq req) {
-        News news = newsService.findByIdAndInsertRecord(req);
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
+        Long playerId = null;
+        String playerName = null;
+        if (playerTokenResp != null){
+            playerId = playerTokenResp.getId();
+            playerName = playerTokenResp.getName();
+        }
+        News news = newsService.findByIdAndInsertRecord(req, playerId, playerName);
         return R.ok(news);
     }
 
