@@ -55,7 +55,7 @@ public class NewsTools {
             result = HttpUtil.get(url);
             JSONObject json = new JSONObject(result);
             if (json.getInt("status") != 0) {
-                log.info(json.getStr("msg"));
+                log.warn(json.getStr("msg"));
             } else {
                 JSONObject resultarr = json.getJSONObject("result");
                 String channel = resultarr.getStr("channel");
@@ -95,7 +95,7 @@ public class NewsTools {
                             news.setContentImagePath(contentImagePath);
                         }
 
-                        news.setCreateName("平台");
+                        news.setCreateName("聚合新闻");
                         news.setCreateTime(LocalDateTime.now());
                         newsList.add(news);
                     }

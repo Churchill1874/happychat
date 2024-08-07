@@ -122,6 +122,7 @@ public class CommentApi {
 
         //存入该新闻 顶层和回复的评论组 列表
         newsCommentRespPage.setList(list);
+        newsCommentRespPage.setCount(topPage.getTotal());
         return R.ok(newsCommentRespPage);
     }
 
@@ -143,6 +144,7 @@ public class CommentApi {
         comment.setCreateTime(LocalDateTime.now());
         comment.setCreateName(playerTokenResp.getName());
         comment.setContent(req.getContent());
+        comment.setReadStatus(false);
         commentService.sendComment(comment);
         return R.ok(null);
     }

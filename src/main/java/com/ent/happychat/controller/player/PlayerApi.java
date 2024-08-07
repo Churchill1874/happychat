@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -82,6 +83,7 @@ public class PlayerApi {
         playerInfo.setLevel(LevelEnum.LEVEL_0);
         playerInfo.setStatus(UserStatusEnum.NORMAL);
         playerInfo.setAvatarPath("1");
+        playerInfo.setBalance(BigDecimal.ZERO);
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);

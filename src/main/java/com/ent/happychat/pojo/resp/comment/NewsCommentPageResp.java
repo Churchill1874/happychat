@@ -14,6 +14,6 @@ public class NewsCommentPageResp implements Serializable {
     private List<NewsCommentResp> list;
 
     @ApiModelProperty("总评论数量")
-    private int count = 0;
+    private long count = 0;
 
 }

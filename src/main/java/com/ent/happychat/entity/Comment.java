@@ -20,7 +20,7 @@ public class Comment extends BaseInfo implements Serializable {
     @ApiModelProperty("新闻id")
     private Long newsId;
 
-    @TableField("top_comment_id")
+    @TableField("top_id")
     @ApiModelProperty("顶层评论id")
     private Long topId;
 
