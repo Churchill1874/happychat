@@ -7,19 +7,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
-import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
-import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.mapper.NewsMapper;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
-import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.LikesRecordService;
@@ -184,14 +180,22 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Override
     @Async
     public void increaseViewsCount(Long viewsId, String content, Long playerId, String playerName) {
-        viewsRecordService.addViewsRecord(viewsId, content, playerId, playerName);
-        baseMapper.increaseViewsCount(viewsId);
+        QueryWrapper<ViewsRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .select(ViewsRecord::getId)
+            .eq(ViewsRecord::getViewsId, viewsId)
+            .eq(ViewsRecord::getPlayerId, playerId);
+        List<ViewsRecord> viewsRecordList = viewsRecordService.list(queryWrapper);
+        if (CollectionUtils.isEmpty(viewsRecordList)) {
+            viewsRecordService.addViewsRecord(viewsId, content, playerId, playerName);
+            baseMapper.increaseViewsCount(viewsId);
+        }
     }
 
     @Override
     public News findByIdAndInsertRecord(Long viewsId, Long playerId, String playerName) {
         News news = getById(viewsId);
-        if (playerId != null && StringUtils.isNotBlank(playerName)){
+        if (playerId != null && StringUtils.isNotBlank(playerName)) {
             increaseViewsCount(viewsId, news.getTitle(), playerId, playerName);
         }
         return news;
@@ -205,7 +209,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         queryWrapper.lambda().in(News::getId, ids);
         List<News> list = list(queryWrapper);
 
-        if (CollectionUtils.isNotEmpty(list)){
+        if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(news -> {
                 map.put(news.getId(), news);
             });
