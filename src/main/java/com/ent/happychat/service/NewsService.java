@@ -72,16 +72,21 @@ public interface NewsService extends IService<News> {
 
     /**
      * 增加浏览数量
-     * @param po
+     * @param viewsId
+     * @param content
+     * @param playerId
+     * @param playerName
      */
-    void increaseViewsCount(ViewsAddReq po, Long playerId, String playerName);
+    void increaseViewsCount(Long viewsId, String content, Long playerId, String playerName);
 
     /**
      * 查看新闻并插入浏览记录
-     * @param po
+     * @param viewsId
+     * @param playerId
+     * @param playerName
      * @return
      */
-    News findByIdAndInsertRecord(ViewsAddReq po, Long playerId, String playerName);
+    News findByIdAndInsertRecord(Long viewsId, Long playerId, String playerName);
 
     /**
      * 根据id集合获取新闻集合map

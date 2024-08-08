@@ -9,17 +9,20 @@ import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.comment.CommentSendReq;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
+import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
+import com.ent.happychat.service.NewsService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +48,8 @@ public class CommentApi {
     private CommentService commentService;
     @Autowired
     private PlayerInfoService playerInfoService;
+    @Autowired
+    private NewsService newsService;
 
     @PostMapping("/findNewsComments")
     @ApiOperation(value = "根据新闻id分页查询新闻评论", notes = "根据新闻id分页查询新闻评论")
@@ -52,6 +57,8 @@ public class CommentApi {
         if (req.getNewsId() == null){
             throw new DataException("搜索新闻数据异常");
         }
+
+        News news = addViewsNewsRecord(req.getNewsId());
 
         //待返回的新闻评论对象
         NewsCommentPageResp newsCommentRespPage = new NewsCommentPageResp();
@@ -126,8 +133,28 @@ public class CommentApi {
 
         //存入该新闻 顶层和回复的评论组 列表
         newsCommentRespPage.setList(list);
-        newsCommentRespPage.setCount(topPage.getTotal());
+        newsCommentRespPage.setCommentCount(topPage.getTotal());
+        newsCommentRespPage.setLikesCount(news.getLikesCount());
+        newsCommentRespPage.setViewsCount(news.getViewCount());
         return R.ok(newsCommentRespPage);
+    }
+
+    //添加新闻查看记录并获取新闻信息
+    private News addViewsNewsRecord(Long newsId){
+        Long playerId = null;
+        String playerName = null;
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
+        if (playerTokenResp != null){
+            playerId = playerTokenResp.getId();
+            playerName = playerTokenResp.getName();
+        }
+
+        News news = newsService.findByIdAndInsertRecord(newsId, playerId, playerName);
+        if (news == null){
+            throw new DataException("新闻不存在或已删除");
+        }
+
+        return news;
     }
 
     @PostMapping("/sendNewsComment")
