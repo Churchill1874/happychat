@@ -7,6 +7,7 @@ import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.views.ViewsAddReq;
@@ -40,7 +41,7 @@ public class NewsApi {
 
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
-    public R<News> find(@RequestBody @Valid ViewsAddReq req) {
+    public R<News> find(@RequestBody @Valid Id req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
         Long playerId = null;
         String playerName = null;
@@ -48,7 +49,7 @@ public class NewsApi {
             playerId = playerTokenResp.getId();
             playerName = playerTokenResp.getName();
         }
-        News news = newsService.findByIdAndInsertRecord(req, playerId, playerName);
+        News news = newsService.findByIdAndInsertRecord(req.getId(), playerId, playerName);
         return R.ok(news);
     }
 

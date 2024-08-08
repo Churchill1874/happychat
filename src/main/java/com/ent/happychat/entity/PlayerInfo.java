@@ -1,6 +1,5 @@
 package com.ent.happychat.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
@@ -19,63 +18,48 @@ import java.time.LocalDate;
 @TableName("player_info")
 public class PlayerInfo extends UpdateBaseInfo implements Serializable {
     private static final long serialVersionUID = 8299446727161357208L;
-    @TableField("name")
     @ApiModelProperty("昵称")
     private String name;
 
-    @TableField("account")
     @ApiModelProperty("账号")
     private String account;
 
-    @TableField("password")
     @ApiModelProperty("密码")
     private String password;
 
-    @TableField("phone")
     @ApiModelProperty("手机号")
     private String phone;
 
-    @TableField("email")
     @ApiModelProperty("邮箱")
     private String email;
 
-    @TableField("gender")
     @ApiModelProperty("性别")
     private GenderEnum gender;
 
-    @TableField("city")
     @ApiModelProperty("城市")
     private String city;
 
-    @TableField("birth")
     @ApiModelProperty("生日")
     private LocalDate birth;
 
-    @TableField("level")
     @ApiModelProperty("等级")
     private LevelEnum level;
 
-    @TableField("self_introduction")
     @ApiModelProperty("自我介绍")
     private String selfIntroduction;
 
-    @TableField("is_bot")
     @ApiModelProperty("是否机器人")
     private Boolean isBot;
 
-    @TableField("status")
     @ApiModelProperty("状态")
     private UserStatusEnum status;
 
-    @TableField("avatar_path")
     @ApiModelProperty("头像路径")
     private String avatarPath;
 
-    @TableField("balance")
     @ApiModelProperty("余额")
     private BigDecimal balance;
 
-    @TableField("salt")
     @ApiModelProperty("盐")
     private String salt;
 
