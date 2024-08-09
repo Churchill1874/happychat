@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
@@ -39,17 +41,18 @@ public class NewsApi {
     @Autowired
     private EhcacheService ehcacheService;
 
+
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
     public R<News> find(@RequestBody @Valid Id req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
         Long playerId = null;
         String playerName = null;
-        if (playerTokenResp != null){
+        if ( playerTokenResp != null ){
             playerId = playerTokenResp.getId();
             playerName = playerTokenResp.getName();
         }
-        News news = newsService.findByIdAndInsertRecord(req.getId(), playerId, playerName);
+        News news = newsService.findByIdAndInsertRecord(HttpTools.getIp(), req.getId(), playerId, playerName);
         return R.ok(news);
     }
 

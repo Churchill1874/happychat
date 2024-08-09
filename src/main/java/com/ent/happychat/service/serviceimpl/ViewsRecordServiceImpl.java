@@ -32,7 +32,7 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
     }
 
     @Override
-    public void addViewsRecord(Long viewsId, String content, Long playerId, String playerName) {
+    public void addViewsRecord(String ip, Long viewsId, String content, Long playerId, String playerName) {
         // 插入浏览记录
         ViewsRecord viewsRecord = new ViewsRecord();
         viewsRecord.setPlayerId(playerId);

@@ -16,8 +16,9 @@ public interface ViewsRecordService extends IService<ViewsRecord> {
      * @param content
      * @param playerId
      * @param playerName
+     * @param ip
      */
-    void addViewsRecord(Long viewsId, String content, Long playerId, String playerName);
+    void addViewsRecord(String ip, Long viewsId, String content, Long playerId, String playerName);
 
 
 }

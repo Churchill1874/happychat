@@ -19,6 +19,8 @@ public class ViewsRecord extends BaseInfo implements Serializable {
     private Long playerId;
     @ApiModelProperty("浏览id")
     private Long viewsId;
+    @ApiModelProperty("ip地址")
+    private String ip;
     @ApiModelProperty("浏览类型")
     private ViewsEnum viewsType;
     @ApiModelProperty("浏览内容")

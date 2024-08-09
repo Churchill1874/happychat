@@ -57,10 +57,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<News> queryNews = new QueryWrapper<>();
         queryNews.lambda()
-            .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
-            .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
-            .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
-            .orderByDesc(News::getCreateTime);
+                .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
+                .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
+                .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
+                .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
         boolean createTimeSort = !newsPageReq.getLikesSort() && !newsPageReq.getViewSort() && !newsPageReq.getCommentsSort();
@@ -83,9 +83,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     public List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size) {
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(News::getNewsStatus, newsStatusEnum)
-            .orderByDesc(News::getCreateTime)
-            .last("LIMIT " + size);
+                .eq(News::getNewsStatus, newsStatusEnum)
+                .orderByDesc(News::getCreateTime)
+                .last("LIMIT " + size);
 
         return this.list(queryWrapper);
     }
@@ -179,25 +179,15 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     @Async
-    public void increaseViewsCount(Long viewsId, String content, Long playerId, String playerName) {
-        QueryWrapper<ViewsRecord> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-            .select(ViewsRecord::getId)
-            .eq(ViewsRecord::getViewsId, viewsId)
-            .eq(ViewsRecord::getPlayerId, playerId);
-        List<ViewsRecord> viewsRecordList = viewsRecordService.list(queryWrapper);
-        if (CollectionUtils.isEmpty(viewsRecordList)) {
-            viewsRecordService.addViewsRecord(viewsId, content, playerId, playerName);
-            baseMapper.increaseViewsCount(viewsId);
-        }
+    public void increaseViewsCount(String ip, Long viewsId, String content, Long playerId, String playerName) {
+        viewsRecordService.addViewsRecord(ip, viewsId, content, playerId, playerName);
+        baseMapper.increaseViewsCount(viewsId);
     }
 
     @Override
-    public News findByIdAndInsertRecord(Long viewsId, Long playerId, String playerName) {
+    public News findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName) {
         News news = getById(viewsId);
-        if (playerId != null && StringUtils.isNotBlank(playerName)) {
-            increaseViewsCount(viewsId, news.getTitle(), playerId, playerName);
-        }
+        increaseViewsCount(ip, viewsId, news.getTitle(), playerId, playerName);
         return news;
     }
 

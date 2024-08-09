@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.entity.News;
@@ -57,8 +58,6 @@ public class CommentApi {
         if (req.getNewsId() == null){
             throw new DataException("搜索新闻数据异常");
         }
-
-        News news = addViewsNewsRecord(req.getNewsId());
 
         //待返回的新闻评论对象
         NewsCommentPageResp newsCommentRespPage = new NewsCommentPageResp();
@@ -134,27 +133,7 @@ public class CommentApi {
         //存入该新闻 顶层和回复的评论组 列表
         newsCommentRespPage.setList(list);
         newsCommentRespPage.setCommentCount(topPage.getTotal());
-        newsCommentRespPage.setLikesCount(news.getLikesCount());
-        newsCommentRespPage.setViewsCount(news.getViewCount());
         return R.ok(newsCommentRespPage);
-    }
-
-    //添加新闻查看记录并获取新闻信息
-    private News addViewsNewsRecord(Long newsId){
-        Long playerId = null;
-        String playerName = null;
-        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
-        if (playerTokenResp != null){
-            playerId = playerTokenResp.getId();
-            playerName = playerTokenResp.getName();
-        }
-
-        News news = newsService.findByIdAndInsertRecord(newsId, playerId, playerName);
-        if (news == null){
-            throw new DataException("新闻不存在或已删除");
-        }
-
-        return news;
     }
 
     @PostMapping("/sendNewsComment")
