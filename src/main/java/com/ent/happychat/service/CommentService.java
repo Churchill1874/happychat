@@ -56,9 +56,9 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 增加点赞数量
-     * @param po
+     * @param id
      */
-    void increaseLikesCount(LikesClickReq po);
+    boolean increaseLikesCount(Long id);
 
 
 

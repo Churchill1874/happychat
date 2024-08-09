@@ -5,14 +5,12 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
-import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
@@ -98,8 +96,8 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R increaseLikesCount(@RequestBody @Valid LikesClickReq req) {
-        newsService.increaseLikesCount(req);
+    public R increaseLikesCount(@RequestBody @Valid Id req) {
+        newsService.increaseLikesCount(req.getId());
         return R.ok(null);
     }
 

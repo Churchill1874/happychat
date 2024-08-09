@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
+import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
@@ -167,14 +168,28 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         baseMapper.increaseCommentsCount(id);
     }
 
-    @Async
+
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void increaseLikesCount(LikesClickReq req) {
+    public boolean increaseLikesCount(Long id) {
+        News news = getById(id);
+        if (news == null){
+            throw new DataException("内容不存在或已删除");
+        }
         //插入点赞记录
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        likesRecordService.increaseLikesCount(playerTokenResp.getId(), playerTokenResp.getName(), req.getLikesId(), req.getContent());
-        baseMapper.increaseLikesCount(req.getLikesId());
+        boolean result = likesRecordService.increaseLikesCount(
+                playerTokenResp.getId(),
+                playerTokenResp.getName(),
+                id,
+                news.getTitle(),
+                LikesEnum.NEWS
+        );
+        if (result){
+            baseMapper.increaseLikesCount(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

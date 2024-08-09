@@ -134,21 +134,29 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         baseMapper.increaseCommentsCount(id);
     }
 
-    @Async
     @Override
-    public void increaseLikesCount(LikesClickReq po) {
+    public boolean increaseLikesCount(Long id) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        Comment comment = getById(id);
+        if (comment == null){
+            throw new DataException("内容不存在或已删除");
+        }
         // 插入点赞记录
-        LikesRecord likesRecord = new LikesRecord();
-        likesRecord.setPlayerId(playerTokenResp.getId());
-        likesRecord.setLikesId(po.getLikesId());
-        likesRecord.setLikesType(LikesEnum.COMMENT);
-        likesRecord.setContent(po.getContent());
-        likesRecord.setCreateTime(LocalDateTime.now());
-        likesRecord.setCreateName(playerTokenResp.getName());
-        likesRecordService.save(likesRecord);
+        boolean result = likesRecordService.increaseLikesCount(
+                playerTokenResp.getId(),
+                playerTokenResp.getName(),
+                id,
+                comment.getContent(),
+                LikesEnum.COMMENT
+        );
         //增加点赞次数
-        baseMapper.increaseLikesCount(po.getLikesId());
+        if (result){
+            baseMapper.increaseLikesCount(id);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 
