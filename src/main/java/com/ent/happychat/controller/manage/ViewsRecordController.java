@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.pojo.req.views.ViewsRecordPageReq;
@@ -37,6 +38,7 @@ public class ViewsRecordController {
     @Autowired
     private PlayerInfoService playerInfoService;
 
+    @AdminLoginCheck
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<ViewsRecordPageResp>> queryPage(@RequestBody @Valid ViewsRecordPageReq req) {

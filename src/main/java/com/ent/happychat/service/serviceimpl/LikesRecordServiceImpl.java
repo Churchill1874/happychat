@@ -21,12 +21,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, LikesRecord> implements LikesRecordService {
-
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private NewsService newsService;
-
     @Override
     public IPage<LikesRecord> queryPage(LikesRecordPageReq po) {
         IPage<LikesRecord> iPage = new Page<>(po.getPageNum(), po.getPageSize());
@@ -53,7 +47,7 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
             LikesRecord likesRecord = new LikesRecord();
             likesRecord.setPlayerId(playerId);
             likesRecord.setLikesId(likesId);
-            likesRecord.setLikesType(LikesEnum.NEWS);
+            likesRecord.setLikesType(likesType);
             likesRecord.setContent(content);
             likesRecord.setCreateTime(LocalDateTime.now());
             likesRecord.setCreateName(playerName);

@@ -66,6 +66,9 @@ public class CommentApi {
         commentPageReq.setPageNum(req.getPageNum());
         commentPageReq.setPageSize(req.getPageSize());
         IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);
+        newsCommentRespPage.setCommentCount(topPage.getTotal());
+
+
         if (CollectionUtils.isEmpty(topPage.getRecords())){
             return R.ok(newsCommentRespPage);
         }
@@ -129,7 +132,6 @@ public class CommentApi {
 
         //存入该新闻 顶层和回复的评论组 列表
         newsCommentRespPage.setList(list);
-        newsCommentRespPage.setCommentCount(topPage.getTotal());
         return R.ok(newsCommentRespPage);
     }
 
@@ -191,8 +193,7 @@ public class CommentApi {
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞评论", notes = "点赞评论")
     public R<Boolean> increaseLikesCount(@RequestBody @Valid Id req) {
-        boolean result = commentService.increaseLikesCount(req.getId());
-        return R.ok(result);
+        return R.ok(commentService.increaseLikesCount(req.getId()));
     }
 
 }

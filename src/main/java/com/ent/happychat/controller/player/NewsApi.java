@@ -9,7 +9,6 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
-import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
@@ -46,7 +45,7 @@ public class NewsApi {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
         Long playerId = null;
         String playerName = null;
-        if ( playerTokenResp != null ){
+        if (playerTokenResp != null) {
             playerId = playerTokenResp.getId();
             playerName = playerTokenResp.getName();
         }
@@ -96,9 +95,8 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R increaseLikesCount(@RequestBody @Valid Id req) {
-        newsService.increaseLikesCount(req.getId());
-        return R.ok(null);
+    public R<Boolean> increaseLikesCount(@RequestBody @Valid Id req) {
+        return R.ok(newsService.increaseLikesCount(req.getId()));
     }
 
 }

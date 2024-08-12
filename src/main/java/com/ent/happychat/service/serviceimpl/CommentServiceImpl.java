@@ -42,7 +42,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Transactional(rollbackFor = Exception.class)
     public void sendComment(Comment po) {
         //处理评论的内容
-        //如果topId 也是空 那证明当前评论就顶层评论 什么都不用做
+        //如果topId 也是空 那证明当前评论就顶层评论 什么都不做暂时
 
         //如果评论的是顶层评论
         //有顶层评论Id 但是没有内嵌评论id 那发布的就是对顶层评论的评论
@@ -135,7 +135,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public boolean increaseLikesCount(Long id) {
+    public Boolean increaseLikesCount(Long id) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         Comment comment = getById(id);
         if (comment == null){
@@ -154,7 +154,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             baseMapper.increaseLikesCount(id);
             return true;
         } else {
-            return false;
+            return null;
         }
 
     }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.PlayerInfo;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -59,7 +61,7 @@ public class CommentController {
         Map<Long, News> newsMap = newsService.mapByIds(newsIdList);
 
         List<Long> playerIdList = commentPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toList());
-        List<Long> targetPlayerIdList = commentPage.getRecords().stream().map(Comment::getTargetPlayerId).collect(Collectors.toList());
+        List<Long> targetPlayerIdList = commentPage.getRecords().stream().map(Comment::getTargetPlayerId).filter(Objects::nonNull).collect(Collectors.toList());
         playerIdList.addAll(targetPlayerIdList);
         Map<Long, PlayerInfo> playerInfoMap = playerInfoService.mapByIds(playerIdList);
 
@@ -67,15 +69,20 @@ public class CommentController {
         List<CommentPageResp> commentPageRespList = new ArrayList<>();
         commentPage.getRecords().forEach(comment -> {
             PlayerInfo player = playerInfoMap.get(comment.getPlayerId());
-            PlayerInfo targetPlayer = playerInfoMap.get(comment.getTargetPlayerId());
             News news = newsMap.get(comment.getNewsId());
-
             CommentPageResp commentPageResp = BeanUtil.toBean(comment, CommentPageResp.class);
             commentPageResp.setCommentator(player.getName());
             commentPageResp.setTitle(news.getTitle());
             commentPageResp.setLevel(player.getLevel());
-            commentPageResp.setTargetPlayerName(targetPlayer.getName());
-            commentPageResp.setTargetPlayerLevel(targetPlayer.getLevel());
+
+            if (comment.getTargetPlayerId() != null){
+                PlayerInfo targetPlayer = playerInfoMap.get(comment.getTargetPlayerId());
+                if (targetPlayer == null){
+                    throw new DataException(String.format("未找到被评论人信息,targetPlayerId:%s", comment.getTargetPlayerId()));
+                }
+                commentPageResp.setTargetPlayerName(targetPlayer.getName());
+                commentPageResp.setTargetPlayerLevel(targetPlayer.getLevel());
+            }
 
             commentPageRespList.add(commentPageResp);
         });
