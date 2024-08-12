@@ -1,6 +1,5 @@
 package com.ent.happychat.service;
 
-import cn.hutool.db.sql.Condition;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.common.constant.enums.LikesEnum;
@@ -23,6 +22,6 @@ public interface LikesRecordService extends IService<LikesRecord> {
      * @param likesId
      * @param content
      */
-    boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType);
+    boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId);
 
 }

@@ -20,14 +20,11 @@ public enum LevelEnum {
     LEVEL_5(5,"江湖高人",100000,0),
     LEVEL_6(6,"阅历长者",500000,1),
     LEVEL_7(7,"社会精英",1000000,10),
-    LEVEL_8(8,"名宿",3000000,100),
-    LEVEL_9(9,"政客",5000000,200),
-    LEVEL_10(10,"智囊",10000000,300),
-    LEVEL_11(11,"谋士",20000000,500),
-    LEVEL_12(12,"军师",30000000,1000),
-    LEVEL_13(13,"帝师",40000000,2000),
-    LEVEL_14(14,"王佐",50000000,3000),
-    LEVEL_15(15,"领袖",100000000,5000);
+    LEVEL_8(8,"政客",5000000,200),
+    LEVEL_9(9,"智囊",10000000,300),
+    LEVEL_10(10,"谋士",20000000,500),
+    LEVEL_11(11,"军师",30000000,1000),
+    LEVEL_12(12,"领袖",100000000,5000);
 
     /**
      *级别编码
@@ -60,6 +57,23 @@ public enum LevelEnum {
         this.name = name;
         this.likesReceivedCount = likesReceivedCount;
         this.correctCount = correctCount;
+    }
+
+    public static LevelEnum nextLevel(LevelEnum currentLevel){
+        int nextLevelCode = currentLevel.getCode() + 1;
+        if (nextLevelCode >= 12){
+            return currentLevel;
+        }
+        return findByCode(nextLevelCode);
+    }
+
+    public static LevelEnum findByCode(int code){
+        for(LevelEnum level: LevelEnum.values()){
+            if (level.getCode() == code){
+                return level;
+            }
+        }
+        return null;
     }
 
     @Override

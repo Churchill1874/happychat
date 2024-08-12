@@ -68,7 +68,7 @@ public interface NewsService extends IService<News> {
      * 增加点赞数量
      * @param id
      */
-    boolean increaseLikesCount(Long id);
+    Boolean increaseLikesCount(Long id);
 
     /**
      * 增加浏览数量

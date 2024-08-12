@@ -96,9 +96,9 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R increaseLikesCount(@RequestBody @Valid Id req) {
-        newsService.increaseLikesCount(req.getId());
-        return R.ok(null);
+    public R<Boolean> increaseLikesCount(@RequestBody @Valid Id req) {
+        Boolean result = newsService.increaseLikesCount(req.getId());
+        return R.ok(result);
     }
 
 }

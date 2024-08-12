@@ -12,6 +12,7 @@ import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
+import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.mapper.NewsMapper;
@@ -170,26 +171,36 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
 
     @Override
-    public boolean increaseLikesCount(Long id) {
+    public Boolean increaseLikesCount(Long id) {
         News news = getById(id);
         if (news == null){
             throw new DataException("内容不存在或已删除");
         }
         //插入点赞记录
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        boolean result = likesRecordService.increaseLikesCount(
-                playerTokenResp.getId(),
-                playerTokenResp.getName(),
-                id,
-                news.getTitle(),
-                LikesEnum.NEWS
-        );
-        if (result){
+        QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
+                .eq(LikesRecord::getLikesId, id)
+                .eq(LikesRecord::getLikesType, LikesEnum.COMMENT);
+        int count = likesRecordService.count(queryWrapper);
+
+        if(count == 0){
+            likesRecordService.increaseLikesCount(
+                    playerTokenResp.getId(),
+                    playerTokenResp.getName(),
+                    id,
+                    news.getTitle(),
+                    LikesEnum.NEWS,
+                    null
+            );
+
             baseMapper.increaseLikesCount(id);
             return true;
         } else {
-            return false;
+            return null;
         }
+
     }
 
     @Override
