@@ -8,6 +8,7 @@ import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.PlayerInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class LevelProgressServiceImpl implements LevelProgressService {
 
+    @Lazy
     @Autowired
     private PlayerInfoService playerInfoService;
+    @Lazy
     @Autowired
     private LikesRecordService likesRecordService;
+    @Lazy
     @Autowired
     private CommentService commentService;
 

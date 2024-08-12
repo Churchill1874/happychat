@@ -46,8 +46,7 @@ public class CommentApi {
     private CommentService commentService;
     @Autowired
     private PlayerInfoService playerInfoService;
-    @Autowired
-    private NewsService newsService;
+
 
     @PostMapping("/findNewsComments")
     @ApiOperation(value = "根据新闻id分页查询新闻评论", notes = "根据新闻id分页查询新闻评论")
@@ -66,7 +65,6 @@ public class CommentApi {
         commentPageReq.setPageNum(req.getPageNum());
         commentPageReq.setPageSize(req.getPageSize());
         IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);
-        newsCommentRespPage.setCommentCount(topPage.getTotal());
 
 
         if (CollectionUtils.isEmpty(topPage.getRecords())){

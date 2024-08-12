@@ -1,60 +1,51 @@
 server:
   port: 8009
-  #这个配置解决了获取不到真实ip问题,但可能导致ip在请求头有两个出现
+  # 解决获取不到真实IP的问题，但可能导致请求头中出现多个IP
   forward-headers-strategy: none
   servlet:
     context-path: /
-
+  tomcat:
+    accept-count: 100
+    keep-alive-timeout: 20000  # 设置保持活跃时间为20秒（20000毫秒）
+    connection-timeout: 20000  # 设置请求响应超时时间为20秒（20000毫秒）
+    threads:
+      max: 200
 
 spring:
   cache:
     jcache:
       config: classpath:/ehcache.xml
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://8.141.144.73:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: 3.141592653589793
     type: com.alibaba.druid.pool.DruidDataSource
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-    serialization:
-      write-dates-as-timestamps: false
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
     druid:
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
         login-username: admin
         login-password: admin
-        initial-size: 5
-        max-active: 30
-        min-idle: 5
-        max-wait: 60000
-        time-between-eviction-runs-millis: 60000
-        min-evictable-idle-time-millis: 300000
-        validation-query: select count(*) from dual
-        test-while-idle: true
-        test-on-borrow: false
-        test-on-return: false
-        pool-prepared-statements: false
-        max-pool-prepared-statement-per-connection-size: 50
-        filters: stat,wall
-        connection-properties:
-          druid.stat.mergeSql: true
-          druid.stat.slowSqlMillis: 500
-        use-global-data-source-stat: true
-        filter:
-          stat:
-            log-slow-sql: true
-            slow-sql-millis: 1000
-            merge-sql: true
-          wall:
-            config:
-              multi-statement-allow: true
+      max-wait: 60000
+      min-idle: 5
+      initial-size: 5
+      max-active: 30
+
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+  mvc:
+    async:
+      request-timeout: 60000  # 设置请求超时时间为60秒
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   servlet:
     multipart:
       enabled: true
@@ -78,7 +69,7 @@ mybatis-plus:
 logging:
   config: classpath:log/logback.xml
 
-#初始化配置
+# 初始化配置
 init:
   create:
-    bot: false #创建机器人开关
+    bot: false  # 创建机器人开关

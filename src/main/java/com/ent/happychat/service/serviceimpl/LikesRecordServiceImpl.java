@@ -25,10 +25,6 @@ import java.util.List;
 public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, LikesRecord> implements LikesRecordService {
 
     @Autowired
-    private CommentService commentService;
-    @Autowired
-    private NewsService newsService;
-    @Autowired
     private LevelProgressService levelProgressService;
 
     @Override
