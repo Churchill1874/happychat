@@ -141,21 +141,29 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (comment == null){
             throw new DataException("内容不存在或已删除");
         }
-        // 插入点赞记录
-        boolean result = likesRecordService.increaseLikesCount(
-                playerTokenResp.getId(),
-                playerTokenResp.getName(),
-                id,
-                comment.getContent(),
-                LikesEnum.COMMENT
-        );
+        QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
+                .eq(LikesRecord::getLikesId, id)
+                .eq(LikesRecord::getLikesType, LikesEnum.COMMENT);
+        int count = likesRecordService.count(queryWrapper);
         //增加点赞次数
-        if (result){
+        if (count == 0){
+            likesRecordService.increaseLikesCount(
+                    playerTokenResp.getId(),
+                    playerTokenResp.getName(),
+                    id,
+                    comment.getContent(),
+                    LikesEnum.COMMENT,
+                    comment.getTargetPlayerId()
+            );
+
             baseMapper.increaseLikesCount(id);
             return true;
         } else {
             return null;
         }
+
 
     }
 

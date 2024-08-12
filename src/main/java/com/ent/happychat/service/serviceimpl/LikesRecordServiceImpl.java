@@ -9,10 +9,12 @@ import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.mapper.LikesRecordMapper;
 import com.ent.happychat.pojo.req.likes.LikesRecordPageReq;
 import com.ent.happychat.service.CommentService;
+import com.ent.happychat.service.LevelProgressService;
 import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,14 @@ import java.util.List;
 @Slf4j
 @Service
 public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, LikesRecord> implements LikesRecordService {
+
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private NewsService newsService;
+    @Autowired
+    private LevelProgressService levelProgressService;
+
     @Override
     public IPage<LikesRecord> queryPage(LikesRecordPageReq po) {
         IPage<LikesRecord> iPage = new Page<>(po.getPageNum(), po.getPageSize());
@@ -34,16 +44,10 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
         return page(iPage, queryWrapper);
     }
 
-    @Override
-    public boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType) {
-        QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(LikesRecord::getPlayerId, playerId)
-                .eq(LikesRecord::getLikesId, likesId)
-                .eq(LikesRecord::getLikesType, likesType);
-        int count = count(queryWrapper);
 
-        if (count == 0){
+    @Async
+    @Override
+    public boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId) {
             LikesRecord likesRecord = new LikesRecord();
             likesRecord.setPlayerId(playerId);
             likesRecord.setLikesId(likesId);
@@ -51,11 +55,17 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
             likesRecord.setContent(content);
             likesRecord.setCreateTime(LocalDateTime.now());
             likesRecord.setCreateName(playerName);
+            likesRecord.setTargetPlayerId(targetPlayerId);
             save(likesRecord);
-            return true;
-        }
 
-        return false;
+            //todo 要查询被点赞的玩家 当前 被点赞数量 和 下注正确数量 是否可以升级了
+            if (likesType == LikesEnum.COMMENT){
+                levelProgressService.levelProgress(targetPlayerId);
+            }
+
+            return true;
+
+
     }
 
 
