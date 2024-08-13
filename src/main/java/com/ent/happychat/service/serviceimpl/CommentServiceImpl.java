@@ -135,7 +135,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public Boolean increaseLikesCount(Long id) {
+    public boolean increaseLikesCount(Long id) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         Comment comment = getById(id);
         if (comment == null){
@@ -161,7 +161,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             baseMapper.increaseLikesCount(id);
             return true;
         } else {
-            return null;
+            return false;
         }
 
 

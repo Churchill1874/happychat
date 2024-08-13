@@ -10,6 +10,7 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.resp.BooleanResp;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
@@ -95,8 +96,10 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R<Boolean> increaseLikesCount(@RequestBody @Valid Id req) {
-        return R.ok(newsService.increaseLikesCount(req.getId()));
+    public R<BooleanResp> increaseLikesCount(@RequestBody @Valid Id req) {
+        BooleanResp booleanResp = new BooleanResp();
+        booleanResp.setValue(newsService.increaseLikesCount(req.getId()));
+        return R.ok(booleanResp);
     }
 
 }

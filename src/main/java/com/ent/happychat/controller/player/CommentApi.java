@@ -14,13 +14,11 @@ import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.comment.CommentSendReq;
-import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
-import com.ent.happychat.service.NewsService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +49,7 @@ public class CommentApi {
     @PostMapping("/findNewsComments")
     @ApiOperation(value = "根据新闻id分页查询新闻评论", notes = "根据新闻id分页查询新闻评论")
     public R<NewsCommentPageResp> findNewsComments(@RequestBody @Valid CommentPageReq req) {
-        if (req.getNewsId() == null){
+        if (req.getNewsId() == null) {
             throw new DataException("搜索新闻数据异常");
         }
 
@@ -67,7 +65,7 @@ public class CommentApi {
         IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);
 
 
-        if (CollectionUtils.isEmpty(topPage.getRecords())){
+        if (CollectionUtils.isEmpty(topPage.getRecords())) {
             return R.ok(newsCommentRespPage);
         }
 
@@ -86,7 +84,7 @@ public class CommentApi {
         List<Comment> replyList = commentService.replyList(topIdList);
         //根据顶层评论id分组
         Map<Long, List<Comment>> replyGroup = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(replyList)){
+        if (CollectionUtils.isNotEmpty(replyList)) {
             //将所有回复评论的用户id也放入用户id集合
             playerIdSet.addAll(replyList.stream().map(Comment::getPlayerId).collect(Collectors.toSet()));
             replyGroup = replyList.stream().collect(Collectors.groupingBy(Comment::getTopId));
@@ -99,7 +97,7 @@ public class CommentApi {
 
         //以顶层评论为单位 每组评论集合
         List<NewsCommentResp> list = new ArrayList<>();
-        for(Comment top: topPage.getRecords()){
+        for (Comment top : topPage.getRecords()) {
             //获取顶层评论人的信息
             PlayerInfo topPlayer = playerInfoMap.get(top.getPlayerId());
             NewsCommentResp newsCommentResp = new NewsCommentResp();
@@ -111,9 +109,9 @@ public class CommentApi {
 
             //存入该顶层评论的回复记录
             List<Comment> replyListOfTop = replyGroup.get(topResp.getId());
-            if (CollectionUtils.isNotEmpty(replyListOfTop)){
+            if (CollectionUtils.isNotEmpty(replyListOfTop)) {
                 List<CommentResp> replyRespListOfTop = new ArrayList<>();
-                for(Comment reply: replyListOfTop){
+                for (Comment reply : replyListOfTop) {
                     PlayerInfo replyPlayer = playerInfoMap.get(reply.getPlayerId());
                     CommentResp replyResp = BeanUtil.toBean(reply, CommentResp.class);
                     replyResp.setCommentator(replyPlayer.getName());
@@ -136,7 +134,7 @@ public class CommentApi {
     @PostMapping("/sendNewsComment")
     @ApiOperation(value = "发表新闻评论", notes = "发表新闻评论")
     public R sendNewsComment(@RequestBody @Valid CommentSendReq req) {
-        if ( req.getTopId() == null && req.getReplyId() != null){
+        if (req.getTopId() == null && req.getReplyId() != null) {
             log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
             throw new DataException("顶层评论不存在或已删除");
         }
@@ -166,7 +164,7 @@ public class CommentApi {
         IPage<Comment> commentPage = commentService.queryPage(commentPageReq);
 
         //如果没有收到过任何的评论
-        if (CollectionUtils.isEmpty(commentPage.getRecords())){
+        if (CollectionUtils.isEmpty(commentPage.getRecords())) {
             return R.ok(null);
         }
 

@@ -171,7 +171,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
 
     @Override
-    public Boolean increaseLikesCount(Long id) {
+    public boolean increaseLikesCount(Long id) {
         News news = getById(id);
         if (news == null){
             throw new DataException("内容不存在或已删除");
@@ -182,7 +182,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         queryWrapper.lambda()
                 .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
                 .eq(LikesRecord::getLikesId, id)
-                .eq(LikesRecord::getLikesType, LikesEnum.COMMENT);
+                .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
         int count = likesRecordService.count(queryWrapper);
 
         if(count == 0){
@@ -198,7 +198,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             baseMapper.increaseLikesCount(id);
             return true;
         } else {
-            return null;
+            return false;
         }
 
     }
