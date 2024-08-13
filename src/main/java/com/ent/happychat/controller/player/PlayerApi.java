@@ -111,7 +111,7 @@ public class PlayerApi {
         if (verificationCode == null) {
             throw new DataException("验证码有误或已过期");
         }
-        if (!verificationCode.equals(reqVerificationCode)) {
+        if (!verificationCode.equalsIgnoreCase(reqVerificationCode)) {
             throw new DataException("验证码错误");
         }
     }
