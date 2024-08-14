@@ -14,6 +14,7 @@ import com.ent.happychat.pojo.req.Id;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.comment.CommentSendReq;
+import com.ent.happychat.pojo.resp.BooleanResp;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
@@ -188,8 +189,10 @@ public class CommentApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞评论", notes = "点赞评论")
-    public R<Boolean> increaseLikesCount(@RequestBody @Valid Id req) {
-        return R.ok(commentService.increaseLikesCount(req.getId()));
+    public R<BooleanResp> increaseLikesCount(@RequestBody @Valid Id req) {
+        BooleanResp booleanResp = new BooleanResp();
+        booleanResp.setValue(commentService.increaseLikesCount(req.getId()));
+        return R.ok(booleanResp);
     }
 
 }

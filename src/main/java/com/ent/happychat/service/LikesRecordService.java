@@ -22,6 +22,6 @@ public interface LikesRecordService extends IService<LikesRecord> {
      * @param likesId
      * @param content
      */
-    boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId);
+    void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId);
 
 }

@@ -43,7 +43,7 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
 
     @Async
     @Override
-    public boolean increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId) {
+    public void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId) {
             LikesRecord likesRecord = new LikesRecord();
             likesRecord.setPlayerId(playerId);
             likesRecord.setLikesId(likesId);
@@ -58,9 +58,6 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
             if (likesType == LikesEnum.COMMENT){
                 levelProgressService.levelProgress(targetPlayerId);
             }
-
-            return true;
-
 
     }
 
