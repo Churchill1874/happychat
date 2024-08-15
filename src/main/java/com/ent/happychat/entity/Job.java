@@ -44,10 +44,7 @@ public class Job extends BaseInfo implements Serializable {
     private String skillConditions;
 
     @ApiModelProperty("薪水上限")
-    private String salaryUp;
-
-    @ApiModelProperty("薪水下限")
-    private String salaryDown;
+    private String salaryRange;
 
     @ApiModelProperty("休假方式 单休 双休 大小周")
     private String holiday;

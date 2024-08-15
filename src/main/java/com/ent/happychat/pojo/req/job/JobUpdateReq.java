@@ -45,13 +45,9 @@ public class JobUpdateReq implements Serializable {
     @ApiModelProperty("技能要求条件")
     private String skillConditions;
 
-    @NotBlank(message = "薪水上限不能为空")
-    @ApiModelProperty(value = "薪水上限", required = true)
-    private String salaryUp;
-
-    @NotBlank(message = "薪水下限不能为空")
-    @ApiModelProperty(value = "薪水下限", required = true)
-    private String salaryDown;
+    @NotBlank(message = "薪水范围不能为空")
+    @ApiModelProperty(value = "薪水上限",required = true)
+    private String salaryRange;
 
     @NotBlank(message = "休假方式不能为空")
     @ApiModelProperty(value = "休假方式 单休 双休 大小周", required = true)
