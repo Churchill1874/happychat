@@ -59,7 +59,7 @@ public class Job extends BaseInfo implements Serializable {
     private String environment;
 
     @ApiModelProperty("团队规模 0-20 20-50 50-100 100+")
-    private String teemScale;
+    private String teamScale;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("最后一次 需要招聘 更新时间")

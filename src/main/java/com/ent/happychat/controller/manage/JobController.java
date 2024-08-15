@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Job;
 import com.ent.happychat.pojo.req.Id;
@@ -14,6 +15,7 @@ import com.ent.happychat.service.JobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,10 +60,29 @@ public class JobController {
     @ApiOperation(value = "新增", notes = "新增")
     public R add(@RequestBody @Valid JobAddReq req) {
         Job job = BeanUtil.toBean(req, Job.class);
+        checkLength(job);
         job.setCreateName(TokenTools.getAdminToken(true).getName());
         job.setCreateTime(LocalDateTime.now());
         job.setLastTime(LocalDateTime.now());
         return R.ok(jobService.save(job));
+    }
+
+    private void checkLength(Job req){
+        if (StringUtils.isNotBlank(req.getWelfare()) && req.getWelfare().length() > 100){
+            throw new DataException("其他福利长度1-100");
+        }
+        if (StringUtils.isNotBlank(req.getRoomOut()) && req.getRoomOut().length() > 20){
+            throw new DataException("外宿补贴长度1-20");
+        }
+        if (StringUtils.isNotBlank(req.getEducationConditions()) && req.getEducationConditions().length() > 20){
+            throw new DataException("学历长度1-20");
+        }
+        if (StringUtils.isNotBlank(req.getAgeConditions()) && req.getAgeConditions().length() > 20){
+            throw new DataException("年龄范围长度1-20");
+        }
+        if (StringUtils.isNotBlank(req.getSkillConditions()) && req.getSkillConditions().length() > 200){
+            throw new DataException("技能描述长度1-20");
+        }
     }
 
     @AdminLoginCheck
@@ -69,6 +90,7 @@ public class JobController {
     @ApiOperation(value = "更新", notes = "更新")
     public R update(@RequestBody @Valid JobUpdateReq req) {
         Job job = BeanUtil.toBean(req, Job.class);
+        checkLength(job);
         return R.ok(jobService.updateById(job));
     }
 
