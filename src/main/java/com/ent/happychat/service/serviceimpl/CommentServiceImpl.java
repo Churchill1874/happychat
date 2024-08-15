@@ -13,12 +13,10 @@ import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
-import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
 import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.NewsService;
-import com.ent.happychat.service.PlayerInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
