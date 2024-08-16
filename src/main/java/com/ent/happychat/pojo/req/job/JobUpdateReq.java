@@ -16,6 +16,10 @@ public class JobUpdateReq implements Serializable {
     @ApiModelProperty(value = "id", required = true)
     private Long id;
 
+    @NotBlank(message = "联系方式不能为空")
+    @ApiModelProperty(value = "联系方式",required = true)
+    private String contact;
+
     @NotBlank(message = "岗位名称不能为空")
     @Length(min = 1, max = 50, message = "岗位长度1-50")
     @ApiModelProperty(value = "岗位名称 多个可以用逗号分开", required = true)

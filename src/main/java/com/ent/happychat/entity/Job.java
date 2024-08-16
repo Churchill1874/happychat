@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 public class Job extends BaseInfo implements Serializable {
     private static final long serialVersionUID = -1021466672750849654L;
 
+    @ApiModelProperty("联系方式")
+    private String contact;
+
     @ApiModelProperty("岗位名称 多个可以用逗号分开")
     private String name;
 
