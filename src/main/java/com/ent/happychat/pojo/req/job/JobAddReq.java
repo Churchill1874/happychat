@@ -45,6 +45,8 @@ public class JobAddReq implements Serializable {
     @ApiModelProperty("年龄要求条件")
     private String ageConditions = "无";
 
+    @NotBlank(message = "技能要求不能为空")
+    @Length(min = 1, max = 1000, message = "技能要求长度1-1000")
     @ApiModelProperty("技能要求条件")
     private String skillConditions = "无";
 
@@ -77,5 +79,18 @@ public class JobAddReq implements Serializable {
     @Length(min = 1, max = 20, message = "团队规模长度1-20")
     @ApiModelProperty(value = "团队规模 0-20 20-50 50-100 100+",required = true)
     private String teamScale;
+
+    @ApiModelProperty("标签 用逗号隔开 可多选内容 老公司,氛围好,领导nice,休假多,龙头公司,高绩效,团建丰富")
+    private String tag;
+
+    @NotBlank(message = "年假不能为空")
+    @Length(min=1, max = 20, message = "年假长度1-20")
+    @ApiModelProperty(value = "年假",required = true)
+    private String annualLeave;
+
+    @NotBlank(message = "项目不能为空")
+    @Length(min=1, max = 20, message = "项目长度1-20")
+    @ApiModelProperty("经营项目")
+    private String project;
 
 }

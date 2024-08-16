@@ -68,4 +68,13 @@ public class Job extends BaseInfo implements Serializable {
     @ApiModelProperty("最后一次 需要招聘 更新时间")
     private LocalDateTime lastTime;
 
+    @ApiModelProperty("标签 用逗号隔开 可多选内容 老公司,氛围好,领导nice,休假多,龙头公司,高绩效,团建丰富")
+    private String tag;
+
+    @ApiModelProperty("年假")
+    private String annualLeave;
+
+    @ApiModelProperty("经营项目")
+    private String project;
+
 }

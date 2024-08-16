@@ -80,8 +80,11 @@ public class JobController {
         if (StringUtils.isNotBlank(req.getAgeConditions()) && req.getAgeConditions().length() > 20){
             throw new DataException("年龄范围长度1-20");
         }
-        if (StringUtils.isNotBlank(req.getSkillConditions()) && req.getSkillConditions().length() > 200){
-            throw new DataException("技能描述长度1-20");
+        if (StringUtils.isNotBlank(req.getTag()) && req.getTag().length() > 30){
+            throw new DataException("标签长度1-30");
+        }
+        if (StringUtils.isNotBlank(req.getAnnualLeave()) && req.getAnnualLeave().length() > 30){
+            throw new DataException("年假长度1-30");
         }
     }
 
