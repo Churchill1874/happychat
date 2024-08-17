@@ -22,5 +22,10 @@ public class Company extends BaseInfo implements Serializable {
     private String logo;
     @ApiModelProperty("描述")
     private String description;
-
+    @ApiModelProperty("团队规模")
+    private String teamScale;
+    @ApiModelProperty("休假制度")
+    private String holiday;
+    @ApiModelProperty("评价")
+    private String evaluate;
 }

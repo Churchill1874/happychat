@@ -24,5 +24,11 @@ public class CompanyUpdateReq implements Serializable {
     private String logo;
     @ApiModelProperty("描述")
     private String description;
+    @NotBlank(message = "休假制度不能为空")
+    @ApiModelProperty(value="休假制度", required = true)
+    private String holiday;
+    @NotBlank(message = "评价不能为空")
+    @ApiModelProperty(value="评价", required = true)
+    private String evaluate;
 
 }
