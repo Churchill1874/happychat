@@ -63,7 +63,8 @@ mybatis-plus:
     db-config:
       logic-not-delete-value: 1  # 配置逻辑删除，未删除的值为1
       logic-delete-value: 0  # 配置逻辑删除，删除的值为0
-      field-strategy: IGNORED  # 配置字段策略，忽略字段策略
+      field-strategy: NOT_NULL  # 配置字段策略，忽略字段策略
+
   type-enums-package: com.ent.happychat.common.constant.enums  # 指定枚举类型所在的包路径
 
 logging:

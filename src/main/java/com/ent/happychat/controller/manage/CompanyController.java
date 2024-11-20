@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Company;
 import com.ent.happychat.entity.CompanyEvent;
 import com.ent.happychat.pojo.req.Id;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,8 @@ public class CompanyController {
     @ApiOperation(value = "添加公司", notes = "添加公司")
     public R addCompany(@RequestBody @Valid CompanyAddReq req) {
         Company company = BeanUtil.toBean(req, Company.class);
+        company.setCreateTime(LocalDateTime.now());
+        company.setCreateName(TokenTools.getAdminToken(true).getName());
         return R.ok(companyService.save(company));
     }
 
@@ -63,6 +67,8 @@ public class CompanyController {
     @ApiOperation(value = "添加事件", notes = "添加事件")
     public R addEvent(@RequestBody @Valid CompanyEventAddReq req) {
         CompanyEvent companyEvent = BeanUtil.toBean(req, CompanyEvent.class);
+        companyEvent.setCreateName(TokenTools.getAdminToken(true).getName());
+        companyEvent.setCreateTime(LocalDateTime.now());
         return R.ok(companyEventService.save(companyEvent));
     }
 

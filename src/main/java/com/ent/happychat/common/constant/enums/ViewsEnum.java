@@ -8,9 +8,10 @@ public enum ViewsEnum {
 
     NEWS(1,"新闻"),
     WORK(2,"工作"),
-    APPLICANT(3,"人才"),
-    CHAT_GIRL(4,"女孩"),
-    BET(5,"投注");
+    Company(3,"公司"),
+    CHAT_GIRL(4,"聊妹"),
+    BET(5,"投注"),
+    SoutheastAsia(6,"东南亚新闻");
 
 
     @Getter

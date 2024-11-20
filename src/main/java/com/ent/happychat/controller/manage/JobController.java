@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
@@ -94,6 +95,7 @@ public class JobController {
     public R update(@RequestBody @Valid JobUpdateReq req) {
         Job job = BeanUtil.toBean(req, Job.class);
         checkLength(job);
+        job.setLastTime(LocalDateTime.now());
         return R.ok(jobService.updateById(job));
     }
 
@@ -103,6 +105,5 @@ public class JobController {
     public R delete(@RequestBody @Valid Id req) {
         return R.ok(jobService.removeById(req.getId()));
     }
-
 
 }

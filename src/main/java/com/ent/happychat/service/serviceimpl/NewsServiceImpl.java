@@ -9,7 +9,10 @@ import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
+import com.ent.happychat.common.constant.enums.ViewsEnum;
+import com.ent.happychat.common.exception.AuthException;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.LikesRecord;
@@ -206,12 +209,15 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Override
     @Async
     public void increaseViewsCount(String ip, Long viewsId, String content, Long playerId, String playerName) {
-        viewsRecordService.addViewsRecord(ip, viewsId, content, playerId, playerName);
+        viewsRecordService.addViewsRecord(ip, viewsId, content, playerId, playerName, ViewsEnum.NEWS);
         baseMapper.increaseViewsCount(viewsId);
     }
 
     @Override
     public News findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName) {
+        if (playerId == null){
+            throw new TokenException();
+        }
         News news = getById(viewsId);
         increaseViewsCount(ip, viewsId, news.getTitle(), playerId, playerName);
         return news;
