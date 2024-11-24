@@ -3,14 +3,12 @@ package com.ent.happychat.controller.manage;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Company;
 import com.ent.happychat.entity.CompanyEvent;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.company.CompanyAddReq;
 import com.ent.happychat.pojo.req.company.CompanyUpdateReq;
@@ -30,9 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -99,7 +94,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/deleteCompany")
     @ApiOperation(value = "删除公司", notes = "删除公司")
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         companyService.removeById(req.getId());
 
         QueryWrapper<CompanyEvent> queryWrapper = new QueryWrapper<>();
@@ -112,7 +107,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/deleteEvent")
     @ApiOperation(value = "删除公司的某个事件记录", notes = "删除公司的某个事件记录")
-    public R deleteEvent(@RequestBody @Valid Id req) {
+    public R deleteEvent(@RequestBody @Valid IdBase req) {
         return R.ok(companyEventService.removeById(req.getId()));
     }
 

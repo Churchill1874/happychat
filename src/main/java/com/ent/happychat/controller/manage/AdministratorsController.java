@@ -10,7 +10,7 @@ import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.Administrators;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.admin.AdministratorsAdd;
 import com.ent.happychat.pojo.req.admin.AdministratorsUpdate;
@@ -71,7 +71,7 @@ public class AdministratorsController {
     @PostMapping("/query")
     @ApiOperation(value = "查询管理员详情", notes = "查询管理员详情")
     @AdminLoginCheck
-    public R<Administrators> query(@RequestBody @Valid Id req) {
+    public R<Administrators> query(@RequestBody @Valid IdBase req) {
         log.info("查询管理员详情入参:{}", JSONObject.toJSONString(req));
         Administrators administrators = administratorsService.getById(req.getId());
         return R.ok(administrators);
@@ -103,7 +103,7 @@ public class AdministratorsController {
     @PostMapping("/delete")
     @ApiOperation(value = "删除管理员", notes = "删除管理员")
     @SuperAdminLoginCheck
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         log.info("删除管理员入参:{}", JSONObject.toJSONString(req));
         administratorsService.removeById(req.getId());
         return R.ok(null);

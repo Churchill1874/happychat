@@ -1,14 +1,13 @@
 package com.ent.happychat.controller.manage;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Job;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.job.JobAddReq;
 import com.ent.happychat.pojo.req.job.JobUpdateReq;
@@ -45,7 +44,7 @@ public class JobController {
     @AdminLoginCheck
     @PostMapping("/updateLastTime")
     @ApiOperation(value = "更新最后招聘需求时间", notes = "更新最后招聘需求时间")
-    public R updateLastTime(@RequestBody @Valid Id req) {
+    public R updateLastTime(@RequestBody @Valid IdBase req) {
         Job job = jobService.getById(req.getId());
 
         if (job == null) {
@@ -102,7 +101,7 @@ public class JobController {
     @AdminLoginCheck
     @PostMapping("/delete")
     @ApiOperation(value = "删除", notes = "删除")
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         return R.ok(jobService.removeById(req.getId()));
     }
 

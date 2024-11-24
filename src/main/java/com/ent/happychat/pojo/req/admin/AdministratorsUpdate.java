@@ -1,7 +1,7 @@
 package com.ent.happychat.pojo.req.admin;
 
 import com.ent.happychat.common.constant.enums.ManageRoleEnum;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-public class AdministratorsUpdate extends Id implements Serializable {
+public class AdministratorsUpdate extends IdBase implements Serializable {
     private static final long serialVersionUID = -7884649139919074869L;
 
     @NotNull(message = "角色不能为空")

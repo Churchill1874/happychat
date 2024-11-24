@@ -8,11 +8,11 @@ import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.news.NewsAddReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.news.NewsPullReq;
-import com.ent.happychat.pojo.req.news.NewsUpdateReq;
+import com.ent.happychat.pojo.req.news.NewsUpdateBase;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
 import io.swagger.annotations.Api;
@@ -49,7 +49,7 @@ public class NewsController {
     @PostMapping("/delete")
     @ApiOperation(value = "删除某个新闻", notes = "删除某个新闻")
     @AdminLoginCheck
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         newsService.removeById(req.getId());
 
         //清理首页的新闻列表缓存
@@ -60,7 +60,7 @@ public class NewsController {
     @PostMapping("/updateNews")
     @ApiOperation(value = "修改编辑新闻", notes = "修改编辑新闻")
     @AdminLoginCheck
-    public R updateNews(@RequestBody @Valid NewsUpdateReq req) {
+    public R updateNews(@RequestBody @Valid NewsUpdateBase req) {
         News news = BeanUtil.toBean(req, News.class);
         newsService.updateNews(news);
 

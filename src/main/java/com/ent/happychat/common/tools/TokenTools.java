@@ -52,6 +52,9 @@ public class TokenTools {
         return adminTokenResp;
     }
 
+    public static String getAdminName () {
+        return getAdminToken(true).getName();
+    }
 
     /**
      * 获取管理员登录信息

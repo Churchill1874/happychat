@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class IdList implements Serializable {
+public class IdListBase implements Serializable {
 
     private static final long serialVersionUID = -8260779700667025387L;
 

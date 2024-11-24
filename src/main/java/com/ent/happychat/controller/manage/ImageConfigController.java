@@ -1,16 +1,14 @@
 package com.ent.happychat.controller.manage;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.ImageConfig;
-import com.ent.happychat.pojo.req.Id;
-import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.image.ImageConfigAddReq;
 import com.ent.happychat.pojo.req.image.ImageConfigPageReq;
-import com.ent.happychat.pojo.req.image.ImageConfigUpdateReq;
+import com.ent.happychat.pojo.req.image.ImageConfigUpdateBase;
 import com.ent.happychat.service.ImageConfigService;
 import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
@@ -50,7 +48,7 @@ public class ImageConfigController {
     @PostMapping("/update")
     @ApiOperation(value = "图片修改", notes = "图片修改")
     @AdminLoginCheck
-    public R update(@RequestBody @Valid ImageConfigUpdateReq req) {
+    public R update(@RequestBody @Valid ImageConfigUpdateBase req) {
         ImageConfig imageConfig = imageConfigService.getById(req.getId());
         imageConfig.setSort(req.getSort());
         imageConfig.setStatus(req.getStatus());
@@ -63,7 +61,7 @@ public class ImageConfigController {
     @PostMapping("/delete")
     @ApiOperation(value = "图片删除", notes = "图片删除")
     @AdminLoginCheck
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         imageConfigService.deleteById(req.getId());
         return R.ok(null);
     }

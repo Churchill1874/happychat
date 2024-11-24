@@ -12,7 +12,7 @@ import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.UpdateStatusBase;
 import com.ent.happychat.pojo.req.player.PlayerInfoAddReq;
@@ -155,7 +155,7 @@ public class PlayerInfoController {
     @PostMapping("/delete")
     @AdminLoginCheck
     @ApiOperation(value = "删除", notes = "删除")
-    public R delete(@RequestBody @Valid Id req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         playerInfoService.removeById(req.getId());
         return R.ok(null);
     }

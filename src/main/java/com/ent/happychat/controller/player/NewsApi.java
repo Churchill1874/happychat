@@ -8,7 +8,7 @@ import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
-import com.ent.happychat.pojo.req.Id;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.resp.BooleanResp;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
@@ -42,7 +42,7 @@ public class NewsApi {
 
     @PostMapping("/find")
     @ApiOperation(value = "新闻详情", notes = "新闻详情")
-    public R<News> find(@RequestBody @Valid Id req) {
+    public R<News> find(@RequestBody @Valid IdBase req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
         Long playerId = null;
         String playerName = null;
@@ -96,7 +96,7 @@ public class NewsApi {
 
     @PostMapping("/increaseLikesCount")
     @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R<BooleanResp> increaseLikesCount(@RequestBody @Valid Id req) {
+    public R<BooleanResp> increaseLikesCount(@RequestBody @Valid IdBase req) {
         BooleanResp booleanResp = new BooleanResp();
         booleanResp.setValue(newsService.increaseLikesCount(req.getId()));
         return R.ok(booleanResp);
