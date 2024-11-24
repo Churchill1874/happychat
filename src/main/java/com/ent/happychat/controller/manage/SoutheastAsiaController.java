@@ -45,13 +45,19 @@ public class SoutheastAsiaController {
         return R.ok(null);
     }
 
-
     @AdminLoginCheck
     @PostMapping("/delete")
     @ApiOperation(value = "删除", notes = "删除")
-    public R add(@RequestBody @Valid IdBase req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         southeastAsiaService.removeById(req.getId());
         return R.ok(null);
+    }
+
+    @PostMapping("/findById")
+    @ApiOperation(value = "查看详情", notes = "查看详情")
+    public R<SoutheastAsia> findById(@RequestBody @Valid IdBase req) {
+        SoutheastAsia southeastAsia = southeastAsiaService.getById(req.getId());
+        return R.ok(southeastAsia);
     }
 
 
