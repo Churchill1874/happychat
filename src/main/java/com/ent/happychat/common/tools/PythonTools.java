@@ -35,7 +35,7 @@ public class PythonTools {
                 log.info(line);
                 if (StringUtils.isNotBlank(line) && line.contains("object has no attribute")
                         || line.contains("unknown error")
-                        || line.contains("Message: timeout")
+                        || line.contains("SysTemMessage: timeout")
                         || line.contains("SSLError")) {
                     return false;
                 }

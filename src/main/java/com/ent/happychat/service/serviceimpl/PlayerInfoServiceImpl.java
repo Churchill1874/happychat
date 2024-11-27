@@ -119,4 +119,11 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         return getOne(queryWrapper);
     }
 
+    @Override
+    public List<PlayerInfo> queryList(boolean isBot) {
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(PlayerInfo::getIsBot, isBot);
+        return list(queryWrapper);
+    }
+
 }

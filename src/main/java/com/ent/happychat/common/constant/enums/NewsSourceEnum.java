@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-/**
- * 信息类型枚举
- */
-public enum InfoEnum {
+public enum NewsSourceEnum {
 
-    NEWS(1,"国内新闻"),
-    SOUTHEAST_ASIA(2,"东南亚新闻");;
+
+    CHINA(1, "国内新闻"),
+    SOUTHEAST_ASIA(2,"东南亚新闻");
 
     @Getter
     @EnumValue
@@ -20,7 +18,7 @@ public enum InfoEnum {
     @Getter
     private String name;
 
-    InfoEnum(int code, String name) {
+    NewsSourceEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }

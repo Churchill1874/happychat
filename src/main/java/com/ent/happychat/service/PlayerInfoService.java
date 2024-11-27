@@ -35,4 +35,12 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      * @return
      */
     PlayerInfo getBaseInfoById(Long id);
+
+    /**
+     * 查询账号列表
+     * @param isBot
+     * @return
+     */
+    List<PlayerInfo> queryList(boolean isBot);
+
 }
