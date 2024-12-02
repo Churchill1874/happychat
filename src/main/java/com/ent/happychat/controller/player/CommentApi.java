@@ -61,6 +61,7 @@ public class CommentApi {
         //查顶部新闻评论分页
         CommentPageReq commentPageReq = new CommentPageReq();
         commentPageReq.setNewsId(req.getNewsId());
+        commentPageReq.setNewsType(req.getNewsType());
         commentPageReq.setPageNum(req.getPageNum());
         commentPageReq.setPageSize(req.getPageSize());
         IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);

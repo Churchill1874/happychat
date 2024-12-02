@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.comment;
 
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -26,5 +27,11 @@ public class CommentSendReq implements Serializable {
     @NotNull(message = "请输入评论内容")
     @ApiModelProperty("评论内容")
     private String content;
+
+    @NotNull(message = "新闻类型不能为空")
+    @ApiModelProperty("新闻类型")
+    private InfoEnum newsType;
+
+
 
 }
