@@ -16,12 +16,8 @@ public class CompanyEvent extends BaseInfo implements Serializable {
 
     @ApiModelProperty("公司编码id")
     private Long companyId;
-    @ApiModelProperty("简述")
-    private String encapsulate;
     @ApiModelProperty("图片 多个图片用逗号分割")
     private String image;
-    @ApiModelProperty("是否有详情")
-    private Boolean haveDetails;
     @ApiModelProperty("详细描述")
     private String description;
 

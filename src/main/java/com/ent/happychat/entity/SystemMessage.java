@@ -30,10 +30,10 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private MessageTypeEnum messageType;
 
     @ApiModelProperty("收取人账号")
-    private Long recipientAccount;
+    private String recipientAccount;
 
-    @ApiModelProperty("发送人id")
-    private Long senderAccount;
+    @ApiModelProperty("发送人账号")
+    private String senderAccount;
 
     @ApiModelProperty("新闻id")
     private Long newsId;

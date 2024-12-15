@@ -61,7 +61,7 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
             systemMessage.setCreateTime(LocalDateTime.now());
             systemMessage.setCreateName(TokenTools.getAdminName());
-            systemMessage.setRecipientAccount(playerInfo.getId());
+            systemMessage.setRecipientAccount(playerInfo.getAccount());
             systemMessageList.add(systemMessage);
         }
         saveBatch(systemMessageList);
