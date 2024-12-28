@@ -11,7 +11,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("message")
+@TableName("system_message")
 @ApiModel("消息")
 public class SystemMessage extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 5655088707782304840L;
@@ -45,6 +45,9 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private String imagePath;
 
     @ApiModelProperty("需要弹窗")
-    private Boolean popUp;
+    private Boolean popup;
+
+    @ApiModelProperty("评论内容")
+    private String comment;
 
 }

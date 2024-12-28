@@ -43,4 +43,11 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      */
     List<PlayerInfo> queryList(boolean isBot);
 
+    /**
+     * 转换用户集合
+     * @param accountList
+     * @return
+     */
+    Map<String, PlayerInfo> accountMapPlayer(List<String> accountList);
+
 }

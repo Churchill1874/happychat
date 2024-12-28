@@ -33,8 +33,8 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
         QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(dto.getMessageType() != null, SystemMessage::getMessageType, dto.getMessageType())
-            .eq(dto.getRecipientId() != null, SystemMessage::getRecipientAccount, dto.getRecipientId())
-            .eq(dto.getSenderId() != null, SystemMessage::getSenderAccount, dto.getSenderId())
+            .eq(dto.getRecipientAccount() != null, SystemMessage::getRecipientAccount, dto.getRecipientAccount())
+            .eq(dto.getSenderAccount() != null, SystemMessage::getSenderAccount, dto.getSenderAccount())
             .eq(dto.getNewsId() != null, SystemMessage::getNewsId, dto.getNewsId())
             .eq(dto.getSourceType() != null, SystemMessage::getSourceType, dto.getSourceType())
             .orderByDesc(SystemMessage::getCreateTime);
@@ -56,7 +56,7 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setImagePath(dto.getImagePath());
             systemMessage.setTitle(dto.getTitle());
             systemMessage.setContent(dto.getContent());
-            systemMessage.setPopUp(dto.getPopUp());
+            systemMessage.setPopup(dto.getPopUp());
             systemMessage.setStatus(false);
             systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
             systemMessage.setCreateTime(LocalDateTime.now());

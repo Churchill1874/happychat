@@ -126,4 +126,21 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         return list(queryWrapper);
     }
 
+    @Override
+    public Map<String, PlayerInfo> accountMapPlayer(List<String> accountList) {
+        Map<String, PlayerInfo> map = new HashMap<>();
+        QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(PlayerInfo::getAccount, accountList);
+        List<PlayerInfo> list = list(queryWrapper);
+        if (CollectionUtils.isEmpty(list)){
+            return map;
+        }
+
+        for(PlayerInfo playerInfo: list){
+            map.put(playerInfo.getAccount(), playerInfo);
+        }
+
+        return map;
+    }
+
 }
