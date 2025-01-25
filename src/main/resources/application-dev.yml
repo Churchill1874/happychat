@@ -18,8 +18,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://119.28.214.138:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
-    #url: jdbc:mysql://127.00.0.1:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://119.28.214.138:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8mb4&zeroDateTimeBehavior=convertToNull&useSSL=false
+    #url: jdbc:mysql://127.00.0.1:3306/happychat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8mb4&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     #password: 123456
     password: 3.141592653589793#Zz-^T[

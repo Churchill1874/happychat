@@ -77,4 +77,6 @@ public class Job extends BaseInfo implements Serializable {
     @ApiModelProperty("经营项目")
     private String project;
 
+    private String abc;
+
 }
