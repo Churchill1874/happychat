@@ -41,5 +41,8 @@ public class SoutheastAsia extends BaseInfo implements Serializable {
     @ApiModelProperty("展示状态")
     private Boolean status;
 
+    @ApiModelProperty("标题")
+    private String title;
+
 
 }
