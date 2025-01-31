@@ -30,7 +30,7 @@ public class SoutheastAsiaApi {
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<SoutheastAsia>> queryPage(SoutheastAsiaPageReq req) {
         IPage<SoutheastAsia> iPage = southeastAsiaService.queryPage(req);
-
+/*
         if (CollectionUtils.isNotEmpty(iPage.getRecords())){
             iPage.getRecords().forEach(southeastAsia -> {
                 //如果标题是空的 并且 内容不为空 就从
@@ -39,7 +39,7 @@ public class SoutheastAsiaApi {
                     southeastAsia.setTitle(title);
                 }
             });
-        }
+        }*/
 
         return R.ok(iPage);
     }
