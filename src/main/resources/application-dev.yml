@@ -59,7 +59,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true  # 将数据库表字段名中的下划线自动映射到Java对象属性的驼峰命名法
     auto-mapping-behavior: full  # 启用全自动映射，将数据库字段自动映射到Java对象
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 配置日志实现，使用标准输出打印SQL
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 配置日志实现，使用标准输出打印SQL
   mapper-locations: classpath*:mapper/*.xml  # 指定MyBatis Mapper XML文件的位置
   global-config:
     db-config:

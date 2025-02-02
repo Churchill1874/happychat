@@ -50,4 +50,7 @@ public class SystemMessage extends BaseInfo implements Serializable {
     @ApiModelProperty("评论内容")
     private String comment;
 
+    @ApiModelProperty("评论id")
+    private Long commentId;
+
 }

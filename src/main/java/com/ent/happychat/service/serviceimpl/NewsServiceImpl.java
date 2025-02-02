@@ -158,7 +158,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
 
         if (CollectionUtils.isNotEmpty(newsList)) {
-            log.info("执行新闻定时任务,处理新闻数据{}条", newsList.size());
             baseMapper.insertBatchIgnore(newsList);
 
             //清理首页的新闻列表缓存
