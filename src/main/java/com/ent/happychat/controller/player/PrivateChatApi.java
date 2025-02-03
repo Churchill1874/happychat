@@ -10,7 +10,6 @@ import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
 import com.ent.happychat.pojo.dto.privatechat.PrivateChatDto;
 import com.ent.happychat.pojo.req.privatechat.PlayerPrivateChatPageReq;
-import com.ent.happychat.pojo.req.privatechat.PrivateChatPageReq;
 import com.ent.happychat.pojo.resp.privatechat.PrivateChatResp;
 import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.PrivateChatService;
