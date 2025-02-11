@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
-import com.ent.happychat.pojo.dto.privatechat.PrivateChatDto;
+import com.ent.happychat.pojo.dto.privatechat.PrivateChatPersonInfoDto;
 import com.ent.happychat.pojo.req.privatechat.PlayerPrivateChatPageReq;
 import com.ent.happychat.pojo.resp.privatechat.PrivateChatResp;
 import com.ent.happychat.service.PlayerInfoService;
@@ -55,16 +55,16 @@ public class PrivateChatApi {
             return R.ok(respIPage);
         }
 
-        Map<String, PrivateChatDto> map = new HashMap<>();
+        Map<String, PrivateChatPersonInfoDto> map = new HashMap<>();
         //将a账号信息放入集合
-        PrivateChatDto privateChatADto = new PrivateChatDto();
+        PrivateChatPersonInfoDto privateChatADto = new PrivateChatPersonInfoDto();
         privateChatADto.setAccount(req.getAccountA());
         privateChatADto.setName(req.getAccountAName());
         privateChatADto.setAvatarPath(req.getAccountAAvatarPath());
         privateChatADto.setLevel(req.getAccountALevel());
         map.put(req.getAccountA(), privateChatADto);
         //将b用户信息放入结合
-        PrivateChatDto privateChatBDto = new PrivateChatDto();
+        PrivateChatPersonInfoDto privateChatBDto = new PrivateChatPersonInfoDto();
         privateChatBDto.setAccount(req.getAccountB());
         privateChatBDto.setName(req.getAccountBName());
         privateChatBDto.setAvatarPath(req.getAccountBAvatarPath());
@@ -75,12 +75,12 @@ public class PrivateChatApi {
         for (PrivateChat privateChat : iPage.getRecords()) {
             PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
             //拼装账号信息
-            PrivateChatDto sendDto = map.get(privateChatResp.getSendAccount());
+            PrivateChatPersonInfoDto sendDto = map.get(privateChatResp.getSendAccount());
             privateChatResp.setSendName(sendDto.getName());
             privateChatResp.setSendLevel(sendDto.getLevel());
             privateChatResp.setSendAvatarPath(sendDto.getAvatarPath());
 
-            PrivateChatDto receiveDto = map.get(privateChatResp.getReceiveAccount());
+            PrivateChatPersonInfoDto receiveDto = map.get(privateChatResp.getReceiveAccount());
             privateChatResp.setReceiveName(receiveDto.getName());
             privateChatResp.setReceiveLevel(receiveDto.getLevel());
             privateChatResp.setReceiveAvatarPath(receiveDto.getAvatarPath());

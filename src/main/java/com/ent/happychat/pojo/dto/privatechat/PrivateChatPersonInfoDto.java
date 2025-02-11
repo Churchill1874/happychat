@@ -6,7 +6,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class PrivateChatDto implements Serializable {
+public class PrivateChatPersonInfoDto implements Serializable {
+
+    private static final long serialVersionUID = 4330009566367155752L;
 
     //账号
     private String account;
