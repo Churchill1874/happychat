@@ -29,4 +29,7 @@ public class PrivateChatResp extends PrivateChat implements Serializable {
     @ApiModelProperty("接收人等级")
     private LevelEnum receiveLevel;
 
+    @ApiModelProperty("未读取")
+    private Boolean notRead;
+
 }
