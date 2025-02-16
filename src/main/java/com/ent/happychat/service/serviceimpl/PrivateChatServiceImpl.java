@@ -57,7 +57,7 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
                     .eq(PrivateChat::getReceiveAccount, po.getAccountA())
             )
 
-            .orderByDesc(PrivateChat::getCreateTime);
+            .orderByAsc(PrivateChat::getCreateTime);
 
         return page(iPage, queryWrapper);
     }

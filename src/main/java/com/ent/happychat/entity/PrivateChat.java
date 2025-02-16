@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.ChatContentEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,5 +37,8 @@ public class PrivateChat implements Serializable {
 
     @ApiModelProperty("是否已经读取")
     private Boolean status;
+
+    @ApiModelProperty("内容类型")
+    private ChatContentEnum type;
 
 }

@@ -51,25 +51,11 @@ public class PrivateChatApi {
             return R.ok(iPage);
         }
 
-        //将a账号信息放入集合
-        PrivateChatPersonInfoDto privateChatADto = new PrivateChatPersonInfoDto();
-        privateChatADto.setAccount(req.getAccountA());
-        privateChatADto.setName(req.getAccountAName());
-        privateChatADto.setAvatarPath(req.getAccountAAvatarPath());
-        privateChatADto.setLevel(req.getAccountALevel());
-
-        //将b用户信息放入结合
-        PrivateChatPersonInfoDto privateChatBDto = new PrivateChatPersonInfoDto();
-        privateChatBDto.setAccount(req.getAccountB());
-        privateChatBDto.setName(req.getAccountBName());
-        privateChatBDto.setAvatarPath(req.getAccountBAvatarPath());
-        privateChatBDto.setLevel(req.getAccountBLevel());
-
         privateChatService.cleanNotRead(req.getAccountA(),req.getAccountB());
         return R.ok(iPage);
     }
 
-    @PostMapping("/privateChatPage")
+    @PostMapping("/privateChatList")
     @ApiOperation(value = "查询自己的外层私信记录", notes = "查询自己的外层私信记录")
     public R<List<PrivateChatResp>> privateChatPage() {
         String myAccount = TokenTools.getPlayerToken(true).getAccount();

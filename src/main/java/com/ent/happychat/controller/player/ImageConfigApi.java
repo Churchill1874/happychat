@@ -25,7 +25,7 @@ public class ImageConfigApi {
     @Autowired
     private ImageConfigService imageConfigService;
 
-    @PostMapping("/图片查询")
+    @PostMapping("/list")
     @ApiOperation(value = "图片查询", notes = "图片查询")
     public R<List<ImageConfig>> page(@RequestBody ImageConfigPageReq req) {
         QueryWrapper<ImageConfig> queryWrapper = new QueryWrapper<>();

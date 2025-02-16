@@ -15,20 +15,5 @@ public class PlayerPrivateChatPageReq extends PageBase implements Serializable {
     @ApiModelProperty("账号b")
     private String accountB;
 
-    @ApiModelProperty("发送人名字")
-    private String accountAName;
-    @ApiModelProperty("接收人名字")
-    private String accountBName;
-
-    @ApiModelProperty("发送人头像路径")
-    private String accountAAvatarPath;
-    @ApiModelProperty("接收人头像路径")
-    private String accountBAvatarPath;
-
-    @ApiModelProperty("发送人等级")
-    private LevelEnum accountALevel;
-    @ApiModelProperty("接收人等级")
-    private LevelEnum accountBLevel;
-
 
 }
