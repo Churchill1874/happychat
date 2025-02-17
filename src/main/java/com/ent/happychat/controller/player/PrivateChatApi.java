@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
-import com.ent.happychat.pojo.dto.privatechat.PrivateChatPersonInfoDto;
 import com.ent.happychat.pojo.req.privatechat.PlayerPrivateChatPageReq;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.pojo.resp.privatechat.PrivateChatListResp;
+import com.ent.happychat.pojo.resp.privatechat.PrivateChatOuterResp;
 import com.ent.happychat.pojo.resp.privatechat.PrivateChatResp;
 import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.PrivateChatService;
@@ -38,27 +40,40 @@ public class PrivateChatApi {
 
     @PostMapping("/playerPrivateChatPage")
     @ApiOperation(value = "指定某个玩家与自己的聊天记录查询", notes = "指定某个玩家与自己的聊天记录查询")
-    public R<IPage<PrivateChat>> playerPrivateChatPage(@RequestBody PlayerPrivateChatPageReq req) {
+    public R<IPage<PrivateChatResp>> playerPrivateChatPage(@RequestBody PlayerPrivateChatPageReq req) {
         if (StringUtils.isBlank(req.getAccountA())) {
             return R.failed("未指定对方玩家");
         }
-        String account = TokenTools.getPlayerToken(true).getAccount();
-        req.setAccountB(account);
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        req.setAccountB(playerTokenResp.getAccount());
 
-        IPage<PrivateChat> iPage = privateChatService.playerPrivateChatPage(req);
+        IPage<PrivateChat> privateChatPage = privateChatService.playerPrivateChatPage(req);
+        //分页聊天记录待转换数据
+        IPage<PrivateChatResp> privateChatRespPage = new Page<>(privateChatPage.getCurrent(), privateChatPage.getSize());
+        privateChatRespPage.setPages(privateChatPage.getPages());
+        privateChatRespPage.setTotal(privateChatPage.getTotal());
+        privateChatRespPage.setRecords(new ArrayList<>());
 
-        if (CollectionUtils.isEmpty(iPage.getRecords())) {
-            return R.ok(iPage);
+
+        if (CollectionUtils.isEmpty(privateChatPage.getRecords())) {
+            return R.ok(privateChatRespPage);
+        }
+
+        for(PrivateChat privateChat: privateChatPage.getRecords()){
+            PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
+            privateChatResp.setIsSender(privateChat.getSendAccount().equals(playerTokenResp.getAccount()));
+            privateChatRespPage.getRecords().add(privateChatResp);
         }
 
         privateChatService.cleanNotRead(req.getAccountA(),req.getAccountB());
-        return R.ok(iPage);
+        return R.ok(privateChatRespPage);
     }
 
     @PostMapping("/privateChatList")
     @ApiOperation(value = "查询自己的外层私信记录", notes = "查询自己的外层私信记录")
-    public R<List<PrivateChatResp>> privateChatPage() {
-        String myAccount = TokenTools.getPlayerToken(true).getAccount();
+    public R<PrivateChatListResp> privateChatPage() {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        String myAccount = playerTokenResp.getAccount();
 
         List<PrivateChat> list = privateChatService.listByAccount(myAccount);
         if (CollectionUtils.isEmpty(list)){
@@ -89,30 +104,37 @@ public class PrivateChatApi {
         }
 
         Map<String, PlayerInfo> map = playerInfoService.accountMapPlayer(new ArrayList<>(set));
-        List<PrivateChatResp> resultList = new ArrayList<>();
+        List<PrivateChatOuterResp> resultList = new ArrayList<>();
 
         for(String key: linkedHashMap.keySet()){
             PrivateChat privateChat = linkedHashMap.get(key);
-            PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
+            PrivateChatOuterResp privateChatOuterResp = BeanUtil.toBean(privateChat, PrivateChatOuterResp.class);
 
-            if (myAccount.equals(privateChatResp.getReceiveAccount()) && notReadAccountSet.contains(privateChatResp.getSendAccount())){
-                privateChatResp.setNotRead(true);
+            if (myAccount.equals(privateChatOuterResp.getReceiveAccount()) && notReadAccountSet.contains(privateChatOuterResp.getSendAccount())){
+                privateChatOuterResp.setNotRead(true);
             }
 
-            PlayerInfo sendPlayer = map.get(privateChatResp.getSendAccount());
-            privateChatResp.setSendName(sendPlayer.getName());
-            privateChatResp.setSendLevel(sendPlayer.getLevel());
-            privateChatResp.setSendAvatarPath(sendPlayer.getAvatarPath());
+            PlayerInfo sendPlayer = map.get(privateChatOuterResp.getSendAccount());
+            privateChatOuterResp.setSendName(sendPlayer.getName());
+            privateChatOuterResp.setSendLevel(sendPlayer.getLevel());
+            privateChatOuterResp.setSendAvatarPath(sendPlayer.getAvatarPath());
 
-            PlayerInfo receivePlayer = map.get(privateChatResp.getReceiveAccount());
-            privateChatResp.setReceiveName(receivePlayer.getName());
-            privateChatResp.setReceiveLevel(receivePlayer.getLevel());
-            privateChatResp.setReceiveAvatarPath(receivePlayer.getAvatarPath());
+            PlayerInfo receivePlayer = map.get(privateChatOuterResp.getReceiveAccount());
+            privateChatOuterResp.setReceiveName(receivePlayer.getName());
+            privateChatOuterResp.setReceiveLevel(receivePlayer.getLevel());
+            privateChatOuterResp.setReceiveAvatarPath(receivePlayer.getAvatarPath());
 
-            resultList.add(privateChatResp);
+            resultList.add(privateChatOuterResp);
         }
 
-        return R.ok(resultList);
+        PrivateChatListResp privateChatListResp = new PrivateChatListResp();
+        privateChatListResp.setList(resultList);
+        privateChatListResp.setLoginAccount(playerTokenResp.getAccount());
+        privateChatListResp.setLoginAvatar(playerTokenResp.getAvatarPath());
+        privateChatListResp.setLoginLevel(playerTokenResp.getLevel());
+        privateChatListResp.setLoginName(playerTokenResp.getName());
+
+        return R.ok(privateChatListResp);
     }
 
 

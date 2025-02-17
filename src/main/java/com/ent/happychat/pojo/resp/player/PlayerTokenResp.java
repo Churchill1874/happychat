@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.resp.player;
 
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -26,6 +27,10 @@ public class PlayerTokenResp implements Serializable {
     private UserStatusEnum status;
     @ApiModelProperty("登陆时间")
     private LocalDateTime loginTime;
+    @ApiModelProperty("头像")
+    private String avatarPath;
+    @ApiModelProperty("等级")
+    private LevelEnum level;
 
 
 }

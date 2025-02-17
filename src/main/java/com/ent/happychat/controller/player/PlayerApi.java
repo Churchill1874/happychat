@@ -98,6 +98,8 @@ public class PlayerApi {
         playerTokenResp.setTokenId(tokenId);
         playerTokenResp.setLoginTime(LocalDateTime.now());
         playerTokenResp.setId(playerInfo.getId());
+        playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
+        playerTokenResp.setLevel(playerInfo.getLevel());
 
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
         ehcacheService.playerInfoCache().put(playerInfo.getAccount(), playerInfo);
@@ -162,7 +164,6 @@ public class PlayerApi {
         if (playerInfo == null) {
             throw new DataException("数据异常");
         }
-
         playerInfo.setName(req.getName());
         playerInfo.setCity(req.getCity());
         playerInfo.setPhone(req.getPhone());
@@ -173,7 +174,14 @@ public class PlayerApi {
         playerInfo.setUpdateTime(LocalDateTime.now());
         playerInfoService.updateById(playerInfo);
 
-        //更新缓存
+
+        playerTokenResp.setName(playerInfo.getName());
+        playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
+        playerTokenResp.setLevel(playerInfo.getLevel());
+        //更新token缓存
+        ehcacheService.playerTokenCache().put(playerTokenResp.getTokenId(), playerTokenResp);
+
+        //更新账号关联的缓存
         ehcacheService.playerInfoCache().remove(playerInfo.getAccount());
         return R.ok(null);
     }
