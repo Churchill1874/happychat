@@ -31,8 +31,8 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
             .eq(req.getIsHot() != null, SoutheastAsia::getIsHot, req.getIsHot())
             .eq(req.getIsTop() != null, SoutheastAsia::getIsTop, req.getIsTop())
             .eq(StringUtils.isNotBlank(req.getArea()), SoutheastAsia::getArea, req.getArea())
-            .orderByDesc(SoutheastAsia::getIsTop)
-            .orderByDesc(SoutheastAsia::getCreateTime);
+            .orderByDesc(SoutheastAsia::getCreateTime)
+            .orderByDesc(SoutheastAsia::getIsTop);
 
         return page(iPage, queryWrapper);
     }

@@ -35,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -246,32 +243,32 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (CollectionUtils.isNotEmpty(newsCategoryEnums)) {
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.HEADLINES)) {
                 //头条
-                List<News> headlinesNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.HEADLINES, 3);
+                List<News> headlinesNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.HEADLINES, 10);
                 newsList.addAll(headlinesNews);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.NEWS)) {
                 //新闻
-                List<News> news = NewsTools.getNewsData(JuHeNewsCategoryEnum.NEWS, 2);
+                List<News> news = NewsTools.getNewsData(JuHeNewsCategoryEnum.NEWS, 10);
                 newsList.addAll(news);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.SPORTS)) {
                 //体育
-                List<News> sportsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SPORTS, 2);
+                List<News> sportsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SPORTS, 10);
                 newsList.addAll(sportsNews);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.MILITARY_AFFAIRS)) {
                 //军事
-                List<News> militaryAffairsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.MILITARY_AFFAIRS, 1);
+                List<News> militaryAffairsNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.MILITARY_AFFAIRS, 10);
                 newsList.addAll(militaryAffairsNews);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.SCIENCE)) {
                 //科技
-                List<News> scienceNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SCIENCE, 1);
+                List<News> scienceNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.SCIENCE, 10);
                 newsList.addAll(scienceNews);
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.ENTERTAINMENT)) {
                 //娱乐
-                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 1);
+                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 10);
                 newsList.addAll(entertainmentNews);
             }
 /*            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.WOMAN)) {
@@ -280,6 +277,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
                 newsList.addAll(womanNews);
             }*/
         }
+
+        Collections.shuffle(newsList);
         return newsList;
     }
 }

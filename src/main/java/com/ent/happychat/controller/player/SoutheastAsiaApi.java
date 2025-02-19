@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class SoutheastAsiaApi {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R<IPage<SoutheastAsia>> queryPage(SoutheastAsiaPageReq req) {
+    public R<IPage<SoutheastAsia>> queryPage(@RequestBody SoutheastAsiaPageReq req) {
         IPage<SoutheastAsia> iPage = southeastAsiaService.queryPage(req);
 /*
         if (CollectionUtils.isNotEmpty(iPage.getRecords())){
