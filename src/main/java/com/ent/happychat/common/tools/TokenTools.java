@@ -37,7 +37,7 @@ public class TokenTools {
     public static AdminTokenResp getAdminToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
         if (StringUtils.isBlank(headerToken)){
-            //如果要求在请求头里的token_id不能为空 要校验令牌
+            //如果要求在请求头里的token-id不能为空 要校验令牌
             if (needCheck){
                 throw new TokenException();
             } else {
@@ -63,7 +63,7 @@ public class TokenTools {
     public static PlayerTokenResp getPlayerToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
         if (StringUtils.isBlank(headerToken)){
-            //如果要求在请求头里的token_id不能为空 要校验令牌
+            //如果要求在请求头里的token-id不能为空 要校验令牌
             if (needCheck){
                 throw new TokenException();
             } else {

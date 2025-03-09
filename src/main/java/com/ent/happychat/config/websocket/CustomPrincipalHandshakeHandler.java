@@ -22,7 +22,7 @@ public class CustomPrincipalHandshakeHandler extends DefaultHandshakeHandler {
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         // 从 attributes 中取出 Token
-        String token = (String) attributes.get("token_id");
+        String token = (String) attributes.get("token-id");
 
         // 如果没有 token，可返回 null 或做其它处理
         if (token == null) {
