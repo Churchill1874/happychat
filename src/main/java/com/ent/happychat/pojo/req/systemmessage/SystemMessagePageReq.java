@@ -15,11 +15,11 @@ public class SystemMessagePageReq extends PageBase implements Serializable {
     @ApiModelProperty("消息类型")
     private MessageTypeEnum messageType;
 
-    @ApiModelProperty("收取人账号")
-    private String recipientAccount;
+    @ApiModelProperty("收取人账号id")
+    private Long recipientId;
 
-    @ApiModelProperty("发送人账号")
-    private String senderAccount;
+    @ApiModelProperty("发送人账号id")
+    private String senderId;
 
     @ApiModelProperty("新闻id")
     private Long newsId;

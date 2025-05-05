@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface PrivateChatService extends IService<PrivateChat> {
 
-    List<PrivateChat> listByAccount(String account);
+    List<PrivateChat> listByAccountId(Long account);
+
+
 
     IPage<PrivateChat> playerPrivateChatPage(PlayerPrivateChatPageReq po);
 

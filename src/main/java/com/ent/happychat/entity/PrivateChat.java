@@ -26,11 +26,11 @@ public class PrivateChat implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
-    @ApiModelProperty("发送人账号")
-    private String sendAccount;
+    @ApiModelProperty("发送人账号id")
+    private Long sendId;
 
-    @ApiModelProperty("接收人账号")
-    private String receiveAccount;
+    @ApiModelProperty("接收人账号id")
+    private Long receiveId;
 
     @ApiModelProperty("私信内容")
     private String content;

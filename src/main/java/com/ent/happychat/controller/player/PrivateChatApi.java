@@ -61,7 +61,7 @@ public class PrivateChatApi {
 
         for(PrivateChat privateChat: privateChatPage.getRecords()){
             PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
-            privateChatResp.setIsSender(privateChat.getSendAccount().equals(playerTokenResp.getAccount()));
+            privateChatResp.setIsSender(privateChat.getSendId().equals(playerTokenResp.getAccount()));
             privateChatRespPage.getRecords().add(privateChatResp);
         }
 
@@ -73,53 +73,53 @@ public class PrivateChatApi {
     @ApiOperation(value = "查询自己的外层私信记录", notes = "查询自己的外层私信记录")
     public R<PrivateChatListResp> privateChatPage() {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        String myAccount = playerTokenResp.getAccount();
+        Long myAccountId = playerTokenResp.getId();
 
-        List<PrivateChat> list = privateChatService.listByAccount(myAccount);
+        List<PrivateChat> list = privateChatService.listByAccountId(myAccountId);
         if (CollectionUtils.isEmpty(list)){
             return R.ok(null);
         }
 
         //待查询详细信息的账号
-        Set<String> set = new HashSet<>();
-        set.add(myAccount);
+        Set<Long> set = new HashSet<>();
+        set.add(myAccountId);
 
         //待保留有未读记录的账号
-        Set<String> notReadAccountSet = new HashSet<>();
+        Set<Long> notReadAccountSet = new HashSet<>();
 
-        Map<String, PrivateChat> linkedHashMap = new LinkedHashMap<>();
+        Map<Long, PrivateChat> linkedHashMap = new LinkedHashMap<>();
 
         for(PrivateChat privateChat: list){
             //不论聊天记录的发送人和接收人是谁,只保留过滤对方的账号最为过滤依据
-            String chatTargetAccount = myAccount.equals(privateChat.getSendAccount()) ? privateChat.getReceiveAccount() : privateChat.getSendAccount();
+            Long chatTargetId = myAccountId.compareTo(privateChat.getSendId()) == 0 ? privateChat.getReceiveId() : privateChat.getSendId();
 
-            if (!linkedHashMap.containsKey(chatTargetAccount)){
-                set.add(chatTargetAccount);
-                linkedHashMap.put(chatTargetAccount, privateChat);
+            if (!linkedHashMap.containsKey(chatTargetId)){
+                set.add(chatTargetId);
+                linkedHashMap.put(chatTargetId, privateChat);
             }
 
             if (!privateChat.getStatus()){
-                notReadAccountSet.add(chatTargetAccount);
+                notReadAccountSet.add(chatTargetId);
             }
         }
 
-        Map<String, PlayerInfo> map = playerInfoService.accountMapPlayer(new ArrayList<>(set));
+        Map<Long, PlayerInfo> map = playerInfoService.accountIdMapPlayer(new ArrayList<>(set));
         List<PrivateChatOuterResp> resultList = new ArrayList<>();
 
-        for(String key: linkedHashMap.keySet()){
+        for(Long key: linkedHashMap.keySet()){
             PrivateChat privateChat = linkedHashMap.get(key);
             PrivateChatOuterResp privateChatOuterResp = BeanUtil.toBean(privateChat, PrivateChatOuterResp.class);
 
-            if (myAccount.equals(privateChatOuterResp.getReceiveAccount()) && notReadAccountSet.contains(privateChatOuterResp.getSendAccount())){
+            if (myAccountId.equals(privateChatOuterResp.getReceiveId()) && notReadAccountSet.contains(privateChatOuterResp.getSendId())){
                 privateChatOuterResp.setNotRead(true);
             }
 
-            PlayerInfo sendPlayer = map.get(privateChatOuterResp.getSendAccount());
+            PlayerInfo sendPlayer = map.get(privateChatOuterResp.getSendId());
             privateChatOuterResp.setSendName(sendPlayer.getName());
             privateChatOuterResp.setSendLevel(sendPlayer.getLevel());
             privateChatOuterResp.setSendAvatarPath(sendPlayer.getAvatarPath());
 
-            PlayerInfo receivePlayer = map.get(privateChatOuterResp.getReceiveAccount());
+            PlayerInfo receivePlayer = map.get(privateChatOuterResp.getReceiveId());
             privateChatOuterResp.setReceiveName(receivePlayer.getName());
             privateChatOuterResp.setReceiveLevel(receivePlayer.getLevel());
             privateChatOuterResp.setReceiveAvatarPath(receivePlayer.getAvatarPath());

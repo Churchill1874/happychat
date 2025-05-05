@@ -15,17 +15,17 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 发表评论
-     * @param po
+     * @param dto
      */
-    void sendComment(Comment po);
+    void sendComment(Comment dto);
 
 
     /**
      * 分页查询顶层评论
-     * @param po
+     * @param dto
      * @return
      */
-    IPage<Comment> queryTopPage(CommentPageReq po);
+    IPage<Comment> queryTopPage(CommentPageReq dto);
 
     /**
      * 回复顶层回复记录
@@ -43,10 +43,10 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 分页查询
-     * @param po
+     * @param dto
      * @return
      */
-    IPage<Comment> queryPage(CommentPageReq po);
+    IPage<Comment> queryPage(CommentPageReq dto);
 
     /**
      * 增加评论数量

@@ -30,12 +30,12 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
     }
 
     @Override
-    public List<PrivateChat> listByAccount(String account) {
+    public List<PrivateChat> listByAccountId(Long accountId) {
         QueryWrapper<PrivateChat> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(PrivateChat::getSendAccount, account)
+            .eq(PrivateChat::getSendId, accountId)
             .or()
-            .eq(PrivateChat::getReceiveAccount, account)
+            .eq(PrivateChat::getReceiveId, accountId)
             .orderByDesc(PrivateChat::getCreateTime);
         return list(queryWrapper);
     }
@@ -47,14 +47,14 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         QueryWrapper<PrivateChat> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.lambda()
-            .select(PrivateChat::getSendAccount, PrivateChat::getReceiveAccount, PrivateChat::getContent, PrivateChat::getCreateTime)
+            .select(PrivateChat::getSendId, PrivateChat::getReceiveId, PrivateChat::getContent, PrivateChat::getCreateTime)
             .and(
                 query -> query
-                    .eq(PrivateChat::getSendAccount, po.getAccountA())
-                    .eq(PrivateChat::getReceiveAccount, po.getAccountB())
+                    .eq(PrivateChat::getSendId, po.getAccountA())
+                    .eq(PrivateChat::getReceiveId, po.getAccountB())
                     .or()
-                    .eq(PrivateChat::getSendAccount, po.getAccountB())
-                    .eq(PrivateChat::getReceiveAccount, po.getAccountA())
+                    .eq(PrivateChat::getSendId, po.getAccountB())
+                    .eq(PrivateChat::getReceiveId, po.getAccountA())
             )
 
             .orderByDesc(PrivateChat::getCreateTime);
@@ -67,7 +67,7 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         po.setCreateTime(LocalDateTime.now());
         po.setStatus(false);
         save(po);
-        messagingTemplate.convertAndSendToUser(po.getReceiveAccount(),"/queue/private", po);
+        messagingTemplate.convertAndSendToUser(po.getReceiveId() + "","/queue/private", po);
     }
 
     @Async
@@ -77,11 +77,11 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         updateWrapper.lambda()
             .and(
                 query -> query
-                    .eq(PrivateChat::getSendAccount, account1)
-                    .eq(PrivateChat::getReceiveAccount, account2)
+                    .eq(PrivateChat::getSendId, account1)
+                    .eq(PrivateChat::getReceiveId, account2)
                     .or()
-                    .eq(PrivateChat::getSendAccount, account2)
-                    .eq(PrivateChat::getReceiveAccount, account1)
+                    .eq(PrivateChat::getSendId, account2)
+                    .eq(PrivateChat::getReceiveId, account1)
             )
             .eq(PrivateChat::getStatus, true)
             .set(PrivateChat::getStatus, false);

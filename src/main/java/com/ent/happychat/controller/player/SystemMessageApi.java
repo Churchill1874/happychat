@@ -41,8 +41,8 @@ public class SystemMessageApi {
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<SystemMessageResp>> queryPage(@RequestBody SystemMessagePageReq req) {
-        String account = TokenTools.getPlayerToken(true).getAccount();
-        req.setRecipientAccount(account);
+        Long playerId = TokenTools.getPlayerToken(true).getId();
+        req.setRecipientId(playerId);
 
         IPage<SystemMessageResp> systemMessageRespIPage = new Page<>(req.getPageNum(), req.getPageSize());
 
@@ -51,13 +51,13 @@ public class SystemMessageApi {
             return R.ok(systemMessageRespIPage);
         }
 
-        List<String> accountList = iPage.getRecords().stream().map(SystemMessage::getSenderAccount).collect(Collectors.toList());
-        Map<String, PlayerInfo> map = playerInfoService.accountMapPlayer(accountList);
+        List<Long> accountIdList = iPage.getRecords().stream().map(SystemMessage::getSenderId).collect(Collectors.toList());
+        Map<Long, PlayerInfo> map = playerInfoService.accountIdMapPlayer(accountIdList);
 
         List<SystemMessageResp> list = new ArrayList<>();
         for(SystemMessage systemMessage: iPage.getRecords()){
             SystemMessageResp systemMessageResp = BeanUtil.toBean(systemMessage, SystemMessageResp.class);
-            PlayerInfo playerInfo = map.get(systemMessageResp.getSenderAccount());
+            PlayerInfo playerInfo = map.get(systemMessageResp.getSenderId());
             systemMessageResp.setAvatar(playerInfo.getAvatarPath());
             systemMessageResp.setSenderName(playerInfo.getName());
             list.add(systemMessageResp);

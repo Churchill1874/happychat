@@ -162,7 +162,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
     }
 
-    @Async
     @Override
     public void increaseCommentsCount(Long id) {
         baseMapper.increaseCommentsCount(id);

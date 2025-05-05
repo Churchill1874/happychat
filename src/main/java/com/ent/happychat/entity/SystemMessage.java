@@ -30,10 +30,10 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private MessageTypeEnum messageType;
 
     @ApiModelProperty("收取人账号")
-    private String recipientAccount;
+    private Long recipientId;
 
     @ApiModelProperty("发送人账号")
-    private String senderAccount;
+    private Long senderId;
 
     @ApiModelProperty("新闻id")
     private Long newsId;
@@ -47,10 +47,10 @@ public class SystemMessage extends BaseInfo implements Serializable {
     @ApiModelProperty("需要弹窗")
     private Boolean popup;
 
-    @ApiModelProperty("评论内容")
-    private String comment;
-
     @ApiModelProperty("评论id")
     private Long commentId;
+
+    @ApiModelProperty("被回复评论的内容")
+    private String comment;
 
 }
