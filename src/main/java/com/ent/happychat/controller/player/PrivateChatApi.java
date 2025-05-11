@@ -41,11 +41,11 @@ public class PrivateChatApi {
     @PostMapping("/playerPrivateChatPage")
     @ApiOperation(value = "指定某个玩家与自己的聊天记录查询", notes = "指定某个玩家与自己的聊天记录查询")
     public R<IPage<PrivateChatResp>> playerPrivateChatPage(@RequestBody PlayerPrivateChatPageReq req) {
-        if (StringUtils.isBlank(req.getAccountA())) {
+        if (null == req.getPlayerAId()) {
             return R.failed("未指定对方玩家");
         }
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        req.setAccountB(playerTokenResp.getAccount());
+        req.setPlayerBId(playerTokenResp.getId());
 
         IPage<PrivateChat> privateChatPage = privateChatService.playerPrivateChatPage(req);
         //分页聊天记录待转换数据
@@ -59,13 +59,13 @@ public class PrivateChatApi {
             return R.ok(privateChatRespPage);
         }
 
-        for(PrivateChat privateChat: privateChatPage.getRecords()){
+        for (PrivateChat privateChat : privateChatPage.getRecords()) {
             PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
             privateChatResp.setIsSender(privateChat.getSendId().equals(playerTokenResp.getAccount()));
             privateChatRespPage.getRecords().add(privateChatResp);
         }
 
-        privateChatService.cleanNotRead(req.getAccountA(),req.getAccountB());
+        privateChatService.cleanNotRead(req.getPlayerAId(), req.getPlayerBId());
         return R.ok(privateChatRespPage);
     }
 
@@ -76,7 +76,7 @@ public class PrivateChatApi {
         Long myAccountId = playerTokenResp.getId();
 
         List<PrivateChat> list = privateChatService.listByAccountId(myAccountId);
-        if (CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return R.ok(null);
         }
 
@@ -89,16 +89,16 @@ public class PrivateChatApi {
 
         Map<Long, PrivateChat> linkedHashMap = new LinkedHashMap<>();
 
-        for(PrivateChat privateChat: list){
+        for (PrivateChat privateChat : list) {
             //不论聊天记录的发送人和接收人是谁,只保留过滤对方的账号最为过滤依据
             Long chatTargetId = myAccountId.compareTo(privateChat.getSendId()) == 0 ? privateChat.getReceiveId() : privateChat.getSendId();
 
-            if (!linkedHashMap.containsKey(chatTargetId)){
+            if (!linkedHashMap.containsKey(chatTargetId)) {
                 set.add(chatTargetId);
                 linkedHashMap.put(chatTargetId, privateChat);
             }
 
-            if (!privateChat.getStatus()){
+            if (!privateChat.getStatus()) {
                 notReadAccountSet.add(chatTargetId);
             }
         }
@@ -106,11 +106,11 @@ public class PrivateChatApi {
         Map<Long, PlayerInfo> map = playerInfoService.accountIdMapPlayer(new ArrayList<>(set));
         List<PrivateChatOuterResp> resultList = new ArrayList<>();
 
-        for(Long key: linkedHashMap.keySet()){
+        for (Long key : linkedHashMap.keySet()) {
             PrivateChat privateChat = linkedHashMap.get(key);
             PrivateChatOuterResp privateChatOuterResp = BeanUtil.toBean(privateChat, PrivateChatOuterResp.class);
 
-            if (myAccountId.equals(privateChatOuterResp.getReceiveId()) && notReadAccountSet.contains(privateChatOuterResp.getSendId())){
+            if (myAccountId.equals(privateChatOuterResp.getReceiveId()) && notReadAccountSet.contains(privateChatOuterResp.getSendId())) {
                 privateChatOuterResp.setNotRead(true);
             }
 
@@ -129,16 +129,13 @@ public class PrivateChatApi {
 
         PrivateChatListResp privateChatListResp = new PrivateChatListResp();
         privateChatListResp.setList(resultList);
-        privateChatListResp.setLoginAccount(playerTokenResp.getAccount());
+        privateChatListResp.setLoginId(playerTokenResp.getId());
         privateChatListResp.setLoginAvatar(playerTokenResp.getAvatarPath());
         privateChatListResp.setLoginLevel(playerTokenResp.getLevel());
         privateChatListResp.setLoginName(playerTokenResp.getName());
 
         return R.ok(privateChatListResp);
     }
-
-
-
 
 
 }

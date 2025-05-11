@@ -50,11 +50,11 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
             .select(PrivateChat::getSendId, PrivateChat::getReceiveId, PrivateChat::getContent, PrivateChat::getCreateTime)
             .and(
                 query -> query
-                    .eq(PrivateChat::getSendId, po.getAccountA())
-                    .eq(PrivateChat::getReceiveId, po.getAccountB())
+                    .eq(PrivateChat::getSendId, po.getPlayerAId())
+                    .eq(PrivateChat::getReceiveId, po.getPlayerBId())
                     .or()
-                    .eq(PrivateChat::getSendId, po.getAccountB())
-                    .eq(PrivateChat::getReceiveId, po.getAccountA())
+                    .eq(PrivateChat::getSendId, po.getPlayerBId())
+                    .eq(PrivateChat::getReceiveId, po.getPlayerAId())
             )
 
             .orderByDesc(PrivateChat::getCreateTime);
@@ -72,16 +72,16 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
 
     @Async
     @Override
-    public void cleanNotRead(String account1, String account2) {
+    public void cleanNotRead(Long playerAId, Long playerBId) {
         UpdateWrapper<PrivateChat> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .and(
                 query -> query
-                    .eq(PrivateChat::getSendId, account1)
-                    .eq(PrivateChat::getReceiveId, account2)
+                    .eq(PrivateChat::getSendId, playerAId)
+                    .eq(PrivateChat::getReceiveId, playerBId)
                     .or()
-                    .eq(PrivateChat::getSendId, account2)
-                    .eq(PrivateChat::getReceiveId, account1)
+                    .eq(PrivateChat::getSendId, playerBId)
+                    .eq(PrivateChat::getReceiveId, playerAId)
             )
             .eq(PrivateChat::getStatus, true)
             .set(PrivateChat::getStatus, false);

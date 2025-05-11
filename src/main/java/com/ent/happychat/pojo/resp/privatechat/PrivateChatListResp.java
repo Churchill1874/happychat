@@ -11,8 +11,8 @@ import java.util.List;
 public class PrivateChatListResp implements Serializable {
     private static final long serialVersionUID = -6955480379052382062L;
 
-    @ApiModelProperty("登陆人账号")
-    private String loginAccount;
+    @ApiModelProperty("登陆人Id")
+    private Long loginId;
 
     @ApiModelProperty("登陆人头像")
     private String loginAvatar;

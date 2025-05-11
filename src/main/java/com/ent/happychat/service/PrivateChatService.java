@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PrivateChatService extends IService<PrivateChat> {
 
-    List<PrivateChat> listByAccountId(Long account);
+    List<PrivateChat> listByAccountId(Long playerId);
 
 
 
@@ -17,6 +17,6 @@ public interface PrivateChatService extends IService<PrivateChat> {
 
     void add(PrivateChat po);
 
-    void cleanNotRead(String account1, String account2);
+    void cleanNotRead(Long playerAId, Long playerBId);
 
 }

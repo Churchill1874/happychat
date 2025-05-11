@@ -11,9 +11,9 @@ public class PlayerPrivateChatPageReq extends PageBase implements Serializable {
     private static final long serialVersionUID = -5290606037007891778L;
 
     @ApiModelProperty("账号a 用于查询指定的对方玩家账号")
-    private String accountA;
+    private Long playerAId;
     @ApiModelProperty("账号b")
-    private String accountB;
+    private Long playerBId;
 
 
 }
