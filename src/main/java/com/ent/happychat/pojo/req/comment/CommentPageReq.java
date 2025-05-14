@@ -35,5 +35,8 @@ public class CommentPageReq extends PageBase implements Serializable {
     @ApiModelProperty("评论目标的玩家id 也就是 被评论玩家的id")
     private Long targetPlayerId;
 
+    @ApiModelProperty("需要评论定位")
+    private Boolean needCommentPoint = false;
+
 
 }

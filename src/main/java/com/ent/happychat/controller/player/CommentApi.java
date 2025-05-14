@@ -2,9 +2,11 @@ package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
@@ -57,15 +59,25 @@ public class CommentApi {
         //待返回的新闻评论对象
         NewsCommentPageResp newsCommentRespPage = new NewsCommentPageResp();
 
-
-        //查顶部新闻评论分页
-        CommentPageReq commentPageReq = new CommentPageReq();
-        commentPageReq.setNewsId(req.getNewsId());
-        commentPageReq.setNewsType(req.getNewsType());
-        commentPageReq.setPageNum(req.getPageNum());
-        commentPageReq.setPageSize(req.getPageSize());
-        IPage<Comment> topPage = commentService.queryTopPage(commentPageReq);
-
+        IPage<Comment> topPage = null;
+        //如果需要新闻评论位置定位查询
+        if (req.getNeedCommentPoint()){
+            QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(Comment::getNewsId, req.getNewsId());
+            List<Comment> list = commentService.list(queryWrapper);
+            topPage = new Page<>(1, list.size());
+            topPage.setTotal(list.size());
+            topPage.setRecords(list);
+        } else {
+            //否则就正常分页
+            //查顶部新闻评论分页
+            CommentPageReq commentPageReq = new CommentPageReq();
+            commentPageReq.setNewsId(req.getNewsId());
+            commentPageReq.setNewsType(req.getNewsType());
+            commentPageReq.setPageNum(req.getPageNum());
+            commentPageReq.setPageSize(req.getPageSize());
+            topPage = commentService.queryTopPage(commentPageReq);
+        }
 
         if (CollectionUtils.isEmpty(topPage.getRecords())) {
             return R.ok(newsCommentRespPage);

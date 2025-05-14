@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.MessageTypeEnum;
 import com.ent.happychat.entity.base.BaseInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,12 +31,15 @@ public class SystemMessage extends BaseInfo implements Serializable {
     @ApiModelProperty("消息类型")
     private MessageTypeEnum messageType;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty("收取人账号")
     private Long recipientId;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty("发送人账号")
     private Long senderId;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty("新闻id")
     private Long newsId;
 
@@ -47,6 +52,7 @@ public class SystemMessage extends BaseInfo implements Serializable {
     @ApiModelProperty("需要弹窗")
     private Boolean popup;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty("评论id")
     private Long commentId;
 

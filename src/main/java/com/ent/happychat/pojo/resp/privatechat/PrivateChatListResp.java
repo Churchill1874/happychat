@@ -1,6 +1,8 @@
 package com.ent.happychat.pojo.resp.privatechat;
 
 import com.ent.happychat.common.constant.enums.LevelEnum;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,6 +13,7 @@ import java.util.List;
 public class PrivateChatListResp implements Serializable {
     private static final long serialVersionUID = -6955480379052382062L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty("登陆人Id")
     private Long loginId;
 
