@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 public class PersonalInfoUpdateReq implements Serializable {
@@ -31,5 +32,11 @@ public class PersonalInfoUpdateReq implements Serializable {
     @NotBlank(message = "请指定头像")
     @ApiModelProperty(value = "头像路径", required = true)
     private String avatarPath;
+
+    @ApiModelProperty("小飞机")
+    private String tg;
+
+    @ApiModelProperty(value = "生日", required = true)
+    private LocalDate birth;
 
 }

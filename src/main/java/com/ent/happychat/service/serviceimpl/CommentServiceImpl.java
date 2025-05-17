@@ -1,5 +1,6 @@
 package com.ent.happychat.service.serviceimpl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,6 +13,7 @@ import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
+import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.*;
 import lombok.extern.slf4j.Slf4j;

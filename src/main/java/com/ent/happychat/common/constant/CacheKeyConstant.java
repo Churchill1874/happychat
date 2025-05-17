@@ -57,6 +57,11 @@ public interface CacheKeyConstant {
 
     String BLACKLIST_SET_KEY = "blacklist_set_key";
 
+    /**
+     * 重复冲求校验
+     */
+    String REPEATED_REQUEST_VERIFICATION = "repeated_request_verification";
+
 
 
 }

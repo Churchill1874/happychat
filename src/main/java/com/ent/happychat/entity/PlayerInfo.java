@@ -63,4 +63,6 @@ public class PlayerInfo extends UpdateBaseInfo implements Serializable {
     @ApiModelProperty("盐")
     private String salt;
 
+    @ApiModelProperty("小飞机")
+    private String tg;
 }

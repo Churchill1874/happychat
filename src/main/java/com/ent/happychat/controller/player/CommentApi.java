@@ -22,6 +22,7 @@ import com.ent.happychat.pojo.resp.comment.NewsCommentPageResp;
 import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
+import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +44,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/player/comment")
 public class CommentApi {
 
+    @Autowired
+    private EhcacheService ehcacheService;
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -147,13 +150,16 @@ public class CommentApi {
 
     @PostMapping("/sendNewsComment")
     @ApiOperation(value = "发表新闻评论", notes = "发表新闻评论")
-    public R sendNewsComment(@RequestBody @Valid CommentSendReq req) {
+    public R<CommentResp> sendNewsComment(@RequestBody @Valid CommentSendReq req) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        ehcacheService.verification3SecondsRequest(playerTokenResp.getAccount());
+
         if (req.getTopId() == null && req.getReplyId() != null) {
             log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
             throw new DataException("顶层评论不存在或已删除");
         }
 
-        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
         Comment comment = new Comment();
         comment.setNewsId(req.getNewsId());
         comment.setTopId(req.getTopId());
@@ -165,7 +171,12 @@ public class CommentApi {
         comment.setContent(req.getContent());
         comment.setReadStatus(false);
         commentService.sendComment(comment);
-        return R.ok(null);
+
+        CommentResp commentResp = BeanUtil.toBean(comment, CommentResp.class);
+        commentResp.setAvatarPath(playerTokenResp.getAvatarPath());
+        commentResp.setCommentator(playerTokenResp.getName());
+        commentResp.setLevel(playerTokenResp.getLevel());
+        return R.ok(commentResp);
     }
 
     @PostMapping("/receivedCommentsPage")

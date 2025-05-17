@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
+import com.ent.happychat.pojo.resp.comment.CommentResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -60,6 +61,11 @@ public interface CommentService extends IService<Comment> {
      */
     boolean increaseLikesCount(Long id);
 
-
+    /**
+     * 校验频繁发送
+     * @param newsId
+     * @param account
+     */
+    void checkRepeatedRequestSend(Long newsId, String account);
 
 }

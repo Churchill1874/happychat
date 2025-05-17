@@ -57,5 +57,8 @@ public class PlayerInfoResp implements Serializable {
     @ApiModelProperty("余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("小飞机")
+    private String tg;
+
 
 }

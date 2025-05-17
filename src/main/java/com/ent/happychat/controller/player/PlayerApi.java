@@ -9,6 +9,7 @@ import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
@@ -172,6 +173,8 @@ public class PlayerApi {
         playerInfo.setAvatarPath(req.getAvatarPath());
         playerInfo.setUpdateName(playerTokenResp.getName());
         playerInfo.setUpdateTime(LocalDateTime.now());
+        playerInfo.setTg(req.getTg());
+        playerInfo.setBirth(req.getBirth());
         playerInfoService.updateById(playerInfo);
 
 
@@ -185,4 +188,18 @@ public class PlayerApi {
         ehcacheService.playerInfoCache().remove(playerInfo.getAccount());
         return R.ok(null);
     }
+
+
+    @PostMapping("/findPlayerById")
+    @ApiOperation(value = "查询玩家信息", notes = "查询玩家信息")
+    public R<PlayerInfoResp> findPlayerById(@RequestBody @Valid IdBase req) {
+        PlayerInfo playerInfo = playerInfoService.getById(req.getId());
+        if (playerInfo == null){
+            return R.ok(null);
+        }
+
+        PlayerInfoResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        return R.ok(playerTokenResp);
+    }
+
 }

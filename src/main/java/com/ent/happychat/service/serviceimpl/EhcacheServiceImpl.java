@@ -64,10 +64,18 @@ public class EhcacheServiceImpl implements EhcacheService {
         }
     }
 
-
     @Override
     public Cache<String, Integer> lock3SecondCache() {
         return cacheManager.getCache(CacheKeyConstant.LOCK_3_SECOND, String.class, Integer.class);
+    }
+
+    @Override
+    public void verification3SecondsRequest(String key) {
+        Integer value = lock3SecondCache().get(key);
+        if (value != null){
+            throw new DataException("操作过快,请稍后继续");
+        }
+        lock3SecondCache().put(key, 1);
     }
 
     @Override

@@ -13,11 +13,19 @@ import java.util.Set;
  */
 public interface EhcacheService {
 
+
     /**
      * 获取3秒锁缓存容器
      * @return
      */
     Cache<String, Integer> lock3SecondCache();
+
+    /**
+     * 校验过快操作
+     * @param key
+     */
+    void verification3SecondsRequest(String key);
+
 
     /**
      * 获取验证码缓存容器
