@@ -2,6 +2,7 @@ package com.ent.happychat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.pojo.req.likes.LikesRecordPageReq;
@@ -22,6 +23,6 @@ public interface LikesRecordService extends IService<LikesRecord> {
      * @param likesId
      * @param content
      */
-    void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId);
+    void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId, InfoEnum infoType);
 
 }

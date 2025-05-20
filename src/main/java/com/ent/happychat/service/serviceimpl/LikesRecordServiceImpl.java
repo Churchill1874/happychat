@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.mapper.LikesRecordMapper;
@@ -43,7 +44,7 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
 
     @Async
     @Override
-    public void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId) {
+    public void increaseLikesCount(Long playerId, String playerName, Long likesId, String content, LikesEnum likesType, Long targetPlayerId, InfoEnum infoType) {
             LikesRecord likesRecord = new LikesRecord();
             likesRecord.setPlayerId(playerId);
             likesRecord.setLikesId(likesId);
@@ -52,6 +53,7 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
             likesRecord.setCreateTime(LocalDateTime.now());
             likesRecord.setCreateName(playerName);
             likesRecord.setTargetPlayerId(targetPlayerId);
+            likesRecord.setInfoType(infoType);
             save(likesRecord);
 
             //todo 要查询被点赞的玩家 当前 被点赞数量 和 下注正确数量 是否可以升级了

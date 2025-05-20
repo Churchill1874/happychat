@@ -8,6 +8,7 @@ import com.ent.happychat.entity.News;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.views.ViewsAddReq;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.scheduling.annotation.Async;
 
@@ -68,7 +69,7 @@ public interface NewsService extends IService<News> {
      * 增加点赞数量
      * @param id
      */
-    boolean increaseLikesCount(Long id);
+    void increaseLikesCount(Long id, PlayerTokenResp playerTokenResp);
 
     /**
      * 增加浏览数量

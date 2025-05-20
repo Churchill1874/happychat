@@ -5,17 +5,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.Comment;
-import com.ent.happychat.entity.LikesRecord;
-import com.ent.happychat.entity.News;
+import com.ent.happychat.entity.*;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.*;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private LikesRecordService likesRecordService;
     @Autowired
     private CommentNewsService commentNewsService;
+    @Autowired
+    private PoliticsService politicsService;
+    @Autowired
+    private SoutheastAsiaService southeastAsiaService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -77,13 +81,28 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if(comment != null){
             replyContent = comment.getContent();
         }
-        News news = newsService.getById(dto.getNewsId());
-        String title = null;
-        if (news != null){
-            title = news.getTitle();
-        }
-        commentNewsService.commentNews(dto, title, replyContent);
 
+        String title = null;
+        if (dto.getInfoType() == InfoEnum.NEWS){
+            News news = newsService.getById(dto.getNewsId());
+            if (news != null){
+                title = news.getTitle();
+            }
+        }
+        if (dto.getInfoType() == InfoEnum.POLITICS){
+            Politics politics = politicsService.getById(dto.getNewsId());
+            if (politics != null){
+                title = politics.getTitle();
+            }
+        }
+        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
+            SoutheastAsia southeastAsia = southeastAsiaService.getById(dto.getNewsId());
+            if (southeastAsia != null){
+                title = southeastAsia.getTitle();
+            }
+        }
+
+        commentNewsService.commentNews(dto, title, replyContent);
     }
 
 
@@ -168,7 +187,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 id,
                 comment.getContent(),
                 LikesEnum.COMMENT,
-                comment.getTargetPlayerId()
+                comment.getPlayerId(),
+                comment.getInfoType()
             );
 
             baseMapper.increaseLikesCount(id);

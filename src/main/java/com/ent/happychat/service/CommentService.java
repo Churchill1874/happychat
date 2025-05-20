@@ -61,11 +61,5 @@ public interface CommentService extends IService<Comment> {
      */
     boolean increaseLikesCount(Long id);
 
-    /**
-     * 校验频繁发送
-     * @param newsId
-     * @param account
-     */
-    void checkRepeatedRequestSend(Long newsId, String account);
 
 }

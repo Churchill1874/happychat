@@ -6,12 +6,14 @@ import lombok.Getter;
 
 public enum ViewsEnum {
 
-    NEWS(1,"新闻"),
+    NEWS(1,"国内新闻"),
     WORK(2,"工作"),
-    Company(3,"公司"),
+    COMPANY(3,"公司"),
     CHAT_GIRL(4,"聊妹"),
     BET(5,"投注"),
-    SoutheastAsia(6,"东南亚新闻");
+    SoutheastAsia(6,"东南亚新闻"),
+    POLITICS(7,"政治")
+    ;
 
 
     @Getter

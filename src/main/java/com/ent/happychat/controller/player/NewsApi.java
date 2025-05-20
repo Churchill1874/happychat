@@ -95,12 +95,6 @@ public class NewsApi {
         return R.ok(homeNewsResp);
     }
 
-    @PostMapping("/increaseLikesCount")
-    @ApiOperation(value = "点赞新闻", notes = "点赞新闻")
-    public R<BooleanResp> increaseLikesCount(@RequestBody @Valid IdBase req) {
-        BooleanResp booleanResp = new BooleanResp();
-        booleanResp.setValue(newsService.increaseLikesCount(req.getId()));
-        return R.ok(booleanResp);
-    }
+
 
 }

@@ -6,20 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.CacheKeyConstant;
-import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
-import com.ent.happychat.common.constant.enums.LikesEnum;
-import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.common.constant.enums.ViewsEnum;
-import com.ent.happychat.common.exception.AuthException;
+import com.ent.happychat.common.constant.enums.*;
 import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.common.tools.api.NewsTools;
 import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
-import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.mapper.NewsMapper;
-import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
@@ -31,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -59,10 +51,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<News> queryNews = new QueryWrapper<>();
         queryNews.lambda()
-                .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
-                .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
-                .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
-                .orderByDesc(News::getCreateTime);
+            .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
+            .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
+            .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
+            .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
         boolean createTimeSort = !newsPageReq.getLikesSort() && !newsPageReq.getViewSort() && !newsPageReq.getCommentsSort();
@@ -85,9 +77,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     public List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size) {
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(News::getNewsStatus, newsStatusEnum)
-                .orderByDesc(News::getCreateTime)
-                .last("LIMIT " + size);
+            .eq(News::getNewsStatus, newsStatusEnum)
+            .orderByDesc(News::getCreateTime)
+            .last("LIMIT " + size);
 
         return this.list(queryWrapper);
     }
@@ -162,41 +154,40 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
     }
 
+    @Async
     @Override
     public void increaseCommentsCount(Long id) {
         baseMapper.increaseCommentsCount(id);
     }
 
 
+    @Async
     @Override
-    public boolean increaseLikesCount(Long id) {
+    public void increaseLikesCount(Long id, PlayerTokenResp playerTokenResp) {
         News news = getById(id);
-        if (news == null){
+        if (news == null) {
             throw new DataException("内容不存在或已删除");
         }
-        //插入点赞记录
-        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
         QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
-                .eq(LikesRecord::getLikesId, id)
-                .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
+            .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
+            .eq(LikesRecord::getLikesId, id)
+            .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
         int count = likesRecordService.count(queryWrapper);
 
-        if(count == 0){
+        if (count == 0) {
             likesRecordService.increaseLikesCount(
-                    playerTokenResp.getId(),
-                    playerTokenResp.getName(),
-                    id,
-                    news.getTitle(),
-                    LikesEnum.NEWS,
-                    null
+                playerTokenResp.getId(),
+                playerTokenResp.getName(),
+                id,
+                news.getTitle(),
+                LikesEnum.NEWS,
+                null,
+                InfoEnum.NEWS
             );
 
             baseMapper.increaseLikesCount(id);
-            return true;
-        } else {
-            return false;
         }
 
     }
@@ -210,9 +201,6 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
     @Override
     public News findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName) {
-        if (playerId == null){
-            throw new TokenException();
-        }
         News news = getById(viewsId);
         increaseViewsCount(ip, viewsId, news.getTitle(), playerId, playerName);
         return news;

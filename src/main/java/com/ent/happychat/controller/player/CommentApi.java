@@ -165,7 +165,7 @@ public class CommentApi {
         comment.setTopId(req.getTopId());
         comment.setReplyId(req.getReplyId());
         comment.setPlayerId(playerTokenResp.getId());
-        comment.setInfoType(InfoEnum.NEWS);
+        comment.setInfoType(req.getNewsType());
         comment.setCreateTime(LocalDateTime.now());
         comment.setCreateName(playerTokenResp.getName());
         comment.setContent(req.getContent());

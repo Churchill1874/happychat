@@ -41,6 +41,7 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
         viewsRecord.setContent(content);
         viewsRecord.setCreateTime(LocalDateTime.now());
         viewsRecord.setCreateName(playerName);
+        viewsRecord.setIp(ip);
         save(viewsRecord);
     }
 

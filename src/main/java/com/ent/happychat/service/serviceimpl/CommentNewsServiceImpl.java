@@ -3,10 +3,8 @@ package com.ent.happychat.service.serviceimpl;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.entity.News;
-import com.ent.happychat.service.CommentNewsService;
-import com.ent.happychat.service.CommentService;
-import com.ent.happychat.service.NewsService;
-import com.ent.happychat.service.SystemMessageService;
+import com.ent.happychat.service.*;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,10 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     private NewsService newsService;
     @Autowired
     private SystemMessageService systemMessageService;
+    @Autowired
+    private PoliticsService politicsService;
+    @Autowired
+    private SoutheastAsiaService southeastAsiaService;
 
     @Async
     @Override
@@ -26,6 +28,13 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         if (dto.getInfoType() == InfoEnum.NEWS) {
             newsService.increaseCommentsCount(dto.getNewsId());
         }
+        if (dto.getInfoType() == InfoEnum.POLITICS){
+            politicsService.increaseCommentsCount(dto.getNewsId());
+        }
+        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
+
+        }
+
 
         //异步发送回复评论系统消息
         systemMessageService.sendCommentMessage(dto, newsTitle, replyContent);

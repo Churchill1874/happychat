@@ -1,6 +1,7 @@
 package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.entity.base.BaseInfo;
 import io.swagger.annotations.ApiModel;
@@ -25,5 +26,7 @@ public class LikesRecord extends BaseInfo implements Serializable {
     private String content;
     @ApiModelProperty("点赞目标人id 就是被点赞人")
     private Long targetPlayerId;
+    @ApiModelProperty("新闻类型")
+    private InfoEnum infoType;
 
 }
