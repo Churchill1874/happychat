@@ -11,8 +11,9 @@ public enum ViewsEnum {
     COMPANY(3,"公司"),
     CHAT_GIRL(4,"聊妹"),
     BET(5,"投注"),
-    SoutheastAsia(6,"东南亚新闻"),
-    POLITICS(7,"政治")
+    SOUTHEAST_ASIA(6,"东南亚新闻"),
+    POLITICS(7,"政治"),
+    SOCIETY(8, "社会")
     ;
 
 

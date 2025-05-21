@@ -9,9 +9,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@ApiModel("东南亚新闻")
-@TableName("southeast_asia")
-public class SoutheastAsia extends BaseInfo implements Serializable {
+@ApiModel("社会")
+@TableName("society")
+public class Society extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 362828520285193131L;
 
     @ApiModelProperty("新闻来源")
@@ -22,6 +22,12 @@ public class SoutheastAsia extends BaseInfo implements Serializable {
 
     @ApiModelProperty("图片路径")
     private String imagePath;
+
+    @ApiModelProperty("视频链接")
+    private String videoPath;
+
+    @ApiModelProperty("视频封面")
+    private String videoCover;
 
     @ApiModelProperty("阅读数量")
     private Integer viewCount;
@@ -43,6 +49,5 @@ public class SoutheastAsia extends BaseInfo implements Serializable {
 
     @ApiModelProperty("标题")
     private String title;
-
 
 }

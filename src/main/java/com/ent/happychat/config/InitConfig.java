@@ -1,9 +1,11 @@
 package com.ent.happychat.config;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ent.happychat.common.constant.enums.ManageRoleEnum;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.Administrators;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.service.AdministratorsService;
 import com.ent.happychat.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component

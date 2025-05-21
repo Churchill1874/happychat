@@ -112,6 +112,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(Comment::getNewsId, dto.getNewsId())
+            .eq(Comment::getInfoType, dto.getNewsType())
             .isNull(Comment::getTopId)
             .orderByDesc(Comment::getCreateTime);
         return page(iPage, queryWrapper);

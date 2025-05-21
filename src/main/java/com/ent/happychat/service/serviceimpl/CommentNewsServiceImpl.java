@@ -32,7 +32,7 @@ public class CommentNewsServiceImpl implements CommentNewsService {
             politicsService.increaseCommentsCount(dto.getNewsId());
         }
         if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
-
+            southeastAsiaService.increaseCommentsCount(dto.getNewsId());
         }
 
 

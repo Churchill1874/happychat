@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.Politics;
+import com.ent.happychat.entity.Society;
+import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.pojo.req.IdBase;
-import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.society.SocietyPageReq;
+import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
-import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.PoliticsService;
+import com.ent.happychat.service.SocietyService;
+import com.ent.happychat.service.SoutheastAsiaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,25 +25,25 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@Api(tags = "政治")
-@RequestMapping("/player/politics")
-public class PoliticsApi {
+@Api(tags = "社会")
+@RequestMapping("/player/society")
+public class SocietyApi {
+
 
     @Autowired
-    private PoliticsService politicsService;
-    @Autowired
-    private EhcacheService ehcacheService;
+    private SocietyService societyService;
 
-    @PostMapping("/page")
+
+    @PostMapping("/queryPage")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R<IPage<Politics>> page(@RequestBody @Valid PageBase req) {
-        IPage<Politics> iPage = politicsService.queryPage(req);
+    public R<IPage<Society>> queryPage(@RequestBody SocietyPageReq req) {
+        IPage<Society> iPage = societyService.queryPage(req);
         return R.ok(iPage);
     }
 
     @PostMapping("/find")
     @ApiOperation(value = "根据id查询", notes = "根据id查询")
-    public R<Politics> find(@RequestBody @Valid IdBase req) {
+    public R<Society> find(@RequestBody @Valid IdBase req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
         Long playerId = null;
         String playerName = null;
@@ -49,8 +51,8 @@ public class PoliticsApi {
             playerId = playerTokenResp.getId();
             playerName = playerTokenResp.getName();
         }
-        Politics politics = politicsService.findByIdAndInsertRecord(HttpTools.getIp(), req.getId() ,playerId, playerName);
-        return R.ok(politics);
+        Society society = societyService.findByIdAndInsertRecord(HttpTools.getIp(), req.getId() ,playerId, playerName);
+        return R.ok(society);
     }
 
 

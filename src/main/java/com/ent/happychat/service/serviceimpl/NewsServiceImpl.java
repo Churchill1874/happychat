@@ -147,6 +147,13 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
 
         if (CollectionUtils.isNotEmpty(newsList)) {
+            newsList.forEach(news -> {
+                if("https://n.sinaimg.cn/default/2fb77759/20151125/320X320.png".equals(news.getPhotoPath())
+                || null == news.getPhotoPath()){
+                    news.setPhotoPath("1");
+                }
+            });
+
             baseMapper.insertBatchIgnore(newsList);
 
             //清理首页的新闻列表缓存

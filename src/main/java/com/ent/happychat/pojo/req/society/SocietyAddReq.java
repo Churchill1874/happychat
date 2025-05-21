@@ -1,4 +1,4 @@
-package com.ent.happychat.pojo.req.southeastasia;
+package com.ent.happychat.pojo.req.society;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class SoutheastAsiaAddReq implements Serializable {
+public class SocietyAddReq implements Serializable {
     private static final long serialVersionUID = 895133427848543841L;
 
     @ApiModelProperty(value = "新闻来源",required = true)
@@ -35,5 +35,8 @@ public class SoutheastAsiaAddReq implements Serializable {
 
     @ApiModelProperty("展示状态")
     private Boolean status;
+
+    @ApiModelProperty("视频路径")
+    private String videoPath;
 
 }

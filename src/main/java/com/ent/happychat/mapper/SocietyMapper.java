@@ -1,10 +1,11 @@
 package com.ent.happychat.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ent.happychat.entity.Society;
 import com.ent.happychat.entity.SoutheastAsia;
 import org.apache.ibatis.annotations.Param;
 
-public interface SoutheastAsiaMapper extends BaseMapper<SoutheastAsia> {
+public interface SocietyMapper extends BaseMapper<Society> {
     /**
      * 增加评论数量
      * @param id
@@ -17,10 +18,5 @@ public interface SoutheastAsiaMapper extends BaseMapper<SoutheastAsia> {
      */
     void increaseViewsCount(@Param("id") Long id);
 
-    /**
-     * 增加点赞数量
-     * @param id
-     */
-    void increaseLikesCount(@Param("id") Long id);
 
 }

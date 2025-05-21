@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ent.happychat.mapper.SoutheastAsiaMapper">
+
+    <update id="increaseCommentsCount">
+        UPDATE southeast_asia SET comments_count = comments_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="increaseViewsCount">
+        UPDATE southeast_asia SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+</mapper>

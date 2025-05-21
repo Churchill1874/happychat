@@ -4,21 +4,30 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.entity.Politics;
 import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.mapper.SoutheastAsiaMapper;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.service.SoutheastAsiaService;
+import com.ent.happychat.service.ViewsRecordService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
 public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, SoutheastAsia> implements SoutheastAsiaService {
+
+    @Autowired
+    private ViewsRecordService viewsRecordService;
+
     @Override
     public IPage<SoutheastAsia> queryPage(SoutheastAsiaPageReq req) {
         IPage<SoutheastAsia> iPage = new Page<>(req.getPageNum(), req.getPageSize());
@@ -57,15 +66,34 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
         if (southeastAsia.getStatus() == null){
             southeastAsia.setStatus(true);
         }
-        if (southeastAsia.getCommentCount() == null){
-            southeastAsia.setCommentCount(0);
+        if (southeastAsia.getCommentsCount() == null){
+            southeastAsia.setCommentsCount(0);
         }
-        if (southeastAsia.getReadCount() == null){
-            southeastAsia.setReadCount(0);
+        if (southeastAsia.getViewCount() == null){
+            southeastAsia.setViewCount(0);
         }
         southeastAsia.setCreateTime(LocalDateTime.now());
         southeastAsia.setCreateName(TokenTools.getAdminName());
         save(southeastAsia);
+    }
+
+    @Override
+    public void increaseCommentsCount(Long id) {
+        baseMapper.increaseCommentsCount(id);
+    }
+
+    @Async
+    @Override
+    public void increaseViewsCount(String ip, Long viewsId, String content, Long playerId, String playerName) {
+        viewsRecordService.addViewsRecord(ip, viewsId, content, playerId, playerName, ViewsEnum.SOUTHEAST_ASIA);
+        baseMapper.increaseViewsCount(viewsId);
+    }
+
+    @Override
+    public SoutheastAsia findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName) {
+        SoutheastAsia southeastAsia = getById(viewsId);
+        increaseViewsCount(ip, viewsId, southeastAsia.getTitle(), playerId, playerName);
+        return southeastAsia;
     }
 
 }

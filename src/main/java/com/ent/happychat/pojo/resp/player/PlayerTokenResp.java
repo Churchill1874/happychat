@@ -31,6 +31,8 @@ public class PlayerTokenResp implements Serializable {
     private String avatarPath;
     @ApiModelProperty("等级")
     private LevelEnum level;
+    @ApiModelProperty("地址")
+    private String address;
 
 
 }

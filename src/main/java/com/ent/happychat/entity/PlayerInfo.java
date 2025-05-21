@@ -65,4 +65,7 @@ public class PlayerInfo extends UpdateBaseInfo implements Serializable {
 
     @ApiModelProperty("小飞机")
     private String tg;
+
+    @ApiModelProperty("地址")
+    private String address;
 }

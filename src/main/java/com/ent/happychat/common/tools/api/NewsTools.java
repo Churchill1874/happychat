@@ -91,7 +91,7 @@ public class NewsTools {
                             }
 
                             //从新闻内容中获取图片
-                            String contentImagePath = String.join(",", imagePaths);
+                            String contentImagePath = String.join("||", imagePaths);
                             news.setContentImagePath(contentImagePath);
                         }
 

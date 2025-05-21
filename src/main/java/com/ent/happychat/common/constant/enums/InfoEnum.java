@@ -11,7 +11,9 @@ public enum InfoEnum {
 
     NEWS(1,"国内新闻"),
     SOUTHEAST_ASIA(2,"东南亚新闻"),
-    POLITICS(3,"政治");
+    POLITICS(3,"政治"),
+    SOCIETY(4,"社会")
+    ;
 
     @Getter
     @EnumValue

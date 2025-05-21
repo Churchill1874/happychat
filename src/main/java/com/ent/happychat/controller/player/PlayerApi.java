@@ -85,6 +85,7 @@ public class PlayerApi {
         playerInfo.setStatus(UserStatusEnum.NORMAL);
         playerInfo.setAvatarPath("1");
         playerInfo.setBalance(BigDecimal.ZERO);
+        playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
@@ -101,6 +102,7 @@ public class PlayerApi {
         playerTokenResp.setId(playerInfo.getId());
         playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
         playerTokenResp.setLevel(playerInfo.getLevel());
+        playerTokenResp.setAddress(playerInfo.getAddress());
 
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
         ehcacheService.playerInfoCache().put(playerInfo.getAccount(), playerInfo);
@@ -141,6 +143,9 @@ public class PlayerApi {
         if (!playerInfo.getPassword().equals(CodeTools.md5AndSalt(req.getPassword(), playerInfo.getSalt()))) {
             throw new AccountOrPasswordException();
         }
+
+        playerInfo.setAddress(HttpTools.getAddress());
+        playerInfoService.updateById(playerInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
         return R.ok(playerTokenResp);
