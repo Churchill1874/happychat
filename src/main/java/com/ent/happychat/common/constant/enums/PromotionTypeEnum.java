@@ -4,17 +4,12 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-public enum ViewsEnum {
+public enum PromotionTypeEnum {
 
-    NEWS(1,"国内新闻"),
-    WORK(2,"工作"),
-    COMPANY(3,"公司"),
-    CHAT_GIRL(4,"聊妹"),
-    BET(5,"投注"),
-    SOUTHEAST_ASIA(6,"东南亚新闻"),
-    POLITICS(7,"政治"),
-    SOCIETY(8, "社会"),
-    PROMOTION(9,"推广")
+
+    GOODS(1, "商品"),
+    LIFE(2,"生活"),
+    BUSINESS(3,"商业")
     ;
 
 
@@ -26,7 +21,7 @@ public enum ViewsEnum {
     @Getter
     private String name;
 
-    ViewsEnum(int code, String name) {
+    PromotionTypeEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -35,6 +30,7 @@ public enum ViewsEnum {
     public String toString() {
         return this.name + ":" + this.code;
     }
+
 
 
 }

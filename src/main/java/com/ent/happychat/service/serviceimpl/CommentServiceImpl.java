@@ -39,6 +39,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private PoliticsService politicsService;
     @Autowired
     private SoutheastAsiaService southeastAsiaService;
+    @Autowired
+    private PromotionService promotionService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -101,6 +103,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 title = southeastAsia.getTitle();
             }
         }
+        if (dto.getInfoType() == InfoEnum.PROMOTION){
+            Promotion promotion = promotionService.getById(dto.getNewsId());
+            if (promotion != null){
+                title = promotion.getTitle();
+            }
+        }
 
         commentNewsService.commentNews(dto, title, replyContent);
     }
@@ -150,6 +158,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         IPage<Comment> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
+            .eq(dto.getNewsType() != null, Comment::getInfoType, dto.getNewsType())
             .eq(dto.getNewsId() != null, Comment::getNewsId, dto.getNewsId())
             .eq(dto.getReplyId() != null, Comment::getReplyId, dto.getReplyId())
             .eq(dto.getPlayerId() != null, Comment::getPlayerId, dto.getPlayerId())
