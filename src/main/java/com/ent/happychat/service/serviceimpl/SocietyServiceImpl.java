@@ -39,7 +39,6 @@ public class SocietyServiceImpl extends ServiceImpl<SocietyMapper, Society> impl
             .eq(req.getIsTop() != null, Society::getIsTop, req.getIsTop())
             .eq(StringUtils.isNotBlank(req.getSource()), Society::getSource, req.getSource())
             .eq(req.getIsHot() != null, Society::getIsHot, req.getIsHot())
-            .eq(req.getIsTop() != null, Society::getIsTop, req.getIsTop())
             .eq(StringUtils.isNotBlank(req.getArea()), Society::getArea, req.getArea())
             .orderByDesc(Society::getCreateTime)
             .orderByDesc(Society::getIsTop);

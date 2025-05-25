@@ -14,7 +14,8 @@ public enum ViewsEnum {
     SOUTHEAST_ASIA(6,"东南亚新闻"),
     POLITICS(7,"政治"),
     SOCIETY(8, "社会"),
-    PROMOTION(9,"推广")
+    PROMOTION(9,"推广"),
+    TOPIC(10,"话题")
     ;
 
 

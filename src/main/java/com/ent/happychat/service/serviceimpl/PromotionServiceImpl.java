@@ -41,7 +41,6 @@ public class PromotionServiceImpl extends ServiceImpl<PromotionMapper, Promotion
             .eq(req.getIsTop() != null, Promotion::getIsTop, req.getIsTop())
             .eq(req.getType() != null , Promotion::getType, req.getType())
             .eq(StringUtils.isNotBlank(req.getContact()), Promotion::getContact, req.getContact())
-            .eq(req.getIsTop() != null, Promotion::getIsTop, req.getIsTop())
             .eq(StringUtils.isNotBlank(req.getArea()), Promotion::getArea, req.getArea())
             .orderByDesc(Promotion::getCreateTime)
             .orderByDesc(Promotion::getIsTop);
