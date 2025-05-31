@@ -6,9 +6,9 @@ import com.ent.happychat.common.exception.IpException;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Blacklist;
-import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
+import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
@@ -94,8 +94,8 @@ public class EhcacheServiceImpl implements EhcacheService {
     }
 
     @Override
-    public Cache<String, PlayerInfo> playerInfoCache() {
-        return cacheManager.getCache(CacheKeyConstant.PLAYER_INFO, String.class, PlayerInfo.class);
+    public Cache<String, PlayerInfoResp> playerInfoCache() {
+        return cacheManager.getCache(CacheKeyConstant.PLAYER_INFO, String.class, PlayerInfoResp.class);
     }
 
     @Override

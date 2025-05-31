@@ -34,5 +34,4 @@ public class PlayerTokenResp implements Serializable {
     @ApiModelProperty("地址")
     private String address;
 
-
 }

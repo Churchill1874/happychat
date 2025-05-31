@@ -1,8 +1,8 @@
 package com.ent.happychat.service;
 
-import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
+import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.ehcache.Cache;
 
@@ -47,10 +47,10 @@ public interface EhcacheService {
     Cache<String, PlayerTokenResp> playerTokenCache();
 
     /**
-     * 玩家信息缓存
+     * 玩家详细信息缓存容器
      * @return
      */
-    Cache<String, PlayerInfo> playerInfoCache();
+    Cache<String, PlayerInfoResp> playerInfoCache();
 
     /**
      * 获取真实在线人数缓存容器

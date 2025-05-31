@@ -49,5 +49,4 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      * @return
      */
     Map<Long, PlayerInfo> accountIdMapPlayer(List<Long> accountIdList);
-
 }

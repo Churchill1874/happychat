@@ -16,6 +16,7 @@ import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.InteractiveStatisticsService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +39,8 @@ import java.time.LocalDateTime;
 public class PlayerApi {
 
     @Autowired
+    private InteractiveStatisticsService interactiveStatisticsService;
+    @Autowired
     private PlayerInfoService playerInfoService;
     @Autowired
     private EhcacheService ehcacheService;
@@ -45,16 +48,17 @@ public class PlayerApi {
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
     public R<PlayerInfoResp> playerInfo() {
-        String account = TokenTools.getPlayerToken(true).getAccount();
-        PlayerInfo playerInfo = ehcacheService.playerInfoCache().get(account);
-        if (playerInfo != null) {
-            PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        Long playerId = TokenTools.getPlayerToken(true).getId();
+        PlayerInfoResp playerInfoResp = ehcacheService.playerInfoCache().get(playerId.toString());
+        if (playerInfoResp != null) {
             return R.ok(playerInfoResp);
         }
 
-        playerInfo = playerInfoService.findByAccount(account);
-        ehcacheService.playerInfoCache().put(account, playerInfo);
-        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        PlayerInfo playerInfo = playerInfoService.getById(playerId);
+        playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        ehcacheService.playerInfoCache().put(playerId.toString(), playerInfoResp);
+
         return R.ok(playerInfoResp);
     }
 
@@ -97,15 +101,17 @@ public class PlayerApi {
     private PlayerTokenResp createLoginToken(PlayerInfo playerInfo) {
         String tokenId = GenerateTools.createTokenId();
         PlayerTokenResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerTokenResp.class);
+        playerTokenResp.setId(playerInfo.getId());
         playerTokenResp.setTokenId(tokenId);
         playerTokenResp.setLoginTime(LocalDateTime.now());
-        playerTokenResp.setId(playerInfo.getId());
         playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
         playerTokenResp.setLevel(playerInfo.getLevel());
         playerTokenResp.setAddress(playerInfo.getAddress());
-
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
-        ehcacheService.playerInfoCache().put(playerInfo.getAccount(), playerInfo);
+
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
         return playerTokenResp;
     }
 
@@ -182,15 +188,15 @@ public class PlayerApi {
         playerInfo.setBirth(req.getBirth());
         playerInfoService.updateById(playerInfo);
 
-
         playerTokenResp.setName(playerInfo.getName());
         playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
         playerTokenResp.setLevel(playerInfo.getLevel());
         //更新token缓存
         ehcacheService.playerTokenCache().put(playerTokenResp.getTokenId(), playerTokenResp);
 
-        //更新账号关联的缓存
-        ehcacheService.playerInfoCache().remove(playerInfo.getAccount());
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
         return R.ok(null);
     }
 
@@ -199,12 +205,14 @@ public class PlayerApi {
     @ApiOperation(value = "查询玩家信息", notes = "查询玩家信息")
     public R<PlayerInfoResp> findPlayerById(@RequestBody @Valid IdBase req) {
         PlayerInfo playerInfo = playerInfoService.getById(req.getId());
-        if (playerInfo == null){
+        if (playerInfo == null) {
             return R.ok(null);
         }
 
-        PlayerInfoResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
-        return R.ok(playerTokenResp);
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        return R.ok(playerInfoResp);
     }
+
 
 }

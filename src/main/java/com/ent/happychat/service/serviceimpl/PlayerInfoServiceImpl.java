@@ -6,18 +6,20 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.entity.InteractiveStatistics;
 import com.ent.happychat.mapper.PlayerInfoMapper;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.service.PlayerInfoService;
+import com.ent.happychat.service.InteractiveStatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerInfo> implements PlayerInfoService {
+
+    @Autowired
+    private InteractiveStatisticsService interactiveStatisticsService;
 
     @Override
     public IPage<PlayerInfo> queryPage(PlayerInfo playerInfo, PageBase pageBase) {
@@ -49,6 +54,7 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void add(PlayerInfo playerInfo) {
         PlayerInfo queryInfo = findByAccount(playerInfo.getAccount());
         if (queryInfo != null){
@@ -56,6 +62,14 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         }
 
         save(playerInfo);
+
+        InteractiveStatistics interactiveStatistics = interactiveStatisticsService.findByPlayerId(queryInfo.getId());
+        if (interactiveStatistics != null){
+            throw new DataException("刚刚网络繁忙,请您在此请求");
+        }
+
+        //初始化用户交互信息
+        interactiveStatisticsService.init(queryInfo.getId());
     }
 
     @Override
