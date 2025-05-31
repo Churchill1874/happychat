@@ -13,7 +13,8 @@ public enum InfoEnum {
     SOUTHEAST_ASIA(2,"东南亚新闻"),
     POLITICS(3,"政治"),
     SOCIETY(4,"社会"),
-    PROMOTION(5,"推广")
+    PROMOTION(5,"推广"),
+    TOPIC(6,"话题")
     ;
 
     @Getter

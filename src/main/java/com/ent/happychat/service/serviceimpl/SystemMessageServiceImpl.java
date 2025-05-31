@@ -42,7 +42,7 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             .eq(dto.getRecipientId() != null, SystemMessage::getRecipientId, dto.getRecipientId())
             .eq(dto.getSenderId() != null, SystemMessage::getSenderId, dto.getSenderId())
             .eq(dto.getNewsId() != null, SystemMessage::getNewsId, dto.getNewsId())
-            .eq(dto.getSourceType() != null, SystemMessage::getSourceType, dto.getSourceType())
+            .eq(dto.getInfoType() != null, SystemMessage::getInfoType, dto.getInfoType())
             .orderByDesc(SystemMessage::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -85,7 +85,7 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setRecipientId(dto.getTargetPlayerId());
             systemMessage.setSenderId(dto.getPlayerId());
             systemMessage.setNewsId(dto.getNewsId());
-            systemMessage.setSourceType(dto.getInfoType());
+            systemMessage.setInfoType(dto.getInfoType());
             //systemMessage.setImagePath();
             systemMessage.setPopup(false);
             systemMessage.setCommentId(dto.getId());

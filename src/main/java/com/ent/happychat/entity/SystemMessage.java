@@ -44,7 +44,7 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private Long newsId;
 
     @ApiModelProperty("评论来源")
-    private InfoEnum sourceType;
+    private InfoEnum infoType;
 
     @ApiModelProperty("图片路径")
     private String imagePath;

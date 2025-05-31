@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-//平台新闻类型枚举
+//国内平台新闻类型枚举
 public enum NewsCategoryEnum {
 
     News(1,"新闻"),
@@ -13,10 +13,7 @@ public enum NewsCategoryEnum {
     MILITARY_AFFAIRS(4,"军事"),
     SCIENCE(5,"科技"),
     FAVOR(6,"人情"),
-    PLAYER(7,"网友"),
-    SOUTHEAST_ASIA(8, "东南亚"),
-    YOUTUBE(9, "youtube");
-
+    PLAYER(7,"网友");
 
     @Getter
     @EnumValue

@@ -148,8 +148,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         if (CollectionUtils.isNotEmpty(newsList)) {
             newsList.forEach(news -> {
-                if("https://n.sinaimg.cn/default/2fb77759/20151125/320X320.png".equals(news.getPhotoPath())
-                || null == news.getPhotoPath()){
+                if(null == news.getPhotoPath() ||
+                "https://n.sinaimg.cn/default/2fb77759/20151125/320X320.png".equals(news.getPhotoPath())){
                     news.setPhotoPath("1");
                 }
             });
@@ -272,7 +272,10 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             }*/
         }
 
-        Collections.shuffle(newsList);
+        if (CollectionUtils.isNotEmpty(newsList)){
+            Collections.shuffle(newsList);
+        }
+
         return newsList;
     }
 }

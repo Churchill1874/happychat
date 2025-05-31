@@ -25,6 +25,6 @@ public class SystemMessagePageReq extends PageBase implements Serializable {
     private Long newsId;
 
     @ApiModelProperty("消息来源")
-    private InfoEnum sourceType;
+    private InfoEnum infoType;
 
 }

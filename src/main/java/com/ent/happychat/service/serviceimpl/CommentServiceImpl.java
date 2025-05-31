@@ -1,6 +1,5 @@
 package com.ent.happychat.service.serviceimpl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,10 +11,8 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.*;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
-import com.ent.happychat.pojo.resp.comment.CommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.*;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private SoutheastAsiaService southeastAsiaService;
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private TopicService topicService;
+    @Autowired
+    private SocietyService societyService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -74,39 +75,51 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         String replyContent = null;
         Comment comment = null;
-        if (dto.getTopId() != null && dto.getReplyId() == null){
+        if (dto.getTopId() != null && dto.getReplyId() == null) {
             comment = getById(dto.getTopId());
         }
-        if (dto.getTopId() != null && dto.getReplyId() != null){
+        if (dto.getTopId() != null && dto.getReplyId() != null) {
             comment = getById(dto.getReplyId());
         }
-        if(comment != null){
+        if (comment != null) {
             replyContent = comment.getContent();
         }
 
         String title = null;
-        if (dto.getInfoType() == InfoEnum.NEWS){
+        if (dto.getInfoType() == InfoEnum.NEWS) {
             News news = newsService.getById(dto.getNewsId());
-            if (news != null){
+            if (news != null) {
                 title = news.getTitle();
             }
         }
-        if (dto.getInfoType() == InfoEnum.POLITICS){
+        if (dto.getInfoType() == InfoEnum.POLITICS) {
             Politics politics = politicsService.getById(dto.getNewsId());
-            if (politics != null){
+            if (politics != null) {
                 title = politics.getTitle();
             }
         }
-        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
+        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA) {
             SoutheastAsia southeastAsia = southeastAsiaService.getById(dto.getNewsId());
-            if (southeastAsia != null){
+            if (southeastAsia != null) {
                 title = southeastAsia.getTitle();
             }
         }
-        if (dto.getInfoType() == InfoEnum.PROMOTION){
+        if (dto.getInfoType() == InfoEnum.PROMOTION) {
             Promotion promotion = promotionService.getById(dto.getNewsId());
-            if (promotion != null){
+            if (promotion != null) {
                 title = promotion.getTitle();
+            }
+        }
+        if (dto.getInfoType() == InfoEnum.SOCIETY){
+            Society society = societyService.getById(dto.getNewsId());
+            if (society != null){
+                title = society.getTitle();
+            }
+        }
+        if (dto.getInfoType() == InfoEnum.TOPIC){
+            Topic topic = topicService.getById(dto.getNewsId());
+            if (topic != null){
+                title = topic.getTitle();
             }
         }
 

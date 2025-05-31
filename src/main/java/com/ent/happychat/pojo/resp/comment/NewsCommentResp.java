@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,6 +15,6 @@ public class NewsCommentResp implements Serializable {
     private CommentResp topComment;
 
     @ApiModelProperty("回复评论")
-    private List<CommentResp> replyCommentList;
+    private List<CommentResp> replyCommentList = new ArrayList<>();
 
 }
