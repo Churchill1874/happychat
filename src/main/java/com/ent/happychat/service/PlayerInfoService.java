@@ -45,8 +45,8 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
 
     /**
      * 转换用户集合
-     * @param accountIdList
+     * @param playerIdList
      * @return
      */
-    Map<Long, PlayerInfo> accountIdMapPlayer(List<Long> accountIdList);
+    Map<Long, PlayerInfo> playerIdMapPlayer(List<Long> playerIdList);
 }

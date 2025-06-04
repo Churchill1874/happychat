@@ -180,6 +180,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         queryWrapper.lambda()
             .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
             .eq(LikesRecord::getLikesId, id)
+            .eq(LikesRecord::getInfoType, InfoEnum.NEWS)
             .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
         int count = likesRecordService.count(queryWrapper);
 

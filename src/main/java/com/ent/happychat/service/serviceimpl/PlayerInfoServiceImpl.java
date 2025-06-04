@@ -141,10 +141,10 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
     }
 
     @Override
-    public Map<Long, PlayerInfo> accountIdMapPlayer(List<Long> accountIdList) {
+    public Map<Long, PlayerInfo> playerIdMapPlayer(List<Long> playerIdList) {
         Map<Long, PlayerInfo> map = new HashMap<>();
         QueryWrapper<PlayerInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(PlayerInfo::getId, accountIdList);
+        queryWrapper.lambda().in(PlayerInfo::getId, playerIdList);
         List<PlayerInfo> list = list(queryWrapper);
         if (CollectionUtils.isEmpty(list)){
             return map;

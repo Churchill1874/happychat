@@ -49,6 +49,7 @@ public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> i
         queryWrapper.lambda()
             .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
             .eq(LikesRecord::getLikesId, id)
+            .eq(LikesRecord::getInfoType, InfoEnum.POLITICS)
             .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
         int count = likesRecordService.count(queryWrapper);
 

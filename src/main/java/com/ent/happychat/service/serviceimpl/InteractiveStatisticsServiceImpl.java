@@ -38,16 +38,24 @@ public class InteractiveStatisticsServiceImpl extends ServiceImpl<InteractiveSta
     public InteractiveStatistics findByPlayerId(Long playerId) {
         LambdaQueryWrapper<InteractiveStatistics> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(InteractiveStatistics::getPlayerId, playerId);
-        return getOne(queryWrapper);
+        InteractiveStatistics interactiveStatistics = getOne(queryWrapper);
+        if (interactiveStatistics == null){
+            return init(playerId);
+        }
+
+        return interactiveStatistics;
     }
 
     @Override
-    public void init(Long playerId) {
+    public InteractiveStatistics init(Long playerId) {
         InteractiveStatistics interactiveStatistics = new InteractiveStatistics();
         interactiveStatistics.setFollowersCount(0L);
         interactiveStatistics.setLikesReceivedCount(0L);
         interactiveStatistics.setCollectCount(0L);
+        interactiveStatistics.setPlayerId(playerId);
         save(interactiveStatistics);
+
+        return interactiveStatistics;
     }
 
     @Override

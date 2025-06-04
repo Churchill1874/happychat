@@ -1,9 +1,12 @@
 package com.ent.happychat.controller.player;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.pojo.req.IdBase;
+import com.ent.happychat.pojo.req.likes.LikesRecordPageReq;
 import com.ent.happychat.pojo.req.news.NewsLikesReq;
 import com.ent.happychat.pojo.resp.BooleanResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
@@ -42,7 +45,6 @@ public class LikesRecordApi {
         //插入点赞记录
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
 
-
         if (req.getInfoType() == InfoEnum.NEWS){
             newsService.increaseLikesCount(req.getId(), playerTokenResp);
 
@@ -50,13 +52,19 @@ public class LikesRecordApi {
         if (req.getInfoType() == InfoEnum.POLITICS){
             politicsService.increaseLikesCount(req.getId(), playerTokenResp);
         }
-        if (req.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
-
-        }
 
         BooleanResp booleanResp = new BooleanResp();
         booleanResp.setValue(true);
         return R.ok(booleanResp);
+    }
+
+    @PostMapping("/page")
+    @ApiOperation(value = "被点赞记录分页查询", notes = "被点赞记录分页查询")
+    public R<IPage<LikesRecord>> page(@RequestBody @Valid IdBase req) {
+        LikesRecordPageReq likesRecordPageReq = new LikesRecordPageReq();
+        likesRecordPageReq.setTargetPlayerId(req.getId());
+        IPage<LikesRecord> iPage = likesRecordService.queryPage(likesRecordPageReq);
+        return R.ok(iPage);
     }
 
 }

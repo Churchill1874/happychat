@@ -15,7 +15,7 @@ public interface InteractiveStatisticsService extends IService<InteractiveStatis
 
     InteractiveStatistics findByPlayerId(Long playerId);
 
-    void init(Long playerId);
+    InteractiveStatistics init(Long playerId);
 
     void assemblyBaseAndStatistics(PlayerInfoResp playerInfoResp);
 

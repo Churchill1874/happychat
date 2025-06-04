@@ -19,5 +19,7 @@ public class LikesRecordPageReq extends PageBase implements Serializable {
     private LikesEnum likesType;
     @ApiModelProperty("点赞内容")
     private String content;
+    @ApiModelProperty("被点赞目标玩家id")
+    private Long targetPlayerId;
 
 }

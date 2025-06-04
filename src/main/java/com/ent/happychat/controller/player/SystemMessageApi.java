@@ -52,7 +52,7 @@ public class SystemMessageApi {
         }
 
         List<Long> accountIdList = iPage.getRecords().stream().map(SystemMessage::getSenderId).collect(Collectors.toList());
-        Map<Long, PlayerInfo> map = playerInfoService.accountIdMapPlayer(accountIdList);
+        Map<Long, PlayerInfo> map = playerInfoService.playerIdMapPlayer(accountIdList);
 
         List<SystemMessageResp> list = new ArrayList<>();
         for(SystemMessage systemMessage: iPage.getRecords()){

@@ -103,7 +103,7 @@ public class PrivateChatApi {
             }
         }
 
-        Map<Long, PlayerInfo> map = playerInfoService.accountIdMapPlayer(new ArrayList<>(set));
+        Map<Long, PlayerInfo> map = playerInfoService.playerIdMapPlayer(new ArrayList<>(set));
         List<PrivateChatOuterResp> resultList = new ArrayList<>();
 
         for (Long key : linkedHashMap.keySet()) {
