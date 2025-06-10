@@ -17,5 +17,6 @@ public class LikesRecordPageResp extends LikesRecord implements Serializable {
     private String account;
     @ApiModelProperty("等级")
     private LevelEnum level;
-
+    @ApiModelProperty("头像路径")
+    private String avatarPath;
 }
