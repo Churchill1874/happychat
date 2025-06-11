@@ -1,8 +1,10 @@
 package com.ent.happychat.pojo.resp.player;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -56,4 +58,10 @@ public class PlayerInfoResp implements Serializable {
     private Long collectCount = 0L;
     @ApiModelProperty("被点赞数量")
     private Long likesReceivedCount = 0L;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime createTime;
+    @ApiModelProperty("关联状态")
+    private String relationStatus;
+    @ApiModelProperty("是否已经关注了")
+    private Boolean collected;
 }

@@ -9,6 +9,7 @@ import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
@@ -18,6 +19,8 @@ import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.InteractiveStatisticsService;
 import com.ent.happychat.service.PlayerInfoService;
+import com.ent.happychat.service.PlayerRelationService;
+import com.ent.happychat.service.serviceimpl.PlayerRelationServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +47,8 @@ public class PlayerApi {
     private PlayerInfoService playerInfoService;
     @Autowired
     private EhcacheService ehcacheService;
+    @Autowired
+    private PlayerRelationService playerRelationService;
 
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
@@ -204,6 +209,8 @@ public class PlayerApi {
     @PostMapping("/findPlayerById")
     @ApiOperation(value = "查询玩家信息", notes = "查询玩家信息")
     public R<PlayerInfoResp> findPlayerById(@RequestBody @Valid IdBase req) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
         PlayerInfo playerInfo = playerInfoService.getById(req.getId());
         if (playerInfo == null) {
             return R.ok(null);
@@ -211,6 +218,15 @@ public class PlayerApi {
 
         PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
         interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+
+        if (playerTokenResp.getId().compareTo(req.getId()) != 0){
+            PlayerRelation playerRelation = playerRelationService.queryRelation(playerTokenResp.getId(), req.getId());
+            if (playerRelation == null){
+                playerInfoResp.setCollected(false);
+            } else {
+                playerInfoResp.setCollected(true);
+            }
+        }
         return R.ok(playerInfoResp);
     }
 

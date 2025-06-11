@@ -23,14 +23,32 @@ public class InteractiveStatisticsServiceImpl extends ServiceImpl<InteractiveSta
     }
 
     @Override
+    public void subCollect(Long playerId) {
+        baseMapper.subCollect(playerId);
+        ehcacheService.playerInfoCache().remove(playerId.toString());
+    }
+
+    @Override
     public void addLikesReceived(Long playerId) {
         baseMapper.addLikesReceived(playerId);
         ehcacheService.playerInfoCache().remove(playerId.toString());
     }
 
     @Override
+    public void subLikesReceived(Long playerId) {
+        baseMapper.subLikesReceived(playerId);
+        ehcacheService.playerInfoCache().remove(playerId.toString());
+    }
+
+    @Override
     public void addFollowers(Long playerId) {
         baseMapper.addFollowers(playerId);
+        ehcacheService.playerInfoCache().remove(playerId.toString());
+    }
+
+    @Override
+    public void subFollowers(Long playerId) {
+        baseMapper.subFollowers(playerId);
         ehcacheService.playerInfoCache().remove(playerId.toString());
     }
 

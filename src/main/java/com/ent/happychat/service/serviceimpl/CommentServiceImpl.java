@@ -42,6 +42,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private TopicService topicService;
     @Autowired
     private SocietyService societyService;
+    @Autowired
+    private InteractiveStatisticsService interactiveStatisticsService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -215,6 +217,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             );
 
             baseMapper.increaseLikesCount(id);
+            interactiveStatisticsService.addLikesReceived(comment.getPlayerId());
             return true;
         } else {
             return false;

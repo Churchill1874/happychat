@@ -5,15 +5,27 @@
 <mapper namespace="com.ent.happychat.mapper.InteractiveStatisticsMapper">
 
     <update id="addCollect">
-        UPDATE player_interactive_statistics SET collect_count = collect_count + 1 WHERE player_id = #{playerId}
+        UPDATE interactive_statistics SET collect_count = collect_count + 1 WHERE player_id = #{playerId}
+    </update>
+
+    <update id="subCollect">
+        UPDATE interactive_statistics SET collect_count = collect_count - 1 WHERE player_id = #{playerId} and collect_count > 0
     </update>
 
     <update id="addLikesReceived">
-        UPDATE player_interactive_statistics SET likes_received_count = likes_received_count + 1 WHERE player_id = #{playerId}
+        UPDATE interactive_statistics SET likes_received_count = likes_received_count + 1 WHERE player_id = #{playerId}
+    </update>
+
+    <update id="subLikesReceived">
+        UPDATE interactive_statistics SET likes_received_count = likes_received_count - 1 WHERE player_id = #{playerId} and likes_received_count > 0
     </update>
 
     <update id="addFollowers">
-        UPDATE player_interactive_statistics SET followers_count = followers_count + 1 WHERE player_id = #{playerId}
+        UPDATE interactive_statistics SET followers_count = followers_count + 1 WHERE player_id = #{playerId}
+    </update>
+
+    <update id="subFollowers">
+        UPDATE interactive_statistics SET followers_count = followers_count - 1 WHERE player_id = #{playerId} and followers_count > 0
     </update>
 
 </mapper>

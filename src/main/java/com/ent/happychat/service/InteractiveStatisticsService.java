@@ -9,9 +9,15 @@ public interface InteractiveStatisticsService extends IService<InteractiveStatis
 
     void addCollect(Long playerId);
 
+    void subCollect(Long playerId);
+
     void addLikesReceived(Long playerId);
 
+    void subLikesReceived(Long playerId);
+
     void addFollowers(Long playerId);
+
+    void subFollowers(Long playerId);
 
     InteractiveStatistics findByPlayerId(Long playerId);
 

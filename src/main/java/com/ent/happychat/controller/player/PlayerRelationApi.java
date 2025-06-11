@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.pojo.req.playerrelation.PlayerRelationAddReq;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,8 +40,10 @@ public class PlayerRelationApi {
     private PlayerInfoService playerInfoService;
 
     @PostMapping("/pageTargetPlayerId")
-    @ApiOperation(value = "被点赞分页查询", notes = "被点赞分页查询")
+    @ApiOperation(value = "被关注分页查询", notes = "被关注分页查询")
     public R<IPage<PlayerInfoResp>> page(@RequestBody PlayerRelationPageReq req) {
+        Long playerId = TokenTools.getPlayerToken(true).getId();
+
         if (req.getTargetPlayerId() == null) {
             return R.ok(null);
         }
@@ -47,20 +51,23 @@ public class PlayerRelationApi {
 
         IPage<PlayerRelation> iPage = playerRelationService.queryPage(req);
 
-        IPage<PlayerInfoResp> emptyPage = new Page<>(req.getPageNum(),req.getPageSize());
-        if (CollectionUtils.isEmpty(iPage.getRecords())){
+        IPage<PlayerInfoResp> emptyPage = new Page<>(req.getPageNum(), req.getPageSize());
+        if (CollectionUtils.isEmpty(iPage.getRecords())) {
             return R.ok(emptyPage);
         }
 
         List<Long> playerIdList = iPage.getRecords().stream().map(PlayerRelation::getPlayerId).collect(Collectors.toList());
+        Set<Long> relationSet = playerRelationService.relationSet(playerId, playerIdList);
 
         Map<Long, PlayerInfo> map = playerInfoService.mapByIds(playerIdList);
 
         List<PlayerInfoResp> playerInfoList = new ArrayList<>();
-        for(PlayerRelation playerRelation : iPage.getRecords()){
+        for (PlayerRelation playerRelation : iPage.getRecords()) {
             PlayerInfo playerInfo = map.get(playerRelation.getPlayerId());
-            if (playerInfo != null){
-                playerInfoList.add(BeanUtil.toBean(playerInfo, PlayerInfoResp.class));
+            if (playerInfo != null) {
+                PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+                playerInfoResp.setCollected(relationSet.contains(playerInfo.getId()));
+                playerInfoList.add(playerInfoResp);
             }
         }
 
@@ -72,7 +79,7 @@ public class PlayerRelationApi {
     }
 
     @PostMapping("/pagePlayerId")
-    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @ApiOperation(value = "分页查询关注列表", notes = "分页查询关注列表")
     public R<IPage<PlayerInfoResp>> pagePlayerId(@RequestBody PlayerRelationPageReq req) {
         if (req.getPlayerId() == null) {
             return R.ok(null);
@@ -81,8 +88,8 @@ public class PlayerRelationApi {
 
         IPage<PlayerRelation> iPage = playerRelationService.queryPage(req);
 
-        IPage<PlayerInfoResp> emptyPage = new Page<>(req.getPageNum(),req.getPageSize());
-        if (CollectionUtils.isEmpty(iPage.getRecords())){
+        IPage<PlayerInfoResp> emptyPage = new Page<>(req.getPageNum(), req.getPageSize());
+        if (CollectionUtils.isEmpty(iPage.getRecords())) {
             return R.ok(emptyPage);
         }
 
@@ -91,9 +98,9 @@ public class PlayerRelationApi {
         Map<Long, PlayerInfo> map = playerInfoService.mapByIds(targetPlayerIdList);
 
         List<PlayerInfoResp> playerInfoList = new ArrayList<>();
-        for(PlayerRelation playerRelation : iPage.getRecords()){
+        for (PlayerRelation playerRelation : iPage.getRecords()) {
             PlayerInfo playerInfo = map.get(playerRelation.getTargetPlayerId());
-            if (playerInfo != null){
+            if (playerInfo != null) {
                 playerInfoList.add(BeanUtil.toBean(playerInfo, PlayerInfoResp.class));
             }
         }
@@ -106,11 +113,19 @@ public class PlayerRelationApi {
     }
 
 
-
     @PostMapping("/add")
     @ApiOperation(value = "添加", notes = "添加")
     public R page(@RequestBody @Valid PlayerRelationAddReq req) {
-        playerRelationService.add(BeanUtil.toBean(req, PlayerRelation.class));
+        PlayerRelation playerRelation = BeanUtil.toBean(req, PlayerRelation.class);
+        playerRelation.setPlayerId(TokenTools.getPlayerToken(true).getId());
+        playerRelationService.add(playerRelation);
+        return R.ok(null);
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除关系", notes = "删除关系")
+    public R delete(@RequestBody @Valid PlayerRelationAddReq req) {
+        playerRelationService.delete(TokenTools.getPlayerToken(true).getId(), req.getTargetPlayerId());
         return R.ok(null);
     }
 
