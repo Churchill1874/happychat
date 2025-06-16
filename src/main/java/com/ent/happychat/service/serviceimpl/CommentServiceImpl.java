@@ -44,6 +44,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private SocietyService societyService;
     @Autowired
     private InteractiveStatisticsService interactiveStatisticsService;
+    @Autowired
+    private SystemMessageService systemMessageService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -218,12 +220,22 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
             baseMapper.increaseLikesCount(id);
             interactiveStatisticsService.addLikesReceived(comment.getPlayerId());
+
+            String content = comment.getContent();
+            //如果评论内容大于12个字符 只保留12个字符就够了
+            if (StringUtils.isNotBlank(content) && content.length() > 12){
+                content = "点赞了您的评论:" + content.substring(0, 12) + "...";
+            }
+            systemMessageService.sendInteractiveMessage(
+                playerTokenResp.getId(),
+                comment.getPlayerId(),
+                "您收到了 " + playerTokenResp.getName() + " 的点赞",
+                content
+            );
             return true;
         } else {
             return false;
         }
-
-
     }
 
 

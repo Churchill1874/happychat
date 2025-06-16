@@ -1,6 +1,7 @@
 package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -95,6 +96,30 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setComment(replyComment);
             save(systemMessage);
         }
+    }
+
+    public void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content){
+        SystemMessage systemMessage = new SystemMessage();
+        systemMessage.setCreateTime(LocalDateTime.now());
+        systemMessage.setCreateName("系统");
+        systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
+        systemMessage.setPopup(false);
+        systemMessage.setStatus(false);
+        systemMessage.setSenderId(senderId);
+        systemMessage.setRecipientId(recipientId);
+        systemMessage.setTitle(title);
+        systemMessage.setContent(content);
+        save(systemMessage);
+    }
+
+    @Override
+    public void readAll(Long playerId) {
+        UpdateWrapper<SystemMessage> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+            .set(SystemMessage::getStatus, true)
+            .eq(SystemMessage::getRecipientId, playerId)
+            .eq(SystemMessage::getStatus, false);
+        update(updateWrapper);
     }
 
 }

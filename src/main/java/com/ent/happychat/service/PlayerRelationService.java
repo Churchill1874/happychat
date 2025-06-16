@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface PlayerRelationService extends IService<PlayerRelation> {
 
-    void add(PlayerRelation playerRelation);
+    void add(PlayerRelation playerRelation, String playerName);
 
     void delete(Long playerId, Long targetPlayerId);
 

@@ -6,27 +6,32 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.entity.InteractiveStatistics;
 import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.mapper.PlayerRelationMapper;
 import com.ent.happychat.pojo.req.playerrelation.PlayerRelationPageReq;
 import com.ent.happychat.service.InteractiveStatisticsService;
 import com.ent.happychat.service.PlayerRelationService;
+import com.ent.happychat.service.SystemMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper, PlayerRelation> implements PlayerRelationService {
 
     @Autowired
-    InteractiveStatisticsService interactiveStatisticsService;
+    private SystemMessageService systemMessageService;
+    @Autowired
+    private InteractiveStatisticsService interactiveStatisticsService;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(PlayerRelation playerRelation) {
+    public void add(PlayerRelation playerRelation, String playerName) {
         playerRelation.setCreateTime(LocalDateTime.now());
         save(playerRelation);
 
@@ -34,6 +39,14 @@ public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper,
         //b就要多一个粉丝
         interactiveStatisticsService.addCollect(playerRelation.getPlayerId());
         interactiveStatisticsService.addFollowers(playerRelation.getTargetPlayerId());
+
+        //发送系统通知 提示被关注人有人关注了他
+        systemMessageService.sendInteractiveMessage(playerRelation.getPlayerId(),
+            playerRelation.getTargetPlayerId(),
+            "您有新的粉丝关注",
+            playerName + " 关注了您"
+        );
+
     }
 
     @Override
@@ -82,11 +95,11 @@ public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper,
             .in(PlayerRelation::getTargetPlayerId, targetPlayerIdList);
 
         List<PlayerRelation> playerRelationList = list(queryWrapper);
-        if (CollectionUtils.isEmpty(playerRelationList)){
+        if (CollectionUtils.isEmpty(playerRelationList)) {
             return set;
         }
 
-        for(PlayerRelation playerRelation: playerRelationList){
+        for (PlayerRelation playerRelation : playerRelationList) {
             set.add(playerRelation.getTargetPlayerId());
         }
         return set;

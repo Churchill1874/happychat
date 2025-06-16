@@ -23,4 +23,19 @@ public interface SystemMessageService extends IService<SystemMessage> {
      */
     void sendCommentMessage(Comment dto, String newsTitle, String replyComment);
 
+    /**
+     * 发送互动消息
+     * @param  senderId,
+     * @recipientId,
+     * @param title,
+     * @param content
+     */
+    void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content);
+
+    /**
+     * 清除所有未读状态
+     * @param playerId
+     */
+    void readAll(Long playerId);
+
 }

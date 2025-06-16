@@ -11,6 +11,7 @@ import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.pojo.req.playerrelation.PlayerRelationAddReq;
 import com.ent.happychat.pojo.req.playerrelation.PlayerRelationPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.PlayerRelationService;
 import io.swagger.annotations.Api;
@@ -116,9 +117,10 @@ public class PlayerRelationApi {
     @PostMapping("/add")
     @ApiOperation(value = "添加", notes = "添加")
     public R page(@RequestBody @Valid PlayerRelationAddReq req) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         PlayerRelation playerRelation = BeanUtil.toBean(req, PlayerRelation.class);
-        playerRelation.setPlayerId(TokenTools.getPlayerToken(true).getId());
-        playerRelationService.add(playerRelation);
+        playerRelation.setPlayerId(playerTokenResp.getId());
+        playerRelationService.add(playerRelation, playerTokenResp.getName());
         return R.ok(null);
     }
 

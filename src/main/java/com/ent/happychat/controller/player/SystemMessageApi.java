@@ -67,4 +67,11 @@ public class SystemMessageApi {
         return R.ok(systemMessageRespIPage);
     }
 
+    @PostMapping("/readAll")
+    @ApiOperation(value = "修改已读全部", notes = "修改已读全部")
+    public R readAll() {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        systemMessageService.readAll(playerTokenResp.getId());
+        return R.ok(null);
+    }
 }
