@@ -61,7 +61,7 @@ public class PrivateChatApi {
 
         for (PrivateChat privateChat : privateChatPage.getRecords()) {
             PrivateChatResp privateChatResp = BeanUtil.toBean(privateChat, PrivateChatResp.class);
-            privateChatResp.setIsSender(privateChat.getSendId().equals(playerTokenResp.getAccount()));
+            privateChatResp.setIsSender(privateChat.getSendId().equals(playerTokenResp.getId()));
             privateChatRespPage.getRecords().add(privateChatResp);
         }
 
@@ -90,7 +90,7 @@ public class PrivateChatApi {
         Map<Long, PrivateChat> linkedHashMap = new LinkedHashMap<>();
 
         for (PrivateChat privateChat : list) {
-            //不论聊天记录的发送人和接收人是谁,只保留过滤对方的账号最为过滤依据
+            //不论聊天记录的发送人和接收人是谁,只保留过滤对方的账号 作为过滤依据
             Long chatTargetId = myAccountId.compareTo(privateChat.getSendId()) == 0 ? privateChat.getReceiveId() : privateChat.getSendId();
 
             if (!linkedHashMap.containsKey(chatTargetId)) {
@@ -98,7 +98,7 @@ public class PrivateChatApi {
                 linkedHashMap.put(chatTargetId, privateChat);
             }
 
-            if (!privateChat.getStatus()) {
+            if (myAccountId.compareTo(privateChat.getReceiveId()) == 0 && !privateChat.getStatus()) {
                 notReadAccountSet.add(chatTargetId);
             }
         }
@@ -112,6 +112,8 @@ public class PrivateChatApi {
 
             if (myAccountId.equals(privateChatOuterResp.getReceiveId()) && notReadAccountSet.contains(privateChatOuterResp.getSendId())) {
                 privateChatOuterResp.setNotRead(true);
+            } else {
+                privateChatOuterResp.setNotRead(false);
             }
 
             PlayerInfo sendPlayer = map.get(privateChatOuterResp.getSendId());

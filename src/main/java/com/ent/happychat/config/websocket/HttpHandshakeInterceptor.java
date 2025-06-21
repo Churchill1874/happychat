@@ -1,8 +1,6 @@
 package com.ent.happychat.config.websocket;
 
-import com.ent.happychat.service.EhcacheService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
@@ -25,14 +23,14 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
             for (String param : params) {
                 if (param.startsWith("token-id=")) {
                     String token = param.substring("token-id=".length());
-                    attributes.put("toke-id", token);
+                    log.info("拦截器中解析出 token-id: {}", token);
+                    attributes.put("token-id", token);
                     break;
                 }
             }
         }
         return true;
     }
-
 
 
     @Override

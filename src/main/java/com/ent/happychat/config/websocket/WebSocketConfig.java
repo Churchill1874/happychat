@@ -22,6 +22,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Bean
+    public HttpHandshakeInterceptor httpHandshakeInterceptor() {
+        return new HttpHandshakeInterceptor();
+    }
+
+
+    @Bean
     public CustomPrincipalHandshakeHandler customPrincipalHandshakeHandler() {
         return new CustomPrincipalHandshakeHandler(ehcacheService);
     }
@@ -29,7 +35,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 配置消息代理
-        registry.enableSimpleBroker("/topic","/queue"); // 客户端订阅前缀
+        registry.enableSimpleBroker("/topic", "/queue"); // 客户端订阅前缀
         registry.setApplicationDestinationPrefixes("/app"); // 客户端发送消息的前缀
         registry.setUserDestinationPrefix("/user");
     }
@@ -39,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 配置 WebSocket 连接点
         registry.addEndpoint("/ws") // 前端连接 WebSocket 的端点
             .setAllowedOriginPatterns("*") // 允许跨域
-            .addInterceptors(new HttpHandshakeInterceptor()) //注册自定义拦截器
+            .addInterceptors(httpHandshakeInterceptor()) //注册自定义拦截器
             .setHandshakeHandler(customPrincipalHandshakeHandler()) // 注册自定义的 HandshakeHandler
             .withSockJS(); // 开启 SockJS 支持
     }

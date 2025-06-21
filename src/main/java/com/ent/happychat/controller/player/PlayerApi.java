@@ -113,6 +113,7 @@ public class PlayerApi {
         playerTokenResp.setLevel(playerInfo.getLevel());
         playerTokenResp.setAddress(playerInfo.getAddress());
         ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
+        log.info("tokenCache:{}", tokenId);
 
         PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
         interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);

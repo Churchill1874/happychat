@@ -41,7 +41,12 @@ public class WebSocketController {
     //私聊发送功能
     @MessageMapping("/chat/private")
     public void sendPrivateMessage(@Payload PrivateChatSendReq req, Principal principal) {
-        req.setSendAccount(principal.getName());
+        if (principal == null) {
+            log.warn("WebSocket 发送失败：Principal 为空，消息体：{}", req);
+            return;
+        }
+
+        req.setSendId(principal.getName());
         log.info("发送了");
 
         PrivateChat privateChat = BeanUtil.toBean(req, PrivateChat.class);

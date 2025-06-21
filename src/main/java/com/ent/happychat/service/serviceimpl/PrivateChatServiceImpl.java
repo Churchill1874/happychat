@@ -83,8 +83,8 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
                     .eq(PrivateChat::getSendId, playerBId)
                     .eq(PrivateChat::getReceiveId, playerAId)
             )
-            .eq(PrivateChat::getStatus, true)
-            .set(PrivateChat::getStatus, false);
+            .eq(PrivateChat::getStatus, false)
+            .set(PrivateChat::getStatus, true);
 
         update(updateWrapper);
     }

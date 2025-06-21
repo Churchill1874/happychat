@@ -30,12 +30,13 @@ public class CustomPrincipalHandshakeHandler extends DefaultHandshakeHandler {
         }
 
         PlayerTokenResp playerTokenResp =  ehcacheService.playerTokenCache().get(token);
+        log.info("握手中提取 token-id={}, playerTokenResp={}", token, playerTokenResp);
         if (playerTokenResp == null){
             return null;
         }
 
         // 用 token 构造自定义 Principal
-        return new StompPrincipal(playerTokenResp.getAccount());
+        return new StompPrincipal(playerTokenResp.getId().toString());
     }
 
 }
