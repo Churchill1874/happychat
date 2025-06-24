@@ -47,11 +47,13 @@ public class WebSocketController {
         }
 
         req.setSendId(principal.getName());
-        log.info("发送了");
+        log.info("{}-发送给了-{}-消息:{}",principal.getName(),req.getReceiveId(),req.getContent());
 
         PrivateChat privateChat = BeanUtil.toBean(req, PrivateChat.class);
         privateChatService.add(privateChat);
     }
+
+
 
 }
 

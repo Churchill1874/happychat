@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PlayerRelation;
@@ -120,7 +121,12 @@ public class PlayerRelationApi {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         PlayerRelation playerRelation = BeanUtil.toBean(req, PlayerRelation.class);
         playerRelation.setPlayerId(playerTokenResp.getId());
-        playerRelationService.add(playerRelation, playerTokenResp.getName());
+        String content = playerTokenResp.getName()
+            + " ( " + " lv."
+            + playerTokenResp.getLevel().getCode()
+            + " " + LevelEnum.findByCode(playerTokenResp.getLevel().getCode()).getName()
+            + " )";
+        playerRelationService.add(playerRelation, content);
         return R.ok(null);
     }
 

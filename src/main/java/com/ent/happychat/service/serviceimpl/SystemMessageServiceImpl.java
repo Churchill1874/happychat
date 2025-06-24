@@ -9,18 +9,15 @@ import com.ent.happychat.common.constant.enums.MessageTypeEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
-import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.SystemMessage;
 import com.ent.happychat.mapper.SystemMessageMapper;
 import com.ent.happychat.pojo.req.systemmessage.SystemMessageAddReq;
 import com.ent.happychat.pojo.req.systemmessage.SystemMessagePageReq;
-import com.ent.happychat.service.CommentService;
-import com.ent.happychat.service.NewsService;
 import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.SystemMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,6 +30,12 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     @Autowired
     private PlayerInfoService playerInfoService;
 
+    //stomp 发送消息的工具类
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public SystemMessageServiceImpl(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @Override
     public IPage<SystemMessage> queryPage(SystemMessagePageReq dto) {
@@ -95,10 +98,11 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setTitle(newsTitle);
             systemMessage.setComment(replyComment);
             save(systemMessage);
+            messagingTemplate.convertAndSendToUser(systemMessage.getRecipientId() + "", "/queue/commentMessage", systemMessage);
         }
     }
 
-    public void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content){
+    public void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content) {
         SystemMessage systemMessage = new SystemMessage();
         systemMessage.setCreateTime(LocalDateTime.now());
         systemMessage.setCreateName("系统");
@@ -110,6 +114,8 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
         systemMessage.setTitle(title);
         systemMessage.setContent(content);
         save(systemMessage);
+
+        messagingTemplate.convertAndSendToUser(recipientId + "", "/queue/systemMessage", systemMessage);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.privatechat.PlayerPrivateChatPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.pojo.resp.privatechat.PrivateChatListResp;
@@ -67,6 +68,13 @@ public class PrivateChatApi {
 
         privateChatService.cleanNotRead(req.getPlayerAId(), req.getPlayerBId());
         return R.ok(privateChatRespPage);
+    }
+
+    @PostMapping("/cleanUnreadStatus")
+    @ApiOperation(value = "清除指定玩家所有聊天未读状态", notes = "清除指定玩家所有聊天未读状态")
+    public R cleanUnreadStatus(@RequestBody IdBase req) {
+        privateChatService.cleanNotRead(req.getId(), TokenTools.getPlayerToken(true).getId());
+        return R.ok(null);
     }
 
     @PostMapping("/privateChatList")

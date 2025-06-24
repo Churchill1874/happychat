@@ -31,7 +31,7 @@ public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper,
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(PlayerRelation playerRelation, String playerName) {
+    public void add(PlayerRelation playerRelation, String content) {
         playerRelation.setCreateTime(LocalDateTime.now());
         save(playerRelation);
 
@@ -44,7 +44,7 @@ public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper,
         systemMessageService.sendInteractiveMessage(playerRelation.getPlayerId(),
             playerRelation.getTargetPlayerId(),
             "您有新的粉丝关注",
-            playerName + " 关注了您"
+            content
         );
 
     }
