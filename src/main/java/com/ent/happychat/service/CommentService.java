@@ -61,5 +61,12 @@ public interface CommentService extends IService<Comment> {
      */
     boolean increaseLikesCount(Long id);
 
+    /**
+     * 未读数量
+     * @param receiveId
+     * @return
+     */
+    int unreadCount(Long receiveId);
+
 
 }

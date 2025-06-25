@@ -33,5 +33,11 @@ public class PlayerTokenResp implements Serializable {
     private LevelEnum level;
     @ApiModelProperty("地址")
     private String address;
+    @ApiModelProperty("私信未读状态")
+    private Boolean privateMessageUnread;
+    @ApiModelProperty("系统消息未读状态")
+    private Boolean systemMessageUnread;
+    @ApiModelProperty("评论未读状态")
+    private Boolean commentMessageUnread;
 
 }

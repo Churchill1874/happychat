@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
+import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.*;
@@ -230,12 +231,22 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 playerTokenResp.getId(),
                 comment.getPlayerId(),
                 "您收到了 " + playerTokenResp.getName() + " 的点赞",
-                content
+                content,
+                SystemNoticeEnum.LIKES
             );
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int unreadCount(Long receiveId) {
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(Comment::getTargetPlayerId, receiveId)
+            .eq(Comment::getReadStatus, false);
+        return count(queryWrapper);
     }
 
 

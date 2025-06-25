@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.mapper.PlayerRelationMapper;
 import com.ent.happychat.pojo.req.playerrelation.PlayerRelationPageReq;
@@ -44,7 +45,8 @@ public class PlayerRelationServiceImpl extends ServiceImpl<PlayerRelationMapper,
         systemMessageService.sendInteractiveMessage(playerRelation.getPlayerId(),
             playerRelation.getTargetPlayerId(),
             "您有新的粉丝关注",
-            content
+            content,
+            SystemNoticeEnum.FOLLOW
         );
 
     }

@@ -2,6 +2,7 @@ package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
@@ -16,11 +17,7 @@ import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
-import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.InteractiveStatisticsService;
-import com.ent.happychat.service.PlayerInfoService;
-import com.ent.happychat.service.PlayerRelationService;
-import com.ent.happychat.service.serviceimpl.PlayerRelationServiceImpl;
+import com.ent.happychat.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +46,12 @@ public class PlayerApi {
     private EhcacheService ehcacheService;
     @Autowired
     private PlayerRelationService playerRelationService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private SystemMessageService systemMessageService;
+    @Autowired
+    private PrivateChatService privateChatService;
 
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
@@ -116,7 +119,20 @@ public class PlayerApi {
         log.info("tokenCache:{}", tokenId);
 
         PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+
+        //拼装统计关注 粉丝 点赞数量
         interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        //拼装统计私信未读情况 系统消息未读情况 回复评论未读情况
+
+        int commentUnreadCount = commentService.unreadCount(playerTokenResp.getId());
+        playerTokenResp.setCommentMessageUnread(commentUnreadCount > 0);
+
+        int systemUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId());
+        playerTokenResp.setSystemMessageUnread(systemUnreadCount > 0);
+
+        int privateUnreadCount = privateChatService.unreadCount(playerTokenResp.getId());
+        playerTokenResp.setPrivateMessageUnread(privateUnreadCount > 0);
+
         ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
         return playerTokenResp;
     }
@@ -220,9 +236,9 @@ public class PlayerApi {
         PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
         interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
 
-        if (playerTokenResp.getId().compareTo(req.getId()) != 0){
+        if (playerTokenResp.getId().compareTo(req.getId()) != 0) {
             PlayerRelation playerRelation = playerRelationService.queryRelation(playerTokenResp.getId(), req.getId());
-            if (playerRelation == null){
+            if (playerRelation == null) {
                 playerInfoResp.setCollected(false);
             } else {
                 playerInfoResp.setCollected(true);

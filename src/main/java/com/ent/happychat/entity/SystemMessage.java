@@ -1,9 +1,12 @@
 package com.ent.happychat.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.InfoEnum;
+import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.common.constant.enums.MessageTypeEnum;
 import com.ent.happychat.entity.base.BaseInfo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
@@ -11,12 +14,18 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @TableName("system_message")
 @ApiModel("消息")
 public class SystemMessage extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 5655088707782304840L;
+
+
+    @TableField("update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 
     @ApiModelProperty("信息类型messageType是评论类型的时候,title是自己发表对新闻的评论信息,现在有人对此评论发表评论." +
         "信息类型messageType为系统类型的时候,title是系统消息标题")
@@ -58,5 +67,8 @@ public class SystemMessage extends BaseInfo implements Serializable {
 
     @ApiModelProperty("被回复评论的内容")
     private String comment;
+
+    @ApiModelProperty("系统通知类型类型")
+    private SystemNoticeEnum systemNoticeType;
 
 }

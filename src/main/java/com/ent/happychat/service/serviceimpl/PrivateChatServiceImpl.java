@@ -89,4 +89,14 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         update(updateWrapper);
     }
 
+    @Override
+    public int unreadCount(Long playerId) {
+        QueryWrapper<PrivateChat> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+            .lambda()
+            .eq(PrivateChat::getReceiveId, playerId)
+            .eq(PrivateChat::getStatus, false);
+        return count(queryWrapper);
+    }
+
 }

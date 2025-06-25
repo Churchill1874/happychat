@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.MessageTypeEnum;
+import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
@@ -72,6 +74,8 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setCreateTime(LocalDateTime.now());
             systemMessage.setCreateName(TokenTools.getAdminName());
             systemMessage.setRecipientId(playerInfo.getId());
+            systemMessage.setSystemNoticeType(SystemNoticeEnum.ADMIN);
+            systemMessage.setUpdateTime(LocalDateTime.now());
             systemMessageList.add(systemMessage);
         }
         saveBatch(systemMessageList);
@@ -97,25 +101,39 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             systemMessage.setCreateName(dto.getCreateName());
             systemMessage.setTitle(newsTitle);
             systemMessage.setComment(replyComment);
+            systemMessage.setUpdateTime(LocalDateTime.now());
             save(systemMessage);
             messagingTemplate.convertAndSendToUser(systemMessage.getRecipientId() + "", "/queue/commentMessage", systemMessage);
         }
     }
 
-    public void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content) {
-        SystemMessage systemMessage = new SystemMessage();
-        systemMessage.setCreateTime(LocalDateTime.now());
-        systemMessage.setCreateName("系统");
-        systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
-        systemMessage.setPopup(false);
-        systemMessage.setStatus(false);
-        systemMessage.setSenderId(senderId);
-        systemMessage.setRecipientId(recipientId);
-        systemMessage.setTitle(title);
-        systemMessage.setContent(content);
-        save(systemMessage);
+    public void sendInteractiveMessage(Long senderId, Long recipientId, String title, String content, SystemNoticeEnum systemNoticeEnum) {
+        QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(SystemMessage::getRecipientId, recipientId)
+            .eq(SystemMessage::getSenderId, senderId)
+            .eq(SystemMessage::getSystemNoticeType,systemNoticeEnum);
+        SystemMessage systemMessage = getOne(queryWrapper);
 
-        messagingTemplate.convertAndSendToUser(recipientId + "", "/queue/systemMessage", systemMessage);
+        if (systemMessage != null){
+            systemMessage.setUpdateTime(LocalDateTime.now());
+            updateById(systemMessage);
+        } else {
+            systemMessage = new SystemMessage();
+            systemMessage.setCreateTime(LocalDateTime.now());
+            systemMessage.setCreateName("系统");
+            systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
+            systemMessage.setPopup(false);
+            systemMessage.setStatus(false);
+            systemMessage.setSenderId(senderId);
+            systemMessage.setRecipientId(recipientId);
+            systemMessage.setTitle(title);
+            systemMessage.setContent(content);
+            systemMessage.setSystemNoticeType(systemNoticeEnum);
+            systemMessage.setUpdateTime(LocalDateTime.now());
+            save(systemMessage);
+            messagingTemplate.convertAndSendToUser(recipientId + "", "/queue/systemMessage", systemMessage);
+        }
     }
 
     @Override
@@ -126,6 +144,17 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
             .eq(SystemMessage::getRecipientId, playerId)
             .eq(SystemMessage::getStatus, false);
         update(updateWrapper);
+    }
+
+    @Override
+    public int unreadSystemMessage(Long playerId) {
+        QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+            .lambda()
+            .eq(SystemMessage::getRecipientId, playerId)
+            .eq(SystemMessage::getMessageType, MessageTypeEnum.SYSTEM)
+            .eq(SystemMessage::getStatus, false);
+        return count(queryWrapper);
     }
 
 }

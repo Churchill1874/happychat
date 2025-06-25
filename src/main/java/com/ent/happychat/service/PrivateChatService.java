@@ -11,12 +11,13 @@ public interface PrivateChatService extends IService<PrivateChat> {
 
     List<PrivateChat> listByAccountId(Long playerId);
 
-
-
     IPage<PrivateChat> playerPrivateChatPage(PlayerPrivateChatPageReq po);
 
     void add(PrivateChat po);
 
     void cleanNotRead(Long playerAId, Long playerBId);
+
+    int unreadCount(Long playerId);
+
 
 }
