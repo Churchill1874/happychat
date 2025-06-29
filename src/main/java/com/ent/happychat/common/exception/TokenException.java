@@ -11,6 +11,6 @@ public class TokenException extends RuntimeException{
 
     private Integer code = -2;
 
-    private String message = "未登录";
+    private String message = "请先登录";
 
 }

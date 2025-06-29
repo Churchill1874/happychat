@@ -3,8 +3,11 @@ package com.ent.happychat.controller.websocket;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.ent.happychat.entity.ChatRoom;
 import com.ent.happychat.entity.PrivateChat;
+import com.ent.happychat.pojo.req.chatroom.ChatRoomSendReq;
 import com.ent.happychat.pojo.req.privatechat.PrivateChatSendReq;
+import com.ent.happychat.service.ChatRoomService;
 import com.ent.happychat.service.PrivateChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class WebSocketController {
 
     @Autowired
     private PrivateChatService privateChatService;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
 
     //广播发送功能 适用于系统公告 大厅消息等
@@ -34,9 +39,11 @@ public class WebSocketController {
         return "服务器返回: " + message;
     }
 
-
     //聊提室聊天发送功能
-
+    @MessageMapping("/chat/room")
+    public void sendRoomMessage(@Payload ChatRoomSendReq req) {
+        chatRoomService.send(BeanUtil.toBean(req, ChatRoom.class));
+    }
 
     //私聊发送功能
     @MessageMapping("/chat/private")
