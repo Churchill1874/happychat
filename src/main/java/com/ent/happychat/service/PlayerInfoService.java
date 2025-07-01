@@ -51,18 +51,5 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      */
     Map<Long, PlayerInfo> playerIdMapPlayer(List<Long> playerIdList);
 
-    /**
-     * 生成token缓存
-     * @param playerInfo
-     * @return
-     */
-    PlayerTokenResp createLoginToken(PlayerInfo playerInfo);
 
-    /**
-     * 更新token缓存
-     * @param token
-     * @param playerId
-     * @return
-     */
-    PlayerTokenResp updateLoginToken(String token, Long playerId);
 }

@@ -11,6 +11,7 @@ import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.*;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PlayerRelation;
+import com.ent.happychat.entity.PlayerToken;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
@@ -37,11 +38,14 @@ import java.time.LocalDateTime;
 @Api(tags = "玩家")
 @RequestMapping("/player/player")
 public class PlayerApi {
-
+    @Autowired
+    private PlayerTokenService playerTokenService;
     @Autowired
     private InteractiveStatisticsService interactiveStatisticsService;
     @Autowired
     private PlayerInfoService playerInfoService;
+    @Autowired
+    private PlayerHelper playerHelper;
     @Autowired
     private EhcacheService ehcacheService;
     @Autowired
@@ -94,12 +98,10 @@ public class PlayerApi {
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.add(playerInfo);
 
-        PlayerTokenResp playerTokenResp = playerInfoService.createLoginToken(playerInfo);
+        PlayerTokenResp playerTokenResp = playerHelper.createLoginToken(playerInfo);
+        playerTokenService.addOrUpdate(playerInfo.getId(), playerTokenResp.getTokenId());
         return R.ok(playerTokenResp);
     }
-
-
-
 
 
     //校验验证码
@@ -139,7 +141,8 @@ public class PlayerApi {
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.updateById(playerInfo);
 
-        PlayerTokenResp playerTokenResp = playerInfoService.createLoginToken(playerInfo);
+        PlayerTokenResp playerTokenResp = playerHelper.createLoginToken(playerInfo);
+        playerTokenService.addOrUpdate(playerInfo.getId(), playerTokenResp.getTokenId());
         return R.ok(playerTokenResp);
     }
 

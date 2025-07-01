@@ -6,6 +6,7 @@ import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.PlayerHelper;
 import com.ent.happychat.service.PlayerTokenService;
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
@@ -28,10 +29,10 @@ public class TokenTools {
     }
 
 
-    private static PlayerTokenService playerTokenService;
+    private static PlayerHelper playerHelper;
     @Autowired
-    public void setPlayerTokenService(PlayerTokenService playerTokenService){
-        TokenTools.playerTokenService = playerTokenService;
+    public void setPlayerHelper(PlayerHelper playerHelper){
+        TokenTools.playerHelper = playerHelper;
     }
 
     /**
@@ -80,7 +81,7 @@ public class TokenTools {
         PlayerTokenResp playerTokenResp = ehcacheService.playerTokenCache().get(headerToken);
         if (needCheck && playerTokenResp == null) {
 
-            playerTokenResp = playerTokenService.checkAndUpdate(headerToken);
+            playerTokenResp = playerHelper.checkAndUpdate(headerToken);
             if (playerTokenResp != null){
                 return playerTokenResp;
             } else {

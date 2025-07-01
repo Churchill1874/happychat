@@ -37,5 +37,8 @@ public class PlayerToken implements Serializable {
     @ApiModelProperty("令牌")
     private String tokenId;
 
+    @ApiModelProperty("城市")
+    private String city;
+
 }
 

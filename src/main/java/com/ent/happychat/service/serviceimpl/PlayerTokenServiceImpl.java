@@ -7,8 +7,7 @@ import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.PlayerToken;
 import com.ent.happychat.mapper.PlayerTokenMapper;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
-import com.ent.happychat.service.EhcacheService;
-import com.ent.happychat.service.PlayerInfoService;
+import com.ent.happychat.service.PlayerHelper;
 import com.ent.happychat.service.PlayerTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,34 +21,34 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
     private final int DAYS = 30;
 
     @Autowired
-    private PlayerInfoService playerInfoService;
+    private PlayerHelper playerHelper;
 
-    @Override
-    public PlayerTokenResp checkAndUpdate(String token) {
-        PlayerToken playerToken = findByTokenId(token);
-        if (playerToken == null) {
-            throw new TokenException();
-        }
 
-        //更新磁盘存储的token过期时间 过期时间在ehcache配置里面
-        updateToken(playerToken);
-
-        //更新缓存时间
-        return playerInfoService.updateLoginToken(token, playerToken.getPlayerId());
-    }
 
     @Override
     public void updateToken(PlayerToken playerToken) {
+        playerToken.setCity(HttpTools.getAddress());
         playerToken.setExpirationTime(LocalDateTime.now().plusDays(DAYS));
         updateById(playerToken);
     }
 
     @Override
-    public void add(PlayerToken playerToken) {
-        playerToken.setLoginTime(LocalDateTime.now());
-        playerToken.setExpirationTime(playerToken.getLoginTime().plusDays(DAYS));
-        playerToken.setIp(HttpTools.getIp());
-        save(playerToken);
+    public void addOrUpdate(Long playerId, String token) {
+        PlayerToken playerToken = findByPlayerId(playerId);
+
+        if (playerToken == null) {
+            playerToken = new PlayerToken();
+            playerToken.setLoginTime(LocalDateTime.now());
+            playerToken.setExpirationTime(playerToken.getLoginTime().plusDays(DAYS));
+            playerToken.setIp(HttpTools.getIp());
+            playerToken.setTokenId(token);
+            playerToken.setCity(HttpTools.getAddress());
+            save(playerToken);
+        } else {
+            updateToken(playerToken);
+        }
+
+
     }
 
     @Override
@@ -58,6 +57,15 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
         queryWrapper
             .lambda()
             .eq(PlayerToken::getTokenId, token);
+        return getOne(queryWrapper);
+    }
+
+    @Override
+    public PlayerToken findByPlayerId(Long playerId) {
+        QueryWrapper<PlayerToken> queryWrapper = new QueryWrapper<>();
+        queryWrapper
+            .lambda()
+            .eq(PlayerToken::getPlayerId, playerId);
         return getOne(queryWrapper);
     }
 

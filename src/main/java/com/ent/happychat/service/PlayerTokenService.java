@@ -6,12 +6,12 @@ import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 
 public interface PlayerTokenService extends IService<PlayerToken> {
 
-    PlayerTokenResp checkAndUpdate(String token);
-
     void updateToken(PlayerToken playerToken);
 
-    void add(PlayerToken playerToken);
+    void addOrUpdate(Long playerId, String token);
 
     PlayerToken findByTokenId(String token);
+
+    PlayerToken findByPlayerId(Long playerId);
 
 }
