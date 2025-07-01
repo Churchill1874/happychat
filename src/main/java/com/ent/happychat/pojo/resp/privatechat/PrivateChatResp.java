@@ -13,4 +13,7 @@ public class PrivateChatResp extends PrivateChat implements Serializable {
     @ApiModelProperty("该聊天记录 是否是当前登录用户发送")
     private Boolean isSender;
 
+    @ApiModelProperty("发消息人的头像")
+    private String sendAvatarPath;
+
 }

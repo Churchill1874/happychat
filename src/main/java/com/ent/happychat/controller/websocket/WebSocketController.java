@@ -3,6 +3,7 @@ package com.ent.happychat.controller.websocket;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.ChatRoom;
 import com.ent.happychat.entity.PrivateChat;
 import com.ent.happychat.pojo.req.chatroom.ChatRoomSendReq;
@@ -10,6 +11,7 @@ import com.ent.happychat.pojo.req.privatechat.PrivateChatSendReq;
 import com.ent.happychat.service.ChatRoomService;
 import com.ent.happychat.service.PrivateChatService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -39,11 +41,7 @@ public class WebSocketController {
         return "服务器返回: " + message;
     }
 
-    //聊提室聊天发送功能
-    @MessageMapping("/chat/room")
-    public void sendRoomMessage(@Payload ChatRoomSendReq req) {
-        chatRoomService.send(BeanUtil.toBean(req, ChatRoom.class));
-    }
+
 
     //私聊发送功能
     @MessageMapping("/chat/private")
@@ -53,8 +51,8 @@ public class WebSocketController {
             return;
         }
 
-        req.setSendId(principal.getName());
-        log.info("{}-发送给了-{}-消息:{}",principal.getName(),req.getReceiveId(),req.getContent());
+        req.setSendId(Long.valueOf(principal.getName()));
+        log.info("{}-发送给了-{}-消息:{}", principal.getName(), req.getReceiveId(), req.getContent());
 
         PrivateChat privateChat = BeanUtil.toBean(req, PrivateChat.class);
         privateChatService.add(privateChat);

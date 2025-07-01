@@ -46,12 +46,6 @@ public class PlayerApi {
     private EhcacheService ehcacheService;
     @Autowired
     private PlayerRelationService playerRelationService;
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private SystemMessageService systemMessageService;
-    @Autowired
-    private PrivateChatService privateChatService;
 
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
@@ -100,42 +94,12 @@ public class PlayerApi {
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.add(playerInfo);
 
-        PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
+        PlayerTokenResp playerTokenResp = playerInfoService.createLoginToken(playerInfo);
         return R.ok(playerTokenResp);
     }
 
 
-    //创建登录token
-    private PlayerTokenResp createLoginToken(PlayerInfo playerInfo) {
-        String tokenId = GenerateTools.createTokenId();
-        PlayerTokenResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerTokenResp.class);
-        playerTokenResp.setId(playerInfo.getId());
-        playerTokenResp.setTokenId(tokenId);
-        playerTokenResp.setLoginTime(LocalDateTime.now());
-        playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
-        playerTokenResp.setLevel(playerInfo.getLevel());
-        playerTokenResp.setAddress(playerInfo.getAddress());
-        ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
-        log.info("tokenCache:{}", tokenId);
 
-        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
-
-        //拼装统计关注 粉丝 点赞数量
-        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
-        //拼装统计私信未读情况 系统消息未读情况 回复评论未读情况
-
-        int commentUnreadCount = commentService.unreadCount(playerTokenResp.getId());
-        playerTokenResp.setCommentMessageUnread(commentUnreadCount > 0);
-
-        int systemUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId());
-        playerTokenResp.setSystemMessageUnread(systemUnreadCount > 0);
-
-        int privateUnreadCount = privateChatService.unreadCount(playerTokenResp.getId());
-        playerTokenResp.setPrivateMessageUnread(privateUnreadCount > 0);
-
-        ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
-        return playerTokenResp;
-    }
 
 
     //校验验证码
@@ -175,7 +139,7 @@ public class PlayerApi {
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.updateById(playerInfo);
 
-        PlayerTokenResp playerTokenResp = createLoginToken(playerInfo);
+        PlayerTokenResp playerTokenResp = playerInfoService.createLoginToken(playerInfo);
         return R.ok(playerTokenResp);
     }
 

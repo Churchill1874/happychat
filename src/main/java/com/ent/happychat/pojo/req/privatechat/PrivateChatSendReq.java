@@ -11,10 +11,10 @@ public class PrivateChatSendReq implements Serializable {
     private static final long serialVersionUID = -1906829437409984311L;
 
     @ApiModelProperty("发送人账号")
-    private String sendId;
+    private Long sendId;
 
     @ApiModelProperty("消息接收人账号")
-    private String receiveId;
+    private Long receiveId;
 
     @ApiModelProperty("发送内容")
     private String content;

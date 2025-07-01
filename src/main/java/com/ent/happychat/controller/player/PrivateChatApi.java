@@ -83,9 +83,15 @@ public class PrivateChatApi {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         Long myAccountId = playerTokenResp.getId();
 
+        PrivateChatListResp privateChatListResp = new PrivateChatListResp();
+        privateChatListResp.setLoginId(playerTokenResp.getId());
+        privateChatListResp.setLoginAvatar(playerTokenResp.getAvatarPath());
+        privateChatListResp.setLoginLevel(playerTokenResp.getLevel());
+        privateChatListResp.setLoginName(playerTokenResp.getName());
+
         List<PrivateChat> list = privateChatService.listByAccountId(myAccountId);
         if (CollectionUtils.isEmpty(list)) {
-            return R.ok(null);
+            return R.ok(privateChatListResp);
         }
 
         //待查询详细信息的账号
@@ -137,13 +143,8 @@ public class PrivateChatApi {
             resultList.add(privateChatOuterResp);
         }
 
-        PrivateChatListResp privateChatListResp = new PrivateChatListResp();
-        privateChatListResp.setList(resultList);
-        privateChatListResp.setLoginId(playerTokenResp.getId());
-        privateChatListResp.setLoginAvatar(playerTokenResp.getAvatarPath());
-        privateChatListResp.setLoginLevel(playerTokenResp.getLevel());
-        privateChatListResp.setLoginName(playerTokenResp.getName());
 
+        privateChatListResp.setList(resultList);
         return R.ok(privateChatListResp);
     }
 

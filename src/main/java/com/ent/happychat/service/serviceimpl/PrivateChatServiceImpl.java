@@ -1,15 +1,21 @@
 package com.ent.happychat.service.serviceimpl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
 import com.ent.happychat.mapper.PrivateChatMapper;
 import com.ent.happychat.pojo.req.privatechat.PlayerPrivateChatPageReq;
+import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
+import com.ent.happychat.pojo.resp.privatechat.PrivateChatResp;
+import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.PrivateChatService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,9 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
     public PrivateChatServiceImpl(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
+
+    @Autowired
+    private PlayerInfoService playerInfoService;
 
     @Override
     public List<PrivateChat> listByAccountId(Long accountId) {
@@ -67,7 +76,13 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         po.setCreateTime(LocalDateTime.now());
         po.setStatus(false);
         save(po);
-        messagingTemplate.convertAndSendToUser(po.getReceiveId() + "","/queue/private", po);
+
+        PlayerInfo targetPlayer = playerInfoService.getById(po.getSendId());
+        PrivateChatResp playerInfoResp = BeanUtil.toBean(po, PrivateChatResp.class);
+        playerInfoResp.setSendAvatarPath(targetPlayer.getAvatarPath());
+
+
+        messagingTemplate.convertAndSendToUser(po.getReceiveId() + "","/queue/private", playerInfoResp);
     }
 
     @Async

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 
 import java.util.List;
 import java.util.Map;
@@ -49,4 +50,19 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      * @return
      */
     Map<Long, PlayerInfo> playerIdMapPlayer(List<Long> playerIdList);
+
+    /**
+     * 生成token缓存
+     * @param playerInfo
+     * @return
+     */
+    PlayerTokenResp createLoginToken(PlayerInfo playerInfo);
+
+    /**
+     * 更新token缓存
+     * @param token
+     * @param playerId
+     * @return
+     */
+    PlayerTokenResp updateLoginToken(String token, Long playerId);
 }

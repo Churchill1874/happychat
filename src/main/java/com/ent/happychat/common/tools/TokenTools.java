@@ -1,14 +1,12 @@
 package com.ent.happychat.common.tools;
 
-import cn.hutool.Hutool;
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.CacheKeyConstant;
-import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.PlayerTokenService;
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +20,30 @@ import java.time.LocalDateTime;
 @Component
 public class TokenTools {
 
-    private static EhcacheService ehcacheService;
-
     //因为static修饰成员变量不支持自动注入 所以以下面方式给静态成员注入
+    private static EhcacheService ehcacheService;
     @Autowired
     public void setEhcacheService(EhcacheService ehcacheService) {
         TokenTools.ehcacheService = ehcacheService;
     }
 
+
+    private static PlayerTokenService playerTokenService;
+    @Autowired
+    public void setPlayerTokenService(PlayerTokenService playerTokenService){
+        TokenTools.playerTokenService = playerTokenService;
+    }
+
     /**
      * 获取管理员登录信息
+     *
      * @return
      */
     public static AdminTokenResp getAdminToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
-        if (StringUtils.isBlank(headerToken)){
+        if (StringUtils.isBlank(headerToken)) {
             //如果要求在请求头里的token-id不能为空 要校验令牌
-            if (needCheck){
+            if (needCheck) {
                 throw new TokenException();
             } else {
                 return null;
@@ -52,19 +57,20 @@ public class TokenTools {
         return adminTokenResp;
     }
 
-    public static String getAdminName () {
+    public static String getAdminName() {
         return getAdminToken(true).getName();
     }
 
     /**
      * 获取管理员登录信息
+     *
      * @return
      */
     public static PlayerTokenResp getPlayerToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
-        if (StringUtils.isBlank(headerToken)){
+        if (StringUtils.isBlank(headerToken)) {
             //如果要求在请求头里的token-id不能为空 要校验令牌
-            if (needCheck){
+            if (needCheck) {
                 throw new TokenException();
             } else {
                 return null;
@@ -73,19 +79,26 @@ public class TokenTools {
 
         PlayerTokenResp playerTokenResp = ehcacheService.playerTokenCache().get(headerToken);
         if (needCheck && playerTokenResp == null) {
-            throw new TokenException();
+
+            playerTokenResp = playerTokenService.checkAndUpdate(headerToken);
+            if (playerTokenResp != null){
+                return playerTokenResp;
+            } else {
+                throw new TokenException();
+            }
         }
         return playerTokenResp;
     }
 
     /**
      * 获取当前在线人数 随机生成
+     *
      * @return
      */
-    public static int onlineCountRandom(){
+    public static int onlineCountRandom() {
         Cache<String, Integer> cache = ehcacheService.playerOnlineCount();
         Integer playerOnlineCount = cache.get(CacheKeyConstant.PLAYER_ONLINE_COUNT);
-        if (playerOnlineCount != null){
+        if (playerOnlineCount != null) {
             return playerOnlineCount;
         }
 
@@ -93,20 +106,20 @@ public class TokenTools {
         int currentHour = LocalDateTime.now().getHour();
 
         //早晨七点以前人最少
-        if (currentHour < 7){
-            playerOnlineCount =  RandomUtil.randomInt(1,20);
+        if (currentHour < 7) {
+            playerOnlineCount = RandomUtil.randomInt(1, 20);
         }
         //上午人多一点
-        if (currentHour >= 7 && currentHour < 11){
-            playerOnlineCount = RandomUtil.randomInt(10,50);
+        if (currentHour >= 7 && currentHour < 11) {
+            playerOnlineCount = RandomUtil.randomInt(10, 50);
         }
         //中午下午人再多一点
-        if (currentHour >= 11 && currentHour < 17){
-            playerOnlineCount = RandomUtil.randomInt(40,80);
+        if (currentHour >= 11 && currentHour < 17) {
+            playerOnlineCount = RandomUtil.randomInt(40, 80);
         }
         //晚上人最多
-        if (currentHour >= 17){
-            playerOnlineCount = RandomUtil.randomInt(70,150);
+        if (currentHour >= 17) {
+            playerOnlineCount = RandomUtil.randomInt(70, 150);
         }
 
         cache.put(CacheKeyConstant.PLAYER_ONLINE_COUNT, playerOnlineCount);

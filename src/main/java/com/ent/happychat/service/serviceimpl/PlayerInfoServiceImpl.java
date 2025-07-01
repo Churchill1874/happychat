@@ -1,5 +1,6 @@
 package com.ent.happychat.service.serviceimpl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -7,12 +8,14 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.InteractiveStatistics;
 import com.ent.happychat.mapper.PlayerInfoMapper;
 import com.ent.happychat.pojo.req.PageBase;
-import com.ent.happychat.service.PlayerInfoService;
-import com.ent.happychat.service.InteractiveStatisticsService;
+import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +31,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerInfo> implements PlayerInfoService {
-
+    @Autowired
+    private EhcacheService ehcacheService;
     @Autowired
     private InteractiveStatisticsService interactiveStatisticsService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private SystemMessageService systemMessageService;
+    @Autowired
+    private PrivateChatService privateChatService;
+
 
     @Override
     public IPage<PlayerInfo> queryPage(PlayerInfo playerInfo, PageBase pageBase) {
@@ -155,6 +166,65 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         }
 
         return map;
+    }
+
+    //创建登录token
+    public PlayerTokenResp createLoginToken(PlayerInfo playerInfo) {
+        String tokenId = GenerateTools.createTokenId();
+        PlayerTokenResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerTokenResp.class);
+        playerTokenResp.setId(playerInfo.getId());
+        playerTokenResp.setTokenId(tokenId);
+        playerTokenResp.setLoginTime(LocalDateTime.now());
+        playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
+        playerTokenResp.setLevel(playerInfo.getLevel());
+        playerTokenResp.setAddress(playerInfo.getAddress());
+        ehcacheService.playerTokenCache().put(tokenId, playerTokenResp);
+        log.info("生成 tokenCache:{}", tokenId);
+
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+
+        assembly(playerTokenResp, playerInfoResp);
+
+        ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
+        return playerTokenResp;
+    }
+
+    @Override
+    public PlayerTokenResp updateLoginToken(String token, Long playerId) {
+        PlayerInfo playerInfo = getById(playerId);
+
+        PlayerTokenResp playerTokenResp = BeanUtil.toBean(playerInfo, PlayerTokenResp.class);
+        playerTokenResp.setId(playerInfo.getId());
+        playerTokenResp.setTokenId(token);
+        playerTokenResp.setLoginTime(LocalDateTime.now());
+        playerTokenResp.setAvatarPath(playerInfo.getAvatarPath());
+        playerTokenResp.setLevel(playerInfo.getLevel());
+        playerTokenResp.setAddress(playerInfo.getAddress());
+        ehcacheService.playerTokenCache().put(token, playerTokenResp);
+        log.info("更新tokenCache:{}", token);
+
+        PlayerInfoResp playerInfoResp = BeanUtil.toBean(playerInfo, PlayerInfoResp.class);
+
+        assembly(playerTokenResp, playerInfoResp);
+
+        ehcacheService.playerInfoCache().put(playerInfo.getId().toString(), playerInfoResp);
+        return playerTokenResp;
+    }
+
+
+    void assembly(PlayerTokenResp playerTokenResp, PlayerInfoResp playerInfoResp){
+        //拼装统计关注 粉丝 点赞数量
+        interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
+        //拼装统计私信未读情况 系统消息未读情况 回复评论未读情况
+
+        int commentUnreadCount = commentService.unreadCount(playerTokenResp.getId());
+        playerTokenResp.setCommentMessageUnread(commentUnreadCount > 0);
+
+        int systemUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId());
+        playerTokenResp.setSystemMessageUnread(systemUnreadCount > 0);
+
+        int privateUnreadCount = privateChatService.unreadCount(playerTokenResp.getId());
+        playerTokenResp.setPrivateMessageUnread(privateUnreadCount > 0);
     }
 
 }

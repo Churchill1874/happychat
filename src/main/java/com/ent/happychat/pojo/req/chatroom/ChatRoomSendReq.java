@@ -13,17 +13,11 @@ public class ChatRoomSendReq implements Serializable {
     @ApiModelProperty("房间号")
     private Integer roomNumber;
 
-    @ApiModelProperty("发送人")
-    private Long playerId;
-
     @ApiModelProperty("消息接收人")
     private Long targetPlayerId;
 
     @ApiModelProperty("发送内容")
     private String content;
-
-    @ApiModelProperty("回复id")
-    private Long replyId;
 
     @ApiModelProperty("回复内容")
     private String replyContent;
