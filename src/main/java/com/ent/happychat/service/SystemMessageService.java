@@ -2,6 +2,7 @@ package com.ent.happychat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ent.happychat.common.constant.enums.MessageTypeEnum;
 import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.entity.Comment;
 import com.ent.happychat.entity.SystemMessage;
@@ -37,7 +38,7 @@ public interface SystemMessageService extends IService<SystemMessage> {
      * 清除所有未读状态
      * @param playerId
      */
-    void readAll(Long playerId);
+    void readAll(Long playerId, MessageTypeEnum type);
 
     /**
      * 未读系统消息数量

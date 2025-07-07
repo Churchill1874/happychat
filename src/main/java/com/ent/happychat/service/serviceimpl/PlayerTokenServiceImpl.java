@@ -2,14 +2,10 @@ package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.PlayerToken;
 import com.ent.happychat.mapper.PlayerTokenMapper;
-import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
-import com.ent.happychat.service.PlayerHelper;
 import com.ent.happychat.service.PlayerTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,13 +16,10 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
     //延长时间
     private final int DAYS = 30;
 
-    @Autowired
-    private PlayerHelper playerHelper;
-
-
 
     @Override
     public void updateToken(PlayerToken playerToken) {
+        playerToken.setIp(HttpTools.getIp());
         playerToken.setCity(HttpTools.getAddress());
         playerToken.setExpirationTime(LocalDateTime.now().plusDays(DAYS));
         updateById(playerToken);
@@ -38,6 +31,7 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
 
         if (playerToken == null) {
             playerToken = new PlayerToken();
+            playerToken.setPlayerId(playerId);
             playerToken.setLoginTime(LocalDateTime.now());
             playerToken.setExpirationTime(playerToken.getLoginTime().plusDays(DAYS));
             playerToken.setIp(HttpTools.getIp());

@@ -9,6 +9,7 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.SystemMessage;
 import com.ent.happychat.pojo.req.systemmessage.SystemMessagePageReq;
+import com.ent.happychat.pojo.req.systemmessage.SystemMessageReadAllReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.pojo.resp.systemmessage.SystemMessageResp;
 import com.ent.happychat.service.PlayerInfoService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,9 +71,10 @@ public class SystemMessageApi {
 
     @PostMapping("/readAll")
     @ApiOperation(value = "修改已读全部", notes = "修改已读全部")
-    public R readAll() {
+    public R readAll(@RequestBody @Valid SystemMessageReadAllReq req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        systemMessageService.readAll(playerTokenResp.getId());
+        systemMessageService.readAll(playerTokenResp.getId(), req.getType());
         return R.ok(null);
     }
+
 }

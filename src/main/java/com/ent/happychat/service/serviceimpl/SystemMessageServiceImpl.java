@@ -41,6 +41,8 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
 
     @Override
     public IPage<SystemMessage> queryPage(SystemMessagePageReq dto) {
+
+
         IPage<SystemMessage> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
@@ -137,10 +139,11 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    public void readAll(Long playerId) {
+    public void readAll(Long playerId, MessageTypeEnum type) {
         UpdateWrapper<SystemMessage> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .set(SystemMessage::getStatus, true)
+            .eq(SystemMessage::getMessageType, type)
             .eq(SystemMessage::getRecipientId, playerId)
             .eq(SystemMessage::getStatus, false);
         update(updateWrapper);
