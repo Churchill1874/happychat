@@ -31,14 +31,15 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
 
         if (playerToken == null) {
             playerToken = new PlayerToken();
+            playerToken.setTokenId(token);
             playerToken.setPlayerId(playerId);
             playerToken.setLoginTime(LocalDateTime.now());
             playerToken.setExpirationTime(playerToken.getLoginTime().plusDays(DAYS));
             playerToken.setIp(HttpTools.getIp());
-            playerToken.setTokenId(token);
             playerToken.setCity(HttpTools.getAddress());
             save(playerToken);
         } else {
+            playerToken.setTokenId(token);
             updateToken(playerToken);
         }
 

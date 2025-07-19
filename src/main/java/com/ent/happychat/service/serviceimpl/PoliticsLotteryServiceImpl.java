@@ -10,6 +10,8 @@ import com.ent.happychat.pojo.req.lottery.dealer.DealerPageReq;
 import com.ent.happychat.service.PoliticsLotteryService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class PoliticsLotteryServiceImpl extends ServiceImpl<PoliticsLotteryMapper, PoliticsLottery> implements PoliticsLotteryService {
 
@@ -21,8 +23,8 @@ public class PoliticsLotteryServiceImpl extends ServiceImpl<PoliticsLotteryMappe
             .lambda()
             .eq(dto.getStatus() != null, PoliticsLottery::getStatus, dto.getStatus())
             .eq(PoliticsLottery::getIsOnSale, true)
+            .gt(PoliticsLottery::getEndTime, LocalDateTime.now())
             .orderByDesc(PoliticsLottery::getCreateTime);
-
         return page(iPage, queryWrapper);
     }
 

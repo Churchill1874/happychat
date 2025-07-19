@@ -20,6 +20,7 @@ import com.ent.happychat.service.PlayerInfoService;
 import com.ent.happychat.service.SystemMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,7 +42,8 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
 
     @Override
     public IPage<SystemMessage> queryPage(SystemMessagePageReq dto) {
-
+        //异步清理相关类型系统消息未读状态
+        readAll(dto.getRecipientId(), dto.getMessageType());
 
         IPage<SystemMessage> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
@@ -138,6 +140,7 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
         }
     }
 
+    @Async
     @Override
     public void readAll(Long playerId, MessageTypeEnum type) {
         UpdateWrapper<SystemMessage> updateWrapper = new UpdateWrapper<>();

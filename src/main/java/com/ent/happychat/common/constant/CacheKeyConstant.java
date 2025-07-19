@@ -33,7 +33,7 @@ public interface CacheKeyConstant {
     /**
      *3秒锁
      */
-    String LOCK_3_SECOND = "lock_3_Second";
+    String LOCK_3_SECOND = "lock_3_second";
 
     /**
      *验证码

@@ -2,7 +2,7 @@ package com.ent.happychat.controller.player;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
@@ -150,7 +150,13 @@ public class PlayerApi {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        ehcacheService.playerTokenCache().remove(TokenTools.getPlayerToken(true).getTokenId());
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
+        UpdateWrapper<PlayerToken> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(PlayerToken::getPlayerId, playerTokenResp.getId());
+        playerTokenService.remove(updateWrapper);
+
+        ehcacheService.playerTokenCache().remove(playerTokenResp.getTokenId());
         return R.ok(null);
     }
 

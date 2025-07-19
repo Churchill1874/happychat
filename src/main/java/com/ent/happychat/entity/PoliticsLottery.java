@@ -2,6 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.LotteryStatusEnum;
+import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.base.BaseInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,5 +51,22 @@ public class PoliticsLottery extends BaseInfo implements Serializable {
     @ApiModelProperty("彩票状态")
     private LotteryStatusEnum status;
 
+    @ApiModelProperty("开奖时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime drawTime;
+
+
+    public String findChoose(Integer chooseNumber){
+        if (chooseNumber==1){
+            return this.choose1;
+        }
+        if (chooseNumber==2){
+            return this.choose2;
+        }
+        if (chooseNumber==3){
+            return this.choose3;
+        }
+        throw new DataException("下注号码异常");
+    }
 
 }

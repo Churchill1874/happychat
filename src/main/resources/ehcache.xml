@@ -49,14 +49,14 @@
         </resources>
     </cache>
 
-    <cache alias="lock_3_Second">
+    <cache alias="lock_3_second">
         <key-type>java.lang.String</key-type>
         <value-type>java.lang.Integer</value-type>
         <expiry>
             <ttl unit="seconds">3</ttl>
         </expiry>
         <resources>
-            <heap unit="entries">50</heap>
+            <heap unit="entries">100</heap>
         </resources>
     </cache>
 
