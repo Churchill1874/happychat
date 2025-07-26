@@ -20,10 +20,10 @@ public class LotteryDealerServiceImpl extends ServiceImpl<LotteryDealerMapper, L
     public void add(LotteryDealer dto) {
         playerInfoMapper.reduceBalance(dto.getPlayerId(), dto.getPrizePool());
 
-        dto.setCount1(0);
-        dto.setCount2(0);
-        dto.setCount3(0);
-        dto.setRemainingPrizePool(new BigDecimal(0));
+        dto.setBet1Amount(BigDecimal.ZERO);
+        dto.setBet2Amount(BigDecimal.ZERO);
+        dto.setBet3Amount(BigDecimal.ZERO);
+        dto.setRemainingPrizePool(dto.getPrizePool());
         dto.setCreateTime(LocalDateTime.now());
         save(dto);
     }

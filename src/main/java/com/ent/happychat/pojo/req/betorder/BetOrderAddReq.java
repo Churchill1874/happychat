@@ -33,4 +33,7 @@ public class BetOrderAddReq implements Serializable {
 
     private String playerName;
 
+    private String playerAvatar;
+
+    private LevelEnum playerLevel;
 }

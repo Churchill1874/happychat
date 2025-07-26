@@ -3,14 +3,19 @@ package com.ent.happychat.controller.player;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.constant.enums.LotteryTypeEnum;
+import com.ent.happychat.common.exception.InSufficientBalanceException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.BetOrder;
+import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.view.LotteryDealerView;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.betorder.BetOrderAddReq;
 import com.ent.happychat.pojo.req.betorder.BetOrderPageReq;
 import com.ent.happychat.pojo.req.lottery.dealer.DealerPageReq;
+import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BetOrderService;
+import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +35,8 @@ public class BetOrderApi {
 
     @Autowired
     private BetOrderService betOrderService;
+    @Autowired
+    private PlayerInfoService playerInfoService;
 
     @PostMapping("/playerPage")
     @ApiOperation(value = "分页个人注单", notes = "分页个人注单")
@@ -47,6 +54,18 @@ public class BetOrderApi {
     @PostMapping("/betPolitics")
     @ApiOperation(value = "政治下注", notes = "分页公共注单")
     public R betPolitics(@RequestBody @Valid BetOrderAddReq req) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        //玩家账号信息
+        PlayerInfo playerInfo = playerInfoService.getById(playerTokenResp.getId());
+        if (playerInfo.getBalance().compareTo(req.getBetAmount())<0){
+            throw new InSufficientBalanceException();
+        }
+
+        req.setPlayerId(playerInfo.getId());
+        req.setPlayerName(playerInfo.getName());
+        req.setPlayerLevel(playerInfo.getLevel());
+        req.setPlayerAvatar(playerInfo.getAvatarPath());
+        req.setType(LotteryTypeEnum.POLITICS);
         betOrderService.bet(req);
         return R.ok(null);
     }

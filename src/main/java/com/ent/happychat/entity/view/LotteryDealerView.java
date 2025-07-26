@@ -23,12 +23,14 @@ public class LotteryDealerView implements Serializable {
     private Long id;
     @ApiModelProperty("标题")
     private String title;
-    @ApiModelProperty("选项1投注数量")
-    private Integer count1;
-    @ApiModelProperty("选项2投注数量")
-    private Integer count2;
-    @ApiModelProperty("选项3投注数量")
-    private Integer count3;
+    @ApiModelProperty("选项1投注总额")
+    private BigDecimal bet1Amount;
+    @ApiModelProperty("选项2投注总额")
+    private BigDecimal bet2Amount;
+    @ApiModelProperty("选项3投注总额")
+    private BigDecimal bet3Amount;
+    @ApiModelProperty("投注总数")
+    private Integer betCount;
 
     @ApiModelProperty("选择1")
     private String choose1;

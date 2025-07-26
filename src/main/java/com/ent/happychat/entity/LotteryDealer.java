@@ -17,12 +17,15 @@ import java.math.RoundingMode;
 public class LotteryDealer extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 7667141120745212230L;
 
-    @ApiModelProperty("选项1投注数量")
-    private Integer count1;
-    @ApiModelProperty("选项2投注数量")
-    private Integer count2;
-    @ApiModelProperty("选项3投注数量")
-    private Integer count3;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+    @ApiModelProperty("选项1投注总额")
+    private BigDecimal bet1Amount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+    @ApiModelProperty("选项2投注总额")
+    private BigDecimal bet2Amount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+    @ApiModelProperty("选项3投注总额")
+    private BigDecimal bet3Amount;
     @ApiModelProperty("彩种类型")
     private LotteryTypeEnum type;
     @ApiModelProperty("彩种信息关联外键")
@@ -49,7 +52,8 @@ public class LotteryDealer extends BaseInfo implements Serializable {
     @ApiModelProperty("下注支持率3")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal rate3;
-
+    @ApiModelProperty("下注总数量")
+    private Integer betCount;
 
     public BigDecimal findOdds(Integer chooseNumber) {
         if (chooseNumber == 1) {
@@ -64,29 +68,49 @@ public class LotteryDealer extends BaseInfo implements Serializable {
         throw new DataException("下注号码异常");
     }
 
+    public void countBetAmount(Integer chooseNumber, BigDecimal betAmount){
+        if (chooseNumber == 1){
+            this.bet1Amount = this.bet1Amount.add(betAmount);
+        }
+        if (chooseNumber == 2){
+            this.bet2Amount = this.bet2Amount.add(betAmount);
+        }
+        if (chooseNumber == 3){
+            this.bet3Amount = this.bet3Amount.add(betAmount);
+        }
+    }
+
     public BigDecimal getWinnerAmount(Integer chooseNumber, BigDecimal betAmount) {
         BigDecimal winnerAmount = findOdds(chooseNumber).multiply(betAmount);
         if (winnerAmount.compareTo(this.remainingPrizePool) > 0) {
-            throw new DataException("剩余奖池不足以担保您的中奖金额");
+            throw new DataException("剩余奖池不足,请降低投注金额");
         }
         return winnerAmount;
     }
 
-    public void addCount(Integer chooseNumber) {
-        if (chooseNumber == 1) {
-            this.count1 = this.count1 + 1;
-        }
-        if (chooseNumber == 2) {
-            this.count2 = this.count2 + 1;
-        }
-        if (chooseNumber == 3) {
-            this.count3 = this.count3 + 1;
+    //计算比例
+    public void calculateProportion() {
+        this.betCount = this.betCount + 1;
+
+        BigDecimal betTotalAmount = this.bet1Amount.add(this.bet2Amount).add(this.bet3Amount);
+
+        if (this.bet1Amount.compareTo(BigDecimal.ZERO) > 0) {
+            this.rate1 = this.bet1Amount.divide(betTotalAmount, 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
+        } else {
+            this.rate1 = new BigDecimal(0);
         }
 
-        BigDecimal totalCount = new BigDecimal(this.count1 + this.count2 + this.count3);
-        this.rate1 = totalCount.divide(new BigDecimal(this.count1), 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
-        this.rate2 = totalCount.divide(new BigDecimal(this.count2), 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
-        this.rate3 = totalCount.divide(new BigDecimal(this.count3), 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
+        if (this.bet2Amount.compareTo(BigDecimal.ZERO) > 0) {
+            this.rate2 = this.bet2Amount.divide(betTotalAmount, 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
+        } else {
+            this.rate2 = new BigDecimal(0);
+        }
+
+        if (this.bet3Amount.compareTo(BigDecimal.ZERO) > 0) {
+            this.rate3 = bet3Amount.divide(betTotalAmount, 2, RoundingMode.DOWN).multiply(new BigDecimal("100"));
+        } else {
+            this.rate3 = new BigDecimal(0);
+        }
     }
 
 }

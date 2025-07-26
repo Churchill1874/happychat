@@ -7,12 +7,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.DrawStatusEnum;
 import com.ent.happychat.common.constant.enums.LotteryTypeEnum;
+import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.exception.InSufficientBalanceException;
 import com.ent.happychat.entity.BetOrder;
 import com.ent.happychat.entity.LotteryDealer;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PoliticsLottery;
 import com.ent.happychat.mapper.BetOrderMapper;
 import com.ent.happychat.mapper.LotteryDealerMapper;
+import com.ent.happychat.mapper.PlayerInfoMapper;
 import com.ent.happychat.pojo.req.betorder.BetOrderAddReq;
 import com.ent.happychat.pojo.req.betorder.BetOrderPageReq;
 import com.ent.happychat.service.BetOrderService;
@@ -32,6 +35,8 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
     @Autowired
     private PlayerInfoService playerInfoService;
     @Autowired
+    private PlayerInfoMapper playerInfoMapper;
+    @Autowired
     private LotteryDealerMapper lotteryDealerMapper;
     @Autowired
     private LotteryDealerService lotteryDealerService;
@@ -44,6 +49,7 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
         QueryWrapper<BetOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(BetOrder::getType, dto.getType())
+            .eq(dto.getDealerId() != null, BetOrder::getDealerId, dto.getDealerId())
             .eq(dto.getPlayerId() != null, BetOrder::getPlayerId, dto.getPlayerId())
             .orderByDesc(BetOrder::getCreateTime);
         return page(iPage, queryWrapper);
@@ -52,17 +58,22 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void bet(BetOrderAddReq dto) {
+        playerInfoMapper.reduceBalance(dto.getPlayerId(),dto.getBetAmount());
+
         BetOrder betOrder = BeanUtil.toBean(dto, BetOrder.class);
         betOrder.setCreateTime(LocalDateTime.now());
+        betOrder.setCreateName(dto.getPlayerName());
 
         //庄家设置信息
         LotteryDealer lotteryDealer = lotteryDealerService.getById(dto.getDealerId());
-        //庄家账号信息
-        PlayerInfo playerInfo = playerInfoService.getById(lotteryDealer.getPlayerId());
+        //庄家信息
+        PlayerInfo dealerPlayer = playerInfoService.getById(lotteryDealer.getPlayerId());
+        //累计投注金额
+        lotteryDealer.countBetAmount(betOrder.getChooseNumber(), betOrder.getBetAmount());
         //中奖金额
         BigDecimal amount = lotteryDealer.getWinnerAmount(dto.getChooseNumber(), dto.getBetAmount());
         //更新统计投注数量和支持率
-        lotteryDealer.addCount(dto.getChooseNumber());
+        lotteryDealer.calculateProportion();
         //减少奖池
         lotteryDealer.setRemainingPrizePool(lotteryDealer.getRemainingPrizePool().subtract(amount));
         //更新盘口信息
@@ -76,8 +87,9 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
             betOrder.setChoose(politicsLottery.findChoose(dto.getChooseNumber()));
             betOrder.setOdds(lotteryDealer.findOdds(dto.getChooseNumber()));
             betOrder.setDealerUserId(lotteryDealer.getPlayerId());
-            betOrder.setDealerUsername(playerInfo.getName());
-            betOrder.setDealerUserLevel(playerInfo.getLevel());
+            betOrder.setDealerUsername(dealerPlayer.getName());
+            betOrder.setDealerUserLevel(dealerPlayer.getLevel());
+            betOrder.setDealerAvatar(dealerPlayer.getAvatarPath());
             betOrder.setAmount(amount);
             betOrder.setDrawTime(LocalDateTime.now());
             betOrder.setStatus(DrawStatusEnum.WAITING);

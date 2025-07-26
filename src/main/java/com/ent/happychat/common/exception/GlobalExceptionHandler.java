@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InSufficientBalanceException.class)
+    public R errorInSufficientBalanceHandler(InSufficientBalanceException e){
+        log.error("钱包异常:{}",e.getMessage());
+        return R.failed(e.getMessage()).setCode(e.getCode());
+    }
+
     @ExceptionHandler(TokenException.class)
     public R errorTokenExceptionHandler(TokenException e) {
         log.error("未登录操作:{}", e.getMessage());

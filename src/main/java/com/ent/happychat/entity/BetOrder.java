@@ -31,6 +31,15 @@ public class BetOrder extends BaseInfo implements Serializable {
     @ApiModelProperty("下注玩家id")
     private Long playerId;
 
+    @ApiModelProperty("玩家名称")
+    private String playerName;
+
+    @ApiModelProperty("玩家等级")
+    private LevelEnum playerLevel;
+
+    @ApiModelProperty("玩家头像")
+    private String playerAvatar;
+
     @ApiModelProperty("下注号码")
     private Integer chooseNumber;
 
@@ -50,7 +59,11 @@ public class BetOrder extends BaseInfo implements Serializable {
     @ApiModelProperty("等级")
     private LevelEnum dealerUserLevel;
 
+    @ApiModelProperty("庄家头像")
+    private String dealerAvatar;
+
     @ApiModelProperty("投注金额")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal betAmount;
 
     @ApiModelProperty("奖金")
