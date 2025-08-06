@@ -7,7 +7,7 @@ import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.entity.Blacklist;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
-import com.ent.happychat.pojo.resp.news.HomeNewsResp;
+import com.ent.happychat.pojo.resp.news.HomeResp;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.BlacklistService;
@@ -109,9 +109,14 @@ public class EhcacheServiceImpl implements EhcacheService {
     }
 
     @Override
+    public Cache<String, HomeResp> homeCache() {
+        return null;
+    }
+
+/*    @Override
     public Cache<String, HomeNewsResp> homeNewsCache() {
         return cacheManager.getCache(CacheKeyConstant.HOME_NEWS, String.class, HomeNewsResp.class);
-    }
+    }*/
 
     @Override
     public String getVC(String key, Integer limitCount, String remarks) {

@@ -154,7 +154,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             baseMapper.insertBatchIgnore(newsList);
 
             //清理首页的新闻列表缓存
-            ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+            //ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
         }
     }
 

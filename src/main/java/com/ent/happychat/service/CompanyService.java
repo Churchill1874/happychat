@@ -13,6 +13,18 @@ public interface CompanyService extends IService<Company> {
      * @param po
      * @return
      */
-    IPage<CompanyResp> queryPage(PageBase po);
+    IPage<CompanyResp> queryPageCompanyAndEvent(PageBase po);
 
+    /**
+     * 最新公司
+     * @return
+     */
+    CompanyResp last();
+
+    /**
+     * 分页公司
+     * @param po
+     * @return
+     */
+    IPage<Company> queryPage(PageBase po);
 }

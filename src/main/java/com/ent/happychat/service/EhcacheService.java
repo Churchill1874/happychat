@@ -2,6 +2,7 @@ package com.ent.happychat.service;
 
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.news.HomeNewsResp;
+import com.ent.happychat.pojo.resp.news.HomeResp;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.ehcache.Cache;
@@ -68,7 +69,14 @@ public interface EhcacheService {
      * 首页新闻
      * @return
      */
-    Cache<String, HomeNewsResp> homeNewsCache();
+    //Cache<String, HomeNewsResp> homeNewsCache();
+
+
+    /**
+     * 首页数据
+     * @return
+     */
+    Cache<String, HomeResp> homeCache();
 
     /**
      * 获取验证码 并设置每3秒的限制请求次数 和提示语

@@ -29,7 +29,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     private CompanyEventService companyEventService;
 
     @Override
-    public IPage<CompanyResp> queryPage(PageBase po) {
+    public IPage<CompanyResp> queryPageCompanyAndEvent(PageBase po) {
         IPage<CompanyResp> companyRespPage = new Page<>(po.getPageNum(), po.getPageSize());
 
         IPage<Company> iPage = new Page<>(po.getPageNum(), po.getPageSize());
@@ -51,7 +51,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         companyRespPage.setRecords(companyRespList);
 
 
-        Map<Long,List<CompanyEvent>> companyEventMap = companyEventService.mapGroup(companyIdList);
+        Map<Long, List<CompanyEvent>> companyEventMap = companyEventService.mapGroup(companyIdList);
         if (CollectionUtils.isEmpty(companyEventMap)){
             return companyRespPage;
         }
@@ -61,4 +61,27 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
         return companyRespPage;
     }
+
+    @Override
+    public CompanyResp last() {
+        PageBase pageBase = new PageBase();
+        pageBase.setPageNum(1);
+        pageBase.setPageSize(1);
+
+        List<CompanyResp> companyRespList = queryPageCompanyAndEvent(pageBase).getRecords();
+        if(CollectionUtils.isEmpty(companyRespList)){
+            return null;
+        }
+
+        return companyRespList.get(0);
+    }
+
+    @Override
+    public IPage<Company> queryPage(PageBase po) {
+        IPage<Company> iPage = new Page<>(po.getPageNum(), po.getPageSize());
+        QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().orderByDesc(Company::getCreateTime);
+        return page(iPage, queryWrapper);
+    }
+
 }

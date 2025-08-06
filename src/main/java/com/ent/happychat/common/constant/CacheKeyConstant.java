@@ -62,6 +62,11 @@ public interface CacheKeyConstant {
      */
     String REPEATED_REQUEST_VERIFICATION = "repeated_request_verification";
 
+    /**
+     * 首页数据
+     */
+    String HOME_KEY = "home_key";
+
 
 
 }
