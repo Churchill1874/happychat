@@ -93,7 +93,7 @@
         </resources>
     </cache>-->
 
-    <cache alias="home">
+    <cache alias="home_data">
         <key-type>java.lang.String</key-type>
         <value-type>com.ent.happychat.pojo.resp.news.HomeResp</value-type>
         <expiry>

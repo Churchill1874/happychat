@@ -44,7 +44,7 @@ public class CompanyController {
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<CompanyResp>> queryPage(@RequestBody @Valid PageBase req) {
-        return R.ok(companyService.queryPage(req));
+        return R.ok(companyService.queryPageCompanyAndEvent(req));
     }
 
     @AdminLoginCheck

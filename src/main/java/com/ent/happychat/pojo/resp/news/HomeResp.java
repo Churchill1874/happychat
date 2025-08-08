@@ -14,7 +14,7 @@ public class HomeResp implements Serializable {
     @ApiModelProperty("新闻排行")
     private NewsRankResp newsRank;
     @ApiModelProperty("轮播图集合")
-    private List<String> bannerList;
+    private List<BannerResp> bannerList;
     @ApiModelProperty("追踪公司")
     private CompanyRankResp company;
     @ApiModelProperty("热门彩票")

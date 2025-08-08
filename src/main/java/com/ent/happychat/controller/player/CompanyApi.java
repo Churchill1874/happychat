@@ -28,7 +28,7 @@ public class CompanyApi {
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<CompanyResp>> queryPage(@RequestBody @Valid PageBase req) {
-        return R.ok(companyService.queryPage(req));
+        return R.ok(companyService.queryPageCompanyAndEvent(req));
     }
 
 

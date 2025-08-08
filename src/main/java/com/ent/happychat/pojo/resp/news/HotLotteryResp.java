@@ -18,6 +18,7 @@ public class HotLotteryResp implements Serializable {
     private BigDecimal betAmount1;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal odds1;
+    private String description1;
 
     private String betIcon2;
     private String betName2;
@@ -25,6 +26,7 @@ public class HotLotteryResp implements Serializable {
     private BigDecimal betAmount2;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal odds2;
+    private String description2;
 
     private String betIcon3;
     private String betName3;
@@ -32,6 +34,7 @@ public class HotLotteryResp implements Serializable {
     private BigDecimal betAmount3;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal odds3;
+    private String description3;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal prizePool;

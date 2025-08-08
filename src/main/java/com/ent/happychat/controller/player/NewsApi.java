@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,7 @@ public class NewsApi {
     @ApiOperation(value = "首页新闻 置顶和前几十排名新闻", notes = "首页新闻 置顶和前几十排名新闻")
     public R<HomeResp> home() {
         Cache<String, HomeResp> cache = ehcacheService.homeCache();
-        HomeResp homeResp = cache.get(CacheKeyConstant.HOME_KEY);
+        HomeResp homeResp = cache.get(CacheKeyConstant.HOME_DATA);
         if(homeResp != null){
             return R.ok(homeResp);
         }
@@ -129,7 +130,7 @@ public class NewsApi {
         homeResp.setOnlineCount(TokenTools.onlineCountRandom());
 
         //更新缓存
-        cache.put(CacheKeyConstant.HOME_KEY, homeResp);
+        cache.put(CacheKeyConstant.HOME_DATA, homeResp);
         return R.ok(homeResp);
     }
 
@@ -176,7 +177,14 @@ public class NewsApi {
         imageConfigPageReq.setStatus(true);
         List<ImageConfig> imageConfigList = imageConfigService.queryPage(imageConfigPageReq).getRecords();
         if (CollectionUtils.isNotEmpty(imageConfigList)){
-            homeResp.setBannerList(imageConfigList.stream().map(ImageConfig::getPath).collect(Collectors.toList()));
+            List<BannerResp> list = new ArrayList<>();
+            for(ImageConfig imageConfig: imageConfigList){
+                BannerResp bannerResp = new BannerResp();
+                bannerResp.setTitle(imageConfig.getDescription());
+                bannerResp.setImagePath(imageConfig.getPath());
+                list.add(bannerResp);
+            }
+            homeResp.setBannerList(list);
         }
     }
 
@@ -229,14 +237,17 @@ public class NewsApi {
             hotLotteryResp.setBetName1(politicsLottery.getChoose1());
             hotLotteryResp.setBetAmount1(lotteryDealer.getBet1Amount());
             hotLotteryResp.setOdds1(lotteryDealer.getOdds1());
+            hotLotteryResp.setDescription1(politicsLottery.getDescribe1());
             hotLotteryResp.setBetIcon2(politicsLottery.getIcon2());
             hotLotteryResp.setBetName2(politicsLottery.getChoose2());
             hotLotteryResp.setBetAmount2(lotteryDealer.getBet2Amount());
             hotLotteryResp.setOdds2(lotteryDealer.getOdds2());
+            hotLotteryResp.setDescription2(politicsLottery.getDescribe2());
             hotLotteryResp.setBetIcon3(politicsLottery.getIcon3());
             hotLotteryResp.setBetName3(politicsLottery.getChoose3());
             hotLotteryResp.setBetAmount3(lotteryDealer.getBet3Amount());
             hotLotteryResp.setOdds3(lotteryDealer.getOdds3());
+            hotLotteryResp.setDescription3(politicsLottery.getDescribe3());
             hotLotteryResp.setPrizePool(lotteryDealer.getPrizePool());
             hotLotteryResp.setRemainingPrizePool(lotteryDealer.getRemainingPrizePool());
             hotLotteryResp.setDrawTime(politicsLottery.getDrawTime());

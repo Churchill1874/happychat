@@ -25,4 +25,7 @@ public class ImageConfig extends UpdateBaseInfo implements Serializable {
     @ApiModelProperty("使用状态")
     private Boolean status;
 
+    @ApiModelProperty("描述")
+    private String description;
+
 }

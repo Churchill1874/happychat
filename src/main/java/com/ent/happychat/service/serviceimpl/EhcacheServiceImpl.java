@@ -110,7 +110,7 @@ public class EhcacheServiceImpl implements EhcacheService {
 
     @Override
     public Cache<String, HomeResp> homeCache() {
-        return null;
+        return cacheManager.getCache(CacheKeyConstant.HOME_DATA, String.class, HomeResp.class);
     }
 
 /*    @Override

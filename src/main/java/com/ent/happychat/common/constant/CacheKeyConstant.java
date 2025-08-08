@@ -48,7 +48,7 @@ public interface CacheKeyConstant {
     /**
      * 首页新闻
      */
-    String HOME_NEWS = "home_news";
+    //String HOME_NEWS = "home_news";
 
     /**
      * 首页新闻Key
@@ -65,7 +65,7 @@ public interface CacheKeyConstant {
     /**
      * 首页数据
      */
-    String HOME_KEY = "home_key";
+    String HOME_DATA = "home_data";
 
 
 

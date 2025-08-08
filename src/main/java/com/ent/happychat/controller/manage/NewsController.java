@@ -53,7 +53,8 @@ public class NewsController {
         newsService.removeById(req.getId());
 
         //清理首页的新闻列表缓存
-        ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+        //ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+        ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
         return R.ok(null);
     }
 
@@ -65,7 +66,7 @@ public class NewsController {
         newsService.updateNews(news);
 
         //清理首页的新闻列表缓存
-        ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+        ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
         return R.ok(null);
     }
 
@@ -86,7 +87,8 @@ public class NewsController {
         newsService.save(news);
 
         //清理首页的新闻列表缓存
-        ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+        //ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
+        ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
         return R.ok(null);
     }
 
