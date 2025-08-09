@@ -1,6 +1,7 @@
 package com.ent.happychat.pojo.req.image;
 
 import com.ent.happychat.common.constant.enums.ImageTypeEnum;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -27,5 +28,11 @@ public class ImageConfigAddReq implements Serializable {
     @NotNull(message = "使用状态不能为空")
     @ApiModelProperty(value = "使用状态", required = true)
     private Boolean status;
+
+    @ApiModelProperty("新闻类型")
+    private InfoEnum newsType;
+
+    @ApiModelProperty("新闻Id")
+    private Long newsId;
 
 }

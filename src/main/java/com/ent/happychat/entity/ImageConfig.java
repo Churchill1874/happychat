@@ -2,6 +2,7 @@ package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.happychat.common.constant.enums.ImageTypeEnum;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.entity.base.UpdateBaseInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,5 +28,11 @@ public class ImageConfig extends UpdateBaseInfo implements Serializable {
 
     @ApiModelProperty("描述")
     private String description;
+
+    @ApiModelProperty("新闻类型")
+    private InfoEnum newsType;
+
+    @ApiModelProperty("新闻Id")
+    private Long newsId;
 
 }

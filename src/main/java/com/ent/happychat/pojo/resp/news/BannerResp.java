@@ -1,8 +1,12 @@
 package com.ent.happychat.pojo.resp.news;
 
+import com.ent.happychat.common.constant.enums.ImageTypeEnum;
+import com.ent.happychat.common.constant.enums.InfoEnum;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+
 @Data
 public class BannerResp implements Serializable {
     private static final long serialVersionUID = 8114190034947034040L;
@@ -10,5 +14,11 @@ public class BannerResp implements Serializable {
     private String imagePath;
 
     private String title;
+
+    private ImageTypeEnum imageType;
+
+    private InfoEnum newsType;
+
+    private Long newsId;
 
 }

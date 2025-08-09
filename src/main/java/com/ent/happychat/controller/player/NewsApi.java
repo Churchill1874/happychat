@@ -140,7 +140,9 @@ public class NewsApi {
         List<News> topList = newsService.findByNewsStatus(NewsStatusEnum.TOP, 1);
         if (CollectionUtils.isNotEmpty(topList)) {
             newsRankResp = new NewsRankResp();
-            newsRankResp.setNewsTitleTop(topList.get(0).getTitle());
+            News news = topList.get(0);
+            newsRankResp.setNewsTitleTop(news.getTitle());
+            newsRankResp.setNewsTopId(news.getId());
         }
 
         NewsPageReq newsPageReq = new NewsPageReq();
@@ -156,12 +158,15 @@ public class NewsApi {
             for(int i=0; i<iPage.getRecords().size(); i++){
                 News news = iPage.getRecords().get(i);
                 if( i == 0 ){
+                    newsRankResp.setNews1Id(news.getId());
                     newsRankResp.setNewsTitle1(news.getTitle());
                 }
                 if( i == 1 ){
+                    newsRankResp.setNews2Id(news.getId());
                     newsRankResp.setNewsTitle2(news.getTitle());
                 }
                 if( i == 2 ){
+                    newsRankResp.setNews3Id(news.getId());
                     newsRankResp.setNewsTitle3(news.getTitle());
                 }
             }
@@ -182,6 +187,9 @@ public class NewsApi {
                 BannerResp bannerResp = new BannerResp();
                 bannerResp.setTitle(imageConfig.getDescription());
                 bannerResp.setImagePath(imageConfig.getPath());
+                bannerResp.setNewsType(imageConfig.getNewsType());
+                bannerResp.setImageType(imageConfig.getImageType());
+                bannerResp.setNewsId(imageConfig.getNewsId());
                 list.add(bannerResp);
             }
             homeResp.setBannerList(list);
