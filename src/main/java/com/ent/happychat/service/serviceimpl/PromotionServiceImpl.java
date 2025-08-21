@@ -40,10 +40,11 @@ public class PromotionServiceImpl extends ServiceImpl<PromotionMapper, Promotion
             .eq(req.getId() != null, Promotion::getId, req.getId())
             .eq(req.getIsTop() != null, Promotion::getIsTop, req.getIsTop())
             .eq(req.getType() != null , Promotion::getType, req.getType())
+            .eq(req.getStatus() != null, Promotion::getStatus, req.getStatus())
             .eq(StringUtils.isNotBlank(req.getContact()), Promotion::getContact, req.getContact())
             .eq(StringUtils.isNotBlank(req.getArea()), Promotion::getArea, req.getArea())
-            .orderByDesc(Promotion::getCreateTime)
-            .orderByDesc(Promotion::getIsTop);
+            .orderByDesc(Promotion::getIsTop)
+            .orderByDesc(Promotion::getCreateTime);
 
         return page(iPage, queryWrapper);
     }

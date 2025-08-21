@@ -2,7 +2,6 @@ package com.ent.happychat.pojo.resp.news;
 
 import com.ent.happychat.common.constant.enums.ImageTypeEnum;
 import com.ent.happychat.common.constant.enums.InfoEnum;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;

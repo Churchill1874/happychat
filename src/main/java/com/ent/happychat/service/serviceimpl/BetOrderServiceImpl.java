@@ -18,10 +18,7 @@ import com.ent.happychat.mapper.LotteryDealerMapper;
 import com.ent.happychat.mapper.PlayerInfoMapper;
 import com.ent.happychat.pojo.req.betorder.BetOrderAddReq;
 import com.ent.happychat.pojo.req.betorder.BetOrderPageReq;
-import com.ent.happychat.service.BetOrderService;
-import com.ent.happychat.service.LotteryDealerService;
-import com.ent.happychat.service.PlayerInfoService;
-import com.ent.happychat.service.PoliticsLotteryService;
+import com.ent.happychat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +39,8 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
     private LotteryDealerService lotteryDealerService;
     @Autowired
     private PoliticsLotteryService politicsLotteryService;
+    @Autowired
+    private EhcacheService ehcacheService;
 
     @Override
     public IPage<BetOrder> queryPage(BetOrderPageReq dto) {
@@ -59,6 +58,8 @@ public class BetOrderServiceImpl extends ServiceImpl<BetOrderMapper, BetOrder> i
     @Transactional(rollbackFor = Exception.class)
     public synchronized void bet(BetOrderAddReq dto) {
         playerInfoMapper.reduceBalance(dto.getPlayerId(),dto.getBetAmount());
+        ehcacheService.playerInfoCache().remove(dto.getPlayerId().toString());
+        ehcacheService.homeCache().clear();
 
         BetOrder betOrder = BeanUtil.toBean(dto, BetOrder.class);
         betOrder.setCreateTime(LocalDateTime.now());

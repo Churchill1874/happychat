@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Promotion extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 362828520285193131L;
 
-    @ApiModelProperty("新闻来源")
+    @ApiModelProperty("推广内容类型")
     private PromotionTypeEnum type;
 
     @ApiModelProperty("内容")
@@ -50,6 +50,7 @@ public class Promotion extends BaseInfo implements Serializable {
 
     @ApiModelProperty("标题")
     private String title;
+
     @ApiModelProperty("价格描述")
     private String price;
 

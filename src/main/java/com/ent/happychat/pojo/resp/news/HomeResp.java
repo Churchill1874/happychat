@@ -1,5 +1,7 @@
 package com.ent.happychat.pojo.resp.news;
 
+import com.ent.happychat.entity.BetOrder;
+import com.ent.happychat.entity.Politics;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -21,5 +23,11 @@ public class HomeResp implements Serializable {
     private HotLotteryResp hotLottery;
     @ApiModelProperty("东南亚新闻排名")
     private SoutheastAsiaNewsRankResp southeastAsiaNewsRank;
+    @ApiModelProperty("最新下注记录")
+    private List<BetOrder> betOrderList;
+    @ApiModelProperty("政治新闻")
+    private List<Politics> politicsList;
+    @ApiModelProperty("推广信息")
+    private PromotionResp promotion;
 
 }

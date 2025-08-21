@@ -25,4 +25,17 @@ public class SoutheastAsiaNewsRankResp implements Serializable {
     private Integer southeastAsiaCount3;
     private LocalDateTime southeastAsiaTime3;
     private String southeastAsiaCountry3;
+
+    private String southeastAsiaTitle4;
+    private Integer southeastAsiaView4;
+    private Integer southeastAsiaCount4;
+    private LocalDateTime southeastAsiaTime4;
+    private String southeastAsiaCountry4;
+
+    private String southeastAsiaTitle5;
+    private Integer southeastAsiaView5;
+    private Integer southeastAsiaCount5;
+    private LocalDateTime southeastAsiaTime5;
+    private String southeastAsiaCountry5;
+
 }
