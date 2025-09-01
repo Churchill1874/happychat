@@ -64,13 +64,11 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
 
         save(playerInfo);
 
-        InteractiveStatistics interactiveStatistics = interactiveStatisticsService.findByPlayerId(queryInfo.getId());
-        if (interactiveStatistics != null) {
-            throw new DataException("刚刚网络繁忙,请您在此请求");
+        InteractiveStatistics interactiveStatistics = interactiveStatisticsService.findByPlayerId(playerInfo.getId());
+        if (interactiveStatistics == null) {
+            throw new DataException("刚刚网络繁忙,请稍后再次请求");
         }
 
-        //初始化用户交互信息
-        interactiveStatisticsService.init(queryInfo.getId());
     }
 
     @Override

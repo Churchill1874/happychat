@@ -1,6 +1,7 @@
 package com.ent.happychat.pojo.resp.player;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
@@ -64,4 +65,8 @@ public class PlayerInfoResp implements Serializable {
     private String relationStatus;
     @ApiModelProperty("是否已经关注了")
     private Boolean collected;
+    @ApiModelProperty("ip")
+    private String ip;
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
 }

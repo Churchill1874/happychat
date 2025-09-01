@@ -1,6 +1,7 @@
 package com.ent.happychat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
@@ -68,4 +69,12 @@ public class PlayerInfo extends UpdateBaseInfo implements Serializable {
 
     @ApiModelProperty("地址")
     private String address;
+
+    @ApiModelProperty("ip")
+    private String ip;
+
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
+
+
 }

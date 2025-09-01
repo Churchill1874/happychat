@@ -96,6 +96,7 @@ public class PlayerApi {
         playerInfo.setAvatarPath("1");
         playerInfo.setBalance(BigDecimal.ZERO);
         playerInfo.setAddress(HttpTools.getAddress());
+        playerInfo.setCampType(req.getCampType());
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = playerHelper.createLoginToken(playerInfo);
@@ -181,6 +182,7 @@ public class PlayerApi {
         playerInfo.setUpdateTime(LocalDateTime.now());
         playerInfo.setTg(req.getTg());
         playerInfo.setBirth(req.getBirth());
+        playerInfo.setCampType(req.getCampType());
         playerInfoService.updateById(playerInfo);
 
         playerTokenResp.setName(playerInfo.getName());

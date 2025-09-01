@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.CampEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -38,5 +39,8 @@ public class PersonalInfoUpdateReq implements Serializable {
 
     @ApiModelProperty(value = "生日", required = true)
     private LocalDate birth;
+
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
 
 }

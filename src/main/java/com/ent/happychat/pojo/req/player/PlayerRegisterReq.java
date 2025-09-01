@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,6 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -36,14 +38,20 @@ public class PlayerRegisterReq implements Serializable {
     @ApiModelProperty(value = "密码", required = true)
     private String password;
 
+    @NotNull(message = "请填写生日")
     @ApiModelProperty(value = "生日", required = true)
     private LocalDate birth;
 
+    @NotNull(message = "请填写性别")
     @ApiModelProperty(value = "性别", required = true)
     private GenderEnum gender;
 
     @NotBlank(message = "验证码不能为空")
     @ApiModelProperty(value = "验证码", required = true)
     private String verificationCode;
+
+    @NotNull(message = "阵营不能为空")
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
 
 }
