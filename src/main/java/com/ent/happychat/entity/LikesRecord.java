@@ -26,7 +26,7 @@ public class LikesRecord extends BaseInfo implements Serializable {
     private String content;
     @ApiModelProperty("点赞目标人id 就是被点赞人")
     private Long targetPlayerId;
-    @ApiModelProperty("新闻类型")
+    @ApiModelProperty("信息类型")
     private InfoEnum infoType;
 
 }
