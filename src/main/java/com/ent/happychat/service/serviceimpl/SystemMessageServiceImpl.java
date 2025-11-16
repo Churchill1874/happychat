@@ -153,12 +153,12 @@ public class SystemMessageServiceImpl extends ServiceImpl<SystemMessageMapper, S
     }
 
     @Override
-    public int unreadSystemMessage(Long playerId) {
+    public int unreadSystemMessage(Long playerId, MessageTypeEnum type) {
         QueryWrapper<SystemMessage> queryWrapper = new QueryWrapper<>();
         queryWrapper
             .lambda()
             .eq(SystemMessage::getRecipientId, playerId)
-            .eq(SystemMessage::getMessageType, MessageTypeEnum.SYSTEM)
+            .eq(SystemMessage::getMessageType, type)
             .eq(SystemMessage::getStatus, false);
         return count(queryWrapper);
     }

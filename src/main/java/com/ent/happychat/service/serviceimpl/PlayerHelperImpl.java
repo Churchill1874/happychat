@@ -1,6 +1,7 @@
 package com.ent.happychat.service.serviceimpl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.ent.happychat.common.constant.enums.MessageTypeEnum;
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.entity.PlayerInfo;
@@ -79,10 +80,10 @@ public class PlayerHelperImpl implements PlayerHelper {
         interactiveStatisticsService.assemblyBaseAndStatistics(playerInfoResp);
         //拼装统计私信未读情况 系统消息未读情况 回复评论未读情况
 
-        int commentUnreadCount = commentService.unreadCount(playerTokenResp.getId());
+        int commentUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId(), MessageTypeEnum.COMMENT);
         playerTokenResp.setCommentMessageUnread(commentUnreadCount > 0);
 
-        int systemUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId());
+        int systemUnreadCount = systemMessageService.unreadSystemMessage(playerTokenResp.getId(), MessageTypeEnum.SYSTEM);
         playerTokenResp.setSystemMessageUnread(systemUnreadCount > 0);
 
         int privateUnreadCount = privateChatService.unreadCount(playerTokenResp.getId());

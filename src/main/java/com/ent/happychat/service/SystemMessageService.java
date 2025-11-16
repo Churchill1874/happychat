@@ -45,5 +45,5 @@ public interface SystemMessageService extends IService<SystemMessage> {
      * @param playerId
      * @return
      */
-    int unreadSystemMessage(Long playerId);
+    int unreadSystemMessage(Long playerId, MessageTypeEnum type);
 }

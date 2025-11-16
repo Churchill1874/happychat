@@ -52,7 +52,7 @@ public class TokenTools {
         }
 
         AdminTokenResp adminTokenResp = ehcacheService.adminTokenCache().get(headerToken);
-        if (adminTokenResp == null) {
+        if (needCheck && adminTokenResp == null) {
             throw new TokenException();
         }
         return adminTokenResp;
