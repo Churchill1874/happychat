@@ -97,6 +97,7 @@ public class PlayerApi {
         playerInfo.setBalance(BigDecimal.ZERO);
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfo.setCampType(req.getCampType());
+        playerInfo.setIp(HttpTools.getIp());
         playerInfoService.add(playerInfo);
 
         PlayerTokenResp playerTokenResp = playerHelper.createLoginToken(playerInfo);
@@ -139,6 +140,7 @@ public class PlayerApi {
             throw new AccountOrPasswordException();
         }
 
+        playerInfo.setIp(HttpTools.getIp());
         playerInfo.setAddress(HttpTools.getAddress());
         playerInfoService.updateById(playerInfo);
 

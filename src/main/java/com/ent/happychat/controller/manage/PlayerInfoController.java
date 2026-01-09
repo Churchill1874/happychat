@@ -160,4 +160,12 @@ public class PlayerInfoController {
         return R.ok(null);
     }
 
+    @PostMapping("/findById")
+    @ApiOperation(value = "根据id查询", notes = "根据id查询")
+    public R<PlayerInfo> findById(@RequestBody @Valid IdBase req) {
+        PlayerInfo playerInfo = playerInfoService.getById(req.getId());
+        return R.ok(playerInfo);
+    }
+
+
 }
