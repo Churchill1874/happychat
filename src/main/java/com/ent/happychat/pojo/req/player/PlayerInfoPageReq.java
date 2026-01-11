@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.pojo.req.PageBase;
@@ -45,5 +46,11 @@ public class PlayerInfoPageReq extends PageBase implements Serializable {
 
     @ApiModelProperty("状态")
     private UserStatusEnum status;
+
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
+
+    @ApiModelProperty("ip")
+    private String ip;
 
 }

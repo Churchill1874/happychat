@@ -7,8 +7,8 @@ import lombok.Getter;
 public enum CampEnum {
 
     NO(0, "无"),
-    RED(1,"红色"),
-    BLUE(2,"蓝色")
+    RED(1,"红营"),
+    BLUE(2,"红营")
     ;
     @Getter
     @EnumValue

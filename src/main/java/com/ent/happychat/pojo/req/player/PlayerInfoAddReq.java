@@ -15,7 +15,7 @@ public class PlayerInfoAddReq implements Serializable {
     private static final long serialVersionUID = 7444985824789126569L;
 
     @NotBlank(message = "昵称不能为空")
-    @Length(min = 1, max = 15, message = "昵称长度请设置1-15位之间")
+    @Length(min = 1, max = 20, message = "昵称长度请设置1-15位之间")
     @ApiModelProperty(value = "昵称", required = true)
     private String name;
 
