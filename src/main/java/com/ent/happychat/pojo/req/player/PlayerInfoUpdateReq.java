@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -51,5 +52,12 @@ public class PlayerInfoUpdateReq implements Serializable {
 
     @ApiModelProperty(value = "余额", required = false)
     private BigDecimal balance;
+
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
+
+    @ApiModelProperty("小飞机")
+    private String tg;
+
 
 }

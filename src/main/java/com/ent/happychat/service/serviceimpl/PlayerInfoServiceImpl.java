@@ -60,11 +60,13 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(PlayerInfo playerInfo) {
+        if(StringUtils.isBlank(playerInfo.getAvatarPath())){
+            playerInfo.setAvatarPath("1");
+        }
         PlayerInfo queryInfo = findByAccount(playerInfo.getAccount());
         if (queryInfo != null) {
             throw new DataException("该账号已存在");
         }
-
         if(playerInfo.getCampType()==null){
             playerInfo.setCampType(CampEnum.NO);
         }

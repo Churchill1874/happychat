@@ -94,6 +94,9 @@ public class PlayerInfoController {
         playerInfo.setCreateName(TokenTools.getAdminToken(true).getName());
         playerInfo.setCreateTime(LocalDateTime.now());
         playerInfo.setBalance(BigDecimal.ZERO);
+        playerInfo.setCampType(req.getCampType());
+        playerInfo.setTg(req.getTg());
+
         playerInfoService.add(playerInfo);
         return R.ok(null);
     }
@@ -119,6 +122,8 @@ public class PlayerInfoController {
         playerInfo.setSelfIntroduction(req.getSelfIntroduction());
         playerInfo.setAvatarPath(req.getAvatarPath());
         playerInfo.setBalance(req.getBalance());
+        playerInfo.setCampType(req.getCampType());
+        playerInfo.setTg(req.getTg());
 
         if (req.getLevel() == null) {
             playerInfo.setLevel(LevelEnum.LEVEL_0);

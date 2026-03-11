@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.player;
 
+import com.ent.happychat.common.constant.enums.CampEnum;
 import com.ent.happychat.common.constant.enums.GenderEnum;
 import com.ent.happychat.common.constant.enums.LevelEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -55,5 +56,13 @@ public class PlayerInfoAddReq implements Serializable {
 
     @ApiModelProperty(value = "头像路径", required = false)
     private String avatarPath;
+
+    @ApiModelProperty("阵营")
+    private CampEnum campType;
+
+
+    @ApiModelProperty("小飞机")
+    private String tg;
+
 
 }

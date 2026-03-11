@@ -47,7 +47,7 @@ public class WebsiteController {
         if (verificationCode == null) {
             return R.failed("验证码有误或已过期");
         }
-        if (!verificationCode.equals(req.getVerificationCode())){
+        if (!verificationCode.equalsIgnoreCase(req.getVerificationCode())){
             return R.failed("验证码错误");
         }
 

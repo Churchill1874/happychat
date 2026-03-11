@@ -1,6 +1,8 @@
 package com.ent.happychat.config;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ent.happychat.common.constant.enums.ManageRoleEnum;
 import com.ent.happychat.common.tools.CodeTools;
 import com.ent.happychat.common.tools.GenerateTools;
@@ -55,7 +57,6 @@ public class InitConfig {
             administrators.setCreateTime(LocalDateTime.now());
             administratorsService.save(administrators);
         }
-
 
         //log.info("获取创建机器人开关配置:{}", createBot);
 /*        List<News> newsList = NewsTools.getNewsData(NewsCategoryEnum.ENTERTAINMENT,25);

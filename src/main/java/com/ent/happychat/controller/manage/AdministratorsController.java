@@ -51,7 +51,7 @@ public class AdministratorsController {
     }
 
 
-    @PostMapping("/add")
+/*    @PostMapping("/add")
     @ApiOperation(value = "创建管理员", notes = "创建管理员")
     @SuperAdminLoginCheck
     public R add(@RequestBody AdministratorsAdd req) {
@@ -65,7 +65,7 @@ public class AdministratorsController {
         administrators.setSalt(salt);
         administratorsService.save(administrators);
         return R.ok(null);
-    }
+    }*/
 
 
     @PostMapping("/query")
@@ -78,7 +78,7 @@ public class AdministratorsController {
     }
 
 
-    @PostMapping("/update")
+/*    @PostMapping("/update")
     @ApiOperation(value = "修改管理员", notes = "修改管理员")
     @SuperAdminLoginCheck
     public R update(@RequestBody @Valid AdministratorsUpdate req) {
@@ -96,18 +96,18 @@ public class AdministratorsController {
 
         administratorsService.updateById(administrators);
         return R.ok(null);
-    }
+    }*/
 
 
 
-    @PostMapping("/delete")
+/*    @PostMapping("/delete")
     @ApiOperation(value = "删除管理员", notes = "删除管理员")
     @SuperAdminLoginCheck
     public R delete(@RequestBody @Valid IdBase req) {
         log.info("删除管理员入参:{}", JSONObject.toJSONString(req));
         administratorsService.removeById(req.getId());
         return R.ok(null);
-    }
+    }*/
 
 
 }
