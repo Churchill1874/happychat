@@ -13,6 +13,8 @@ public interface SoutheastAsiaService extends IService<SoutheastAsia> {
 
     void add(SoutheastAsia req);
 
+    void update(SoutheastAsia req);
+
     /**
      * 增加评论数量
      * @param id

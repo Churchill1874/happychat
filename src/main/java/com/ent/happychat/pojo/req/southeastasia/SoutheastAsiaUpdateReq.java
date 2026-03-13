@@ -3,11 +3,19 @@ package com.ent.happychat.pojo.req.southeastasia;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-public class SoutheastAsiaAddReq implements Serializable {
+public class SoutheastAsiaUpdateReq implements Serializable {
     private static final long serialVersionUID = 895133427848543841L;
+
+    @NotNull(message = "id不能为空")
+    @ApiModelProperty(value = "id",required = true)
+    private Long id;
+
+    @ApiModelProperty("标题")
+    private String title;
 
     @ApiModelProperty(value = "新闻来源",required = true)
     private String source;
@@ -22,7 +30,7 @@ public class SoutheastAsiaAddReq implements Serializable {
     private Integer viewCount;
 
     @ApiModelProperty("评论数量")
-    private Integer commentCount;
+    private Integer commentsCount;
 
     @ApiModelProperty("是否置顶")
     private Boolean isTop;
@@ -35,8 +43,5 @@ public class SoutheastAsiaAddReq implements Serializable {
 
     @ApiModelProperty("展示状态")
     private Boolean status;
-
-    @ApiModelProperty("标题")
-    private String title;
 
 }

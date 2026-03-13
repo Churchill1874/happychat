@@ -16,6 +16,7 @@ public class FileTools {
             case ".jpeg":
             case ".png":
             case ".gif":
+            case ".webp":
                 return FileTypeEnum.IMAGE;
             case ".mp3":
             case ".wav":
@@ -24,6 +25,10 @@ public class FileTools {
             case ".mp4":
             case ".avi":
             case ".mkv":
+            case ".mov":
+            case ".flv":
+            case ".webm":
+            case ".m4v":
                 return FileTypeEnum.VIDEO;
             default:
                 throw new DataException("请上传符合格式的文件资源");

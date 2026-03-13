@@ -3,6 +3,7 @@ package com.ent.happychat.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Promotion;
+import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.entity.Topic;
 import com.ent.happychat.pojo.req.promotion.PromotionAddReq;
 import com.ent.happychat.pojo.req.promotion.PromotionPageReq;
@@ -21,6 +22,9 @@ public interface TopicService extends IService<Topic> {
      * @param id
      */
     void increaseCommentsCount(Long id);
+
+    void update(Topic req);
+
 
     /**
      * 增加浏览数量

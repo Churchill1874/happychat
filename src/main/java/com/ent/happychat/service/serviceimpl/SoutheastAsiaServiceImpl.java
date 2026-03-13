@@ -34,6 +34,7 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
 
         QueryWrapper<SoutheastAsia> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
+                .like(StringUtils.isNotBlank(req.getTitle()), SoutheastAsia::getTitle, req.getTitle())
             .eq(req.getId() != null, SoutheastAsia::getId, req.getId())
             .eq(req.getIsTop() != null, SoutheastAsia::getIsTop, req.getIsTop())
             .eq(StringUtils.isNotBlank(req.getSource()), SoutheastAsia::getSource, req.getSource())
@@ -74,6 +75,11 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
         southeastAsia.setCreateTime(LocalDateTime.now());
         southeastAsia.setCreateName(TokenTools.getAdminName());
         save(southeastAsia);
+    }
+
+    @Override
+    public void update(SoutheastAsia req) {
+        updateById(req);
     }
 
     @Override

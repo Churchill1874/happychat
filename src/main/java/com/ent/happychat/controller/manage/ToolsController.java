@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.constant.enums.FileTypeEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
@@ -33,20 +34,20 @@ public class ToolsController {
 
     @ApiOperation("上传图片")
     @PostMapping("/upload")
+    @AdminLoginCheck
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
         try {
             if (file.isEmpty()){
-                throw new DataException("上传图片是空");
+                throw new DataException("上传的是空");
             }
 
             // 获取文件后缀
             String originalFilename = file.getOriginalFilename();
             if (StringUtils.isBlank(originalFilename)){
-                throw new DataException("上传图片名称不能为空");
+                throw new DataException("上传文件名称不能为空");
             }
 
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
 
             // 获取Linux服务器上保存文件的目录
             FileTypeEnum fileTypeEnum = FileTools.getFileType(fileExtension);

@@ -11,6 +11,9 @@ import java.io.Serializable;
 public class TopicAddReq implements Serializable {
     private static final long serialVersionUID = 895133427848543841L;
 
+    @ApiModelProperty("标题")
+    private String title;
+
     @ApiModelProperty(value = "话题类型描述",required = true)
     private String type;
 
@@ -37,5 +40,8 @@ public class TopicAddReq implements Serializable {
 
     @ApiModelProperty("视频路径")
     private String videoPath;
+
+    @ApiModelProperty("视频封面图片")
+    private String videoCover;
 
 }

@@ -9,6 +9,7 @@ import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Society;
+import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.entity.Topic;
 import com.ent.happychat.mapper.SocietyMapper;
 import com.ent.happychat.mapper.TopicMapper;
@@ -76,6 +77,12 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
     public void increaseCommentsCount(Long id) {
         baseMapper.increaseCommentsCount(id);
     }
+
+    @Override
+    public void update(Topic req) {
+        updateById(req);
+    }
+
 
     @Async
     @Override
