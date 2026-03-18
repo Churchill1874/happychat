@@ -9,6 +9,7 @@ import com.ent.happychat.pojo.req.IdListBase;
 import com.ent.happychat.pojo.req.blacklist.BlacklistAddReq;
 import com.ent.happychat.pojo.req.blacklist.BlacklistPageReq;
 import com.ent.happychat.service.BlacklistService;
+import com.ent.happychat.service.serviceimpl.BlacklistServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

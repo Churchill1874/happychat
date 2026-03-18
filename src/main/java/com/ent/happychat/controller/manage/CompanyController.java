@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.annotation.HomeDataClean;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Company;
 import com.ent.happychat.entity.CompanyEvent;
@@ -50,6 +51,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/addCompany")
     @ApiOperation(value = "添加公司", notes = "添加公司")
+    @HomeDataClean
     public R addCompany(@RequestBody @Valid CompanyAddReq req) {
         Company company = BeanUtil.toBean(req, Company.class);
         company.setCreateTime(LocalDateTime.now());
@@ -60,6 +62,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/addEvent")
     @ApiOperation(value = "添加事件", notes = "添加事件")
+    @HomeDataClean
     public R addEvent(@RequestBody @Valid CompanyEventAddReq req) {
         CompanyEvent companyEvent = BeanUtil.toBean(req, CompanyEvent.class);
         companyEvent.setCreateName(TokenTools.getAdminToken(true).getName());
@@ -70,6 +73,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/updateCompany")
     @ApiOperation(value = "更新公司", notes = "更新公司")
+    @HomeDataClean
     public R updateCompany(@RequestBody @Valid CompanyUpdateReq req) {
         Company company = BeanUtil.toBean(req, Company.class);
         Company oldData = companyService.getById(req.getId());
@@ -81,6 +85,7 @@ public class CompanyController {
 
     @AdminLoginCheck
     @PostMapping("/updateEvent")
+    @HomeDataClean
     @ApiOperation(value = "修改事件", notes = "修改事件")
     public R updateEvent(@RequestBody @Valid CompanyEventUpdateReq req) {
         CompanyEvent companyEvent = BeanUtil.toBean(req, CompanyEvent.class);
@@ -94,6 +99,7 @@ public class CompanyController {
     @AdminLoginCheck
     @PostMapping("/deleteCompany")
     @ApiOperation(value = "删除公司", notes = "删除公司")
+    @HomeDataClean
     public R delete(@RequestBody @Valid IdBase req) {
         companyService.removeById(req.getId());
 
@@ -106,6 +112,7 @@ public class CompanyController {
 
     @AdminLoginCheck
     @PostMapping("/deleteEvent")
+    @HomeDataClean
     @ApiOperation(value = "删除公司的某个事件记录", notes = "删除公司的某个事件记录")
     public R deleteEvent(@RequestBody @Valid IdBase req) {
         return R.ok(companyEventService.removeById(req.getId()));

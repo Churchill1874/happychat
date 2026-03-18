@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.annotation.HomeDataClean;
 import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaAddReq;
@@ -39,6 +40,7 @@ public class SoutheastAsiaController {
 
     @AdminLoginCheck
     @PostMapping("/add")
+    @HomeDataClean
     @ApiOperation(value = "新增东南亚新闻", notes = "新增东南亚新闻")
     public R add(@RequestBody SoutheastAsiaAddReq req) {
         SoutheastAsia southeastAsia = BeanUtil.toBean(req, SoutheastAsia.class);
@@ -48,6 +50,7 @@ public class SoutheastAsiaController {
 
     @AdminLoginCheck
     @PostMapping("/delete")
+    @HomeDataClean
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
         southeastAsiaService.removeById(req.getId());
@@ -64,6 +67,7 @@ public class SoutheastAsiaController {
 
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改")
+    @HomeDataClean
     public R update(@RequestBody @Valid SoutheastAsiaUpdateReq req) {
         SoutheastAsia southeastAsia = BeanUtil.toBean(req, SoutheastAsia.class);
         southeastAsiaService.update(southeastAsia);

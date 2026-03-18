@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.annotation.HomeDataClean;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
@@ -48,6 +49,7 @@ public class NewsController {
 
     @PostMapping("/delete")
     @ApiOperation(value = "删除某个新闻", notes = "删除某个新闻")
+    @HomeDataClean
     @AdminLoginCheck
     public R delete(@RequestBody @Valid IdBase req) {
         newsService.removeById(req.getId());
@@ -60,6 +62,7 @@ public class NewsController {
 
     @PostMapping("/updateNews")
     @ApiOperation(value = "修改编辑新闻", notes = "修改编辑新闻")
+    @HomeDataClean
     @AdminLoginCheck
     public R updateNews(@RequestBody @Valid NewsUpdateBase req) {
         News news = BeanUtil.toBean(req, News.class);
@@ -72,6 +75,7 @@ public class NewsController {
 
     @PostMapping("/addNews")
     @ApiOperation(value = "添加新闻", notes = "添加编辑新闻")
+    @HomeDataClean
     @AdminLoginCheck
     public R addNews(@RequestBody @Valid NewsAddReq req) {
         News news = BeanUtil.toBean(req, News.class);

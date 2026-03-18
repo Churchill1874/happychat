@@ -15,7 +15,8 @@ public enum ViewsEnum {
     POLITICS(7,"政治"),
     SOCIETY(8, "社会"),
     PROMOTION(9,"推广"),
-    TOPIC(10,"话题")
+    TOPIC(10,"话题"),
+    EXPOSURE(11,"曝光")
     ;
 
 

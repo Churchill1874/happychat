@@ -33,5 +33,4 @@ public class Administrators extends BaseInfo implements Serializable {
     @ApiModelProperty("账号")
     private String account;
 
-
 }

@@ -27,7 +27,7 @@ public class TopicAddReq implements Serializable {
     private Integer viewCount;
 
     @ApiModelProperty("评论数量")
-    private Integer commentCount;
+    private Integer commentsCount;
 
     @ApiModelProperty("是否置顶")
     private Boolean isTop;

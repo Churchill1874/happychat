@@ -11,4 +11,16 @@ public interface AdministratorsService extends IService<Administrators> {
      * @return
      */
     Administrators findByAccount(String account);
+
+
+
+
+
+
+
+
+
+
+
+
 }
