@@ -9,6 +9,7 @@ import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
+import com.ent.happychat.entity.Politics;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.news.NewsAddReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
@@ -95,6 +96,17 @@ public class NewsController {
         ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
         return R.ok(null);
     }
+
+
+    @AdminLoginCheck
+    @PostMapping("/findById")
+    @HomeDataClean
+    @ApiOperation(value = "查看详情", notes = "查看详情")
+    public R<News> findById(@RequestBody @Valid IdBase req) {
+        News news = newsService.getById(req.getId());
+        return R.ok(news);
+    }
+
 
     @AdminLoginCheck
     @PostMapping("/pullJuHeNews")

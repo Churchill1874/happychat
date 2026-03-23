@@ -15,10 +15,12 @@ import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.mapper.PoliticsMapper;
 import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.PoliticsService;
 import com.ent.happychat.service.ViewsRecordService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -32,10 +34,16 @@ public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> i
     private ViewsRecordService viewsRecordService;
 
     @Override
-    public IPage<Politics> queryPage(PageBase dto) {
+    public IPage<Politics> queryPage(PoliticsPageReq dto) {
         IPage<Politics> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Politics> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().orderByDesc(Politics::getCreateTime);
+        queryWrapper.lambda()
+                .eq(dto.getId() != null, Politics::getId, dto.getId())
+                .like(StringUtils.isNotBlank(dto.getTitle()), Politics::getTitle, dto.getTitle())
+                .eq(dto.getNewsStatus() != null , Politics::getNewsStatus, dto.getNewsStatus())
+                .eq(StringUtils.isNotBlank(dto.getSource()), Politics::getSource, dto.getSource())
+                .eq(StringUtils.isNotBlank(dto.getCountry()), Politics::getCountry, dto.getCountry())
+                .orderByDesc(Politics::getCreateTime);
         return page(iPage, queryWrapper);
     }
 

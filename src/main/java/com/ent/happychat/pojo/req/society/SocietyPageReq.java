@@ -31,4 +31,7 @@ public class SocietyPageReq extends PageBase implements Serializable {
     @ApiModelProperty("展示状态")
     private Boolean status;
 
+    @ApiModelProperty("标题")
+    private String title;
+
 }

@@ -7,6 +7,7 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PoliticsService;
@@ -29,12 +30,10 @@ public class PoliticsApi {
 
     @Autowired
     private PoliticsService politicsService;
-    @Autowired
-    private EhcacheService ehcacheService;
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    public R<IPage<Politics>> page(@RequestBody @Valid PageBase req) {
+    public R<IPage<Politics>> page(@RequestBody @Valid PoliticsPageReq req) {
         IPage<Politics> iPage = politicsService.queryPage(req);
         return R.ok(iPage);
     }

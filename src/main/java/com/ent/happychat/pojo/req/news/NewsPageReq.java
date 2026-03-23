@@ -12,6 +12,9 @@ import java.io.Serializable;
 public class NewsPageReq extends PageBase implements Serializable {
     private static final long serialVersionUID = -3968897108907540868L;
 
+    @ApiModelProperty("id")
+    private Long id;
+
     @ApiModelProperty("标题")
     private String title;
 

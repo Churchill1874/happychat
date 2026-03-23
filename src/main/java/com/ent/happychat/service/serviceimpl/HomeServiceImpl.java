@@ -11,8 +11,10 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.*;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.betorder.BetOrderPageReq;
+import com.ent.happychat.pojo.req.exposure.ExposurePage;
 import com.ent.happychat.pojo.req.image.ImageConfigPageReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
+import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.req.promotion.PromotionPageReq;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.pojo.resp.company.CompanyResp;
@@ -49,6 +51,9 @@ public class HomeServiceImpl implements HomeService {
     private PoliticsService politicsService;
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private ExposureService exposureService;
+
 
     @Override
     public HomeResp getHomeData() {
@@ -59,19 +64,35 @@ public class HomeServiceImpl implements HomeService {
         }
 
         homeResp = new HomeResp();
-        getNewsRank(homeResp);
-        getBannerList(homeResp);
+
         getCompany(homeResp);
+        getPolitics(homeResp);
         getSoutheastAsiaNews(homeResp);
+        getExposure(homeResp);
+
+        //getLast3BetOrderList(homeResp);
+        //getNewsRank(homeResp);
+        //getBannerList(homeResp);
+        //getPromotion(homeResp);
+
         //获取随机的在线人数
         homeResp.setOnlineCount(TokenTools.onlineCountRandom());
-        getLast3BetOrderList(homeResp);
-        getPolitics(homeResp);
-        getPromotion(homeResp);
         //更新缓存
         cache.put(CacheKeyConstant.HOME_DATA, homeResp);
         return homeResp;
     }
+
+    private void getExposure(HomeResp homeResp){
+        ExposurePage exposurePage = new ExposurePage();
+        exposurePage.setPageNum(1);
+        exposurePage.setPageSize(2);
+        IPage<Exposure> iPage = exposureService.queryPage(exposurePage);
+        if(CollectionUtils.isEmpty(iPage.getRecords())){
+            return;
+        }
+        homeResp.setExposureList(iPage.getRecords());
+    }
+
 
     private void getPromotion(HomeResp homeResp){
         PromotionPageReq promotionPageReq = new PromotionPageReq();
@@ -101,7 +122,7 @@ public class HomeServiceImpl implements HomeService {
     }
 
     private void getPolitics(HomeResp homeResp){
-        PageBase pageBase = new PageBase();
+        PoliticsPageReq pageBase = new PoliticsPageReq();
         pageBase.setPageNum(1);
         pageBase.setPageSize(3);
         List<Politics> list = politicsService.queryPage(pageBase).getRecords();

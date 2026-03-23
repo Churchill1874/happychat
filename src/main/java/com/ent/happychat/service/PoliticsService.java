@@ -5,12 +5,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.pojo.req.PageBase;
+import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.apache.ibatis.annotations.Param;
 
 public interface PoliticsService extends IService<Politics> {
 
-    IPage<Politics> queryPage(PageBase dto);
+    IPage<Politics> queryPage(PoliticsPageReq dto);
 
     /**
      * 增加点赞数量

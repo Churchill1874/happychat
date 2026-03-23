@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.constant.enums.*;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
@@ -15,7 +14,10 @@ import com.ent.happychat.entity.News;
 import com.ent.happychat.mapper.NewsMapper;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
-import com.ent.happychat.service.*;
+import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.LikesRecordService;
+import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.ViewsRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +50,11 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<News> queryNews = new QueryWrapper<>();
         queryNews.lambda()
-            .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
-            .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
-            .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
-            .orderByDesc(News::getCreateTime);
+                .eq(newsPageReq.getId() != null, News::getId, newsPageReq.getId())
+                .eq(newsPageReq.getCategoryEnum() != null, News::getCategory, newsPageReq.getCategoryEnum())
+                .eq(newsPageReq.getNewsStatus() != null, News::getNewsStatus, newsPageReq.getNewsStatus())
+                .like(StringUtils.isNotBlank(newsPageReq.getTitle()), News::getTitle, newsPageReq.getTitle())
+                .orderByDesc(News::getCreateTime);
 
         //如果没有要求按照 差评 点赞 浏览 评论数量 要求筛选
         boolean createTimeSort = !newsPageReq.getLikesSort() && !newsPageReq.getViewSort() && !newsPageReq.getCommentsSort();
@@ -74,9 +77,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     public List<News> findByNewsStatus(NewsStatusEnum newsStatusEnum, Integer size) {
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(News::getNewsStatus, newsStatusEnum)
-            .orderByDesc(News::getCreateTime)
-            .last("LIMIT " + size);
+                .eq(News::getNewsStatus, newsStatusEnum)
+                .orderByDesc(News::getCreateTime)
+                .last("LIMIT " + size);
 
         return this.list(queryWrapper);
     }
@@ -106,6 +109,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         if (news.getContent() != null) {
             record.setContent(news.getContent());
         }
+        if (news.getFilterContent() != null){
+            record.setFilterContent(news.getFilterContent());
+        }
         if (news.getTitle() != null) {
             record.setTitle(news.getTitle());
         }
@@ -114,6 +120,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         }
         if (news.getContentImagePath() != null) {
             record.setContentImagePath(news.getContentImagePath());
+        }
+        if (news.getPhotoPath() != null){
+            record.setPhotoPath(news.getPhotoPath());
         }
         record.setUpdateName(TokenTools.getAdminToken(true).getName());
         record.setUpdateTime(LocalDateTime.now());
@@ -145,8 +154,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         if (CollectionUtils.isNotEmpty(newsList)) {
             newsList.forEach(news -> {
-                if(null == news.getPhotoPath() ||
-                "https://n.sinaimg.cn/default/2fb77759/20151125/320X320.png".equals(news.getPhotoPath())){
+                if (null == news.getPhotoPath() ||
+                        "https://n.sinaimg.cn/default/2fb77759/20151125/320X320.png".equals(news.getPhotoPath())) {
                     news.setPhotoPath("1");
                 }
             });
@@ -175,21 +184,21 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
-            .eq(LikesRecord::getLikesId, id)
-            .eq(LikesRecord::getInfoType, InfoEnum.NEWS)
-            .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
+                .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
+                .eq(LikesRecord::getLikesId, id)
+                .eq(LikesRecord::getInfoType, InfoEnum.NEWS)
+                .eq(LikesRecord::getLikesType, LikesEnum.NEWS);
         int count = likesRecordService.count(queryWrapper);
 
         if (count == 0) {
             likesRecordService.increaseLikesCount(
-                playerTokenResp.getId(),
-                playerTokenResp.getName(),
-                id,
-                news.getTitle(),
-                LikesEnum.NEWS,
-                null,
-                InfoEnum.NEWS
+                    playerTokenResp.getId(),
+                    playerTokenResp.getName(),
+                    id,
+                    news.getTitle(),
+                    LikesEnum.NEWS,
+                    null,
+                    InfoEnum.NEWS
             );
 
             baseMapper.increaseLikesCount(id);
@@ -270,7 +279,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             }*/
         }
 
-        if (CollectionUtils.isNotEmpty(newsList)){
+        if (CollectionUtils.isNotEmpty(newsList)) {
             Collections.shuffle(newsList);
         }
 

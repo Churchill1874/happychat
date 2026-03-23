@@ -23,11 +23,17 @@ public class NewsUpdateBase extends IdBase implements Serializable {
     @ApiModelProperty("内容")
     private String content;
 
+    @ApiModelProperty("过滤后内容")
+    private String filterContent;
+
     @ApiModelProperty("来源")
     private String source;
 
     @ApiModelProperty("提取内容的图片路径")
     private String contentImagePath;
+
+    @ApiModelProperty("封面图片")
+    private String photoPath;
 
     @ApiModelProperty("浏览量")
     private Integer viewCount = 0;

@@ -17,7 +17,7 @@ public class NewsAddReq implements Serializable {
     @ApiModelProperty("标题")
     private String title;
 
-    @NotBlank(message = "内容不能为空")
+    //@NotBlank(message = "内容不能为空")
     @ApiModelProperty("内容")
     private String content;
 
@@ -28,8 +28,12 @@ public class NewsAddReq implements Serializable {
     @ApiModelProperty("类型")
     private NewsCategoryEnum category;
 
-    @NotBlank(message = "图片路径不能为空")
-    @ApiModelProperty("内容的图片路径")
+    @NotBlank(message = "封面图片不能为空")
+    @ApiModelProperty("封面图片路径")
+    private String photoPath;
+
+    @NotBlank(message = "详情图片不能为空")
+    @ApiModelProperty("详情图片路径")
     private String contentImagePath;
 
     @NotNull(message = "浏览量不能为空")
