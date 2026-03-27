@@ -6,15 +6,12 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.entity.Comment;
-import com.ent.happychat.entity.News;
-import com.ent.happychat.entity.PlayerInfo;
+import com.ent.happychat.entity.*;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.resp.comment.CommentPageResp;
-import com.ent.happychat.service.CommentService;
-import com.ent.happychat.service.NewsService;
-import com.ent.happychat.service.PlayerInfoService;
+import com.ent.happychat.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +31,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/manage/comment")
 public class CommentController {
 
+    @Autowired
+    private ExposureService exposureService;
+    @Autowired
+    private PoliticsService politicsService;
+    @Autowired
+    private SocietyService societyService;
+    @Autowired
+    private TopicService topicService;
+    @Autowired
+    private SoutheastAsiaService southeastAsiaService;
     @Autowired
     private PlayerInfoService playerInfoService;
     @Autowired
@@ -57,8 +61,13 @@ public class CommentController {
         }
 
         //获取 新闻 评论人 和 被评论人的map结构结合数据 方便拼装
-        List<Long> newsIdList = commentPage.getRecords().stream().map(Comment::getNewsId).collect(Collectors.toList());
-        Map<Long, News> newsMap = newsService.mapByIds(newsIdList);
+        Map<Long, News> newsMap = new HashMap<>();
+        Map<Long, SoutheastAsia> southeastAsiaMap = new HashMap<>();
+        Map<Long, Topic> topicMap = new HashMap<>();
+        Map<Long, Society> societyMap = new HashMap<>();
+        Map<Long, Politics> politicsMap = new HashMap<>();
+
+        newsData(commentPage.getRecords(), newsMap, southeastAsiaMap, topicMap, societyMap, politicsMap);
 
         List<Long> playerIdList = commentPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toList());
         List<Long> targetPlayerIdList = commentPage.getRecords().stream().map(Comment::getTargetPlayerId).filter(Objects::nonNull).collect(Collectors.toList());
@@ -67,17 +76,17 @@ public class CommentController {
 
 
         List<CommentPageResp> commentPageRespList = new ArrayList<>();
-        commentPage.getRecords().forEach(comment -> {
+        for (Comment comment : commentPage.getRecords()) {
             PlayerInfo player = playerInfoMap.get(comment.getPlayerId());
-            News news = newsMap.get(comment.getNewsId());
+
             CommentPageResp commentPageResp = BeanUtil.toBean(comment, CommentPageResp.class);
             commentPageResp.setCommentator(player.getName());
-            commentPageResp.setTitle(news.getTitle());
+            commentPageResp.setTitle(getTitle(comment, newsMap, southeastAsiaMap, topicMap, societyMap, politicsMap));
             commentPageResp.setLevel(player.getLevel());
 
-            if (comment.getTargetPlayerId() != null){
+            if (comment.getTargetPlayerId() != null) {
                 PlayerInfo targetPlayer = playerInfoMap.get(comment.getTargetPlayerId());
-                if (targetPlayer == null){
+                if (targetPlayer == null) {
                     throw new DataException(String.format("未找到被评论人信息,targetPlayerId:%s", comment.getTargetPlayerId()));
                 }
                 commentPageResp.setTargetPlayerName(targetPlayer.getName());
@@ -85,9 +94,129 @@ public class CommentController {
             }
 
             commentPageRespList.add(commentPageResp);
-        });
 
+        }
+
+        commentPageRespPage.setPages(commentPage.getPages());
+        commentPageRespPage.setTotal(commentPage.getTotal());
+        commentPageRespPage.setSize(commentPage.getSize());
+        commentPageRespPage.setCurrent(commentPage.getCurrent());
         commentPageRespPage.setRecords(commentPageRespList);
         return R.ok(commentPageRespPage);
     }
+
+    private String getTitle(Comment comment,
+                            Map<Long, News> newsMap,
+                            Map<Long, SoutheastAsia> southeastAsiaMap,
+                            Map<Long, Topic> topicMap,
+                            Map<Long, Society> societyMap,
+                            Map<Long, Politics> politicsMap) {
+        if (comment.getInfoType() == InfoEnum.NEWS) {
+            if (CollectionUtils.isNotEmpty(newsMap)) {
+                News news = newsMap.get(comment.getNewsId());
+                if (news != null) {
+                    return news.getTitle();
+                }
+            }
+        }
+        if (comment.getInfoType() == InfoEnum.SOUTHEAST_ASIA) {
+            if (CollectionUtils.isNotEmpty(southeastAsiaMap)) {
+                SoutheastAsia news = southeastAsiaMap.get(comment.getNewsId());
+                if (news != null) {
+                    return news.getTitle();
+                }
+            }
+        }
+        if (comment.getInfoType() == InfoEnum.SOCIETY) {
+            if (CollectionUtils.isNotEmpty(societyMap)) {
+                Society news = societyMap.get(comment.getNewsId());
+                if (news != null) {
+                    return news.getTitle();
+                }
+            }
+        }
+        if (comment.getInfoType() == InfoEnum.TOPIC) {
+            if (CollectionUtils.isNotEmpty(topicMap)) {
+                Topic news = topicMap.get(comment.getNewsId());
+                if (news != null) {
+                    return news.getTitle();
+                }
+            }
+        }
+        if (comment.getInfoType() == InfoEnum.POLITICS) {
+            if (CollectionUtils.isNotEmpty(politicsMap)) {
+                Politics news = politicsMap.get(comment.getNewsId());
+                if (news != null) {
+                    return news.getTitle();
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    private void newsData(List<Comment> commentList,
+                          Map<Long, News> newsMap,
+                          Map<Long, SoutheastAsia> southeastAsiaMap,
+                          Map<Long, Topic> topicMap,
+                          Map<Long, Society> societyMap,
+                          Map<Long, Politics> politicsMap) {
+
+        List<Long> newsIdList = new ArrayList<>();
+        List<Long> southeastIdList = new ArrayList<>();
+        List<Long> topicIdList = new ArrayList<>();
+        List<Long> societyIdList = new ArrayList<>();
+        List<Long> politicsIdList = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+            if (comment.getInfoType() == InfoEnum.NEWS) {
+                newsIdList.add(comment.getNewsId());
+            }
+            if (comment.getInfoType() == InfoEnum.TOPIC) {
+                topicIdList.add(comment.getNewsId());
+            }
+            if (comment.getInfoType() == InfoEnum.SOCIETY) {
+                societyIdList.add(comment.getNewsId());
+            }
+            if (comment.getInfoType() == InfoEnum.POLITICS) {
+                politicsIdList.add(comment.getNewsId());
+            }
+            if (comment.getInfoType() == InfoEnum.SOUTHEAST_ASIA) {
+                southeastIdList.add(comment.getNewsId());
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(newsIdList)) {
+            Map<Long, News> map =newsService.mapByIds(newsIdList);
+            if(CollectionUtils.isNotEmpty(map)){
+                newsMap.putAll(map);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(southeastIdList)) {
+            Map<Long, SoutheastAsia> map = southeastAsiaService.mapByIds(southeastIdList);
+            if(CollectionUtils.isNotEmpty(map)){
+                southeastAsiaMap.putAll(map);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(topicIdList)) {
+            Map<Long, Topic> map = topicService.mapByIds(topicIdList);
+            if(CollectionUtils.isNotEmpty(map)){
+                topicMap.putAll(map);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(societyIdList)) {
+            Map<Long, Society> map = societyService.mapByIds(societyIdList);
+            if(CollectionUtils.isNotEmpty(map)){
+                societyMap.putAll(map);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(politicsIdList)) {
+            Map<Long, Politics> map = politicsService.mapByIds(politicsIdList);
+            politicsMap.putAll(map);
+        }
+
+    }
+
+
 }

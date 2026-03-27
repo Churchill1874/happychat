@@ -15,7 +15,9 @@ public enum InfoEnum {
     SOCIETY(4,"社会"),
     PROMOTION(5,"推广"),
     TOPIC(6,"话题"),
-    Tieba(7,"帖吧")
+    Tieba(7,"帖吧"),
+    EXPOSURE(8,"曝光"),
+    COMPANY(9,"公司")
     ;
 
     @Getter

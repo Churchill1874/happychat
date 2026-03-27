@@ -30,12 +30,13 @@ public class LikesRecordServiceImpl extends ServiceImpl<LikesRecordMapper, Likes
         IPage<LikesRecord> iPage = new Page<>(po.getPageNum(), po.getPageSize());
         QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(po.getLikesId() != null, LikesRecord::getLikesId, po.getLikesId())
-            .eq(po.getLikesType() != null, LikesRecord::getLikesType, po.getLikesType())
-            .eq(po.getPlayerId() != null, LikesRecord::getPlayerId, po.getPlayerId())
-            .eq(po.getContent() != null, LikesRecord::getContent, po.getContent())
-            .eq(po.getTargetPlayerId() != null, LikesRecord::getTargetPlayerId, po.getTargetPlayerId())
-            .orderByDesc(LikesRecord::getCreateTime);
+                .eq(po.getInfoType() != null, LikesRecord::getInfoType, po.getInfoType())
+                .eq(po.getLikesId() != null, LikesRecord::getLikesId, po.getLikesId())
+                .eq(po.getLikesType() != null, LikesRecord::getLikesType, po.getLikesType())
+                .eq(po.getPlayerId() != null, LikesRecord::getPlayerId, po.getPlayerId())
+                .eq(po.getContent() != null, LikesRecord::getContent, po.getContent())
+                .eq(po.getTargetPlayerId() != null, LikesRecord::getTargetPlayerId, po.getTargetPlayerId())
+                .orderByDesc(LikesRecord::getCreateTime);
         return page(iPage, queryWrapper);
     }
 

@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -18,6 +19,7 @@ import com.ent.happychat.pojo.req.company.event.CompanyEventUpdateReq;
 import com.ent.happychat.pojo.resp.company.CompanyResp;
 import com.ent.happychat.service.CompanyEventService;
 import com.ent.happychat.service.CompanyService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,12 +43,32 @@ public class CompanyController {
     private CompanyService companyService;
     @Autowired
     private CompanyEventService companyEventService;
+    @Autowired
+    private UploadRecordService uploadRecordService;
 
     @AdminLoginCheck
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<CompanyResp>> queryPage(@RequestBody @Valid PageBase req) {
         return R.ok(companyService.queryPageCompanyAndEvent(req));
+    }
+
+    @AdminLoginCheck
+    @PostMapping("/findById")
+    @ApiOperation(value = "根据id查询公司", notes = "根据id查询公司")
+    @HomeDataClean
+    public R<CompanyResp> addCompany(@RequestBody @Valid IdBase req) {
+        Company company  = companyService.getById(req.getId());
+        CompanyResp companyResp = BeanUtil.toBean(company, CompanyResp.class);
+
+        LambdaQueryWrapper<CompanyEvent> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(CompanyEvent::getCompanyId, req.getId())
+                .orderByDesc(CompanyEvent::getEventDate);
+        List<CompanyEvent> list = companyEventService.list(queryWrapper);
+        companyResp.setCompanyEventList(list);
+
+        return R.ok(companyResp);
     }
 
     @AdminLoginCheck
@@ -56,8 +79,45 @@ public class CompanyController {
         Company company = BeanUtil.toBean(req, Company.class);
         company.setCreateTime(LocalDateTime.now());
         company.setCreateName(TokenTools.getAdminToken(true).getName());
-        return R.ok(companyService.save(company));
+
+        companyService.save(company);
+
+        uploadRecordService.cleanByPath(company.getImage());
+        return R.ok(null);
     }
+
+    @AdminLoginCheck
+    @PostMapping("/updateCompany")
+    @ApiOperation(value = "更新公司", notes = "更新公司")
+    @HomeDataClean
+    public R updateCompany(@RequestBody @Valid CompanyUpdateReq req) {
+        Company company = BeanUtil.toBean(req, Company.class);
+        Company oldData = companyService.getById(req.getId());
+        company.setCreateName(oldData.getCreateName());
+        company.setCreateTime(oldData.getCreateTime());
+        companyService.updateById(company);
+        uploadRecordService.cleanByPath(company.getImage());
+        return R.ok(null);
+    }
+
+    @AdminLoginCheck
+    @PostMapping("/deleteCompany")
+    @ApiOperation(value = "删除公司", notes = "删除公司")
+    @HomeDataClean
+    public R delete(@RequestBody @Valid IdBase req) {
+        companyService.removeById(req.getId());
+
+        Company company = companyService.getById(req.getId());
+        uploadRecordService.cleanRemoveFile(company.getImage());
+
+        QueryWrapper<CompanyEvent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(CompanyEvent::getCompanyId, req.getId());
+        companyEventService.remove(queryWrapper);
+
+
+        return R.ok(null);
+    }
+
 
     @AdminLoginCheck
     @PostMapping("/addEvent")
@@ -71,19 +131,6 @@ public class CompanyController {
     }
 
     @AdminLoginCheck
-    @PostMapping("/updateCompany")
-    @ApiOperation(value = "更新公司", notes = "更新公司")
-    @HomeDataClean
-    public R updateCompany(@RequestBody @Valid CompanyUpdateReq req) {
-        Company company = BeanUtil.toBean(req, Company.class);
-        Company oldData = companyService.getById(req.getId());
-        company.setCreateName(oldData.getCreateName());
-        company.setCreateTime(oldData.getCreateTime());
-        return R.ok(companyService.updateById(company));
-    }
-
-
-    @AdminLoginCheck
     @PostMapping("/updateEvent")
     @HomeDataClean
     @ApiOperation(value = "修改事件", notes = "修改事件")
@@ -93,20 +140,6 @@ public class CompanyController {
         companyEvent.setCreateName(oldData.getCreateName());
         companyEvent.setCreateTime(oldData.getCreateTime());
         return R.ok(companyEventService.updateById(companyEvent));
-    }
-
-
-    @AdminLoginCheck
-    @PostMapping("/deleteCompany")
-    @ApiOperation(value = "删除公司", notes = "删除公司")
-    @HomeDataClean
-    public R delete(@RequestBody @Valid IdBase req) {
-        companyService.removeById(req.getId());
-
-        QueryWrapper<CompanyEvent> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(CompanyEvent::getCompanyId, req.getId());
-
-        return R.ok(companyEventService.remove(queryWrapper));
     }
 
 

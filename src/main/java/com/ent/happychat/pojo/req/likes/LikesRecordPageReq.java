@@ -1,5 +1,6 @@
 package com.ent.happychat.pojo.req.likes;
 
+import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,5 +22,7 @@ public class LikesRecordPageReq extends PageBase implements Serializable {
     private String content;
     @ApiModelProperty("被点赞目标玩家id")
     private Long targetPlayerId;
+    @ApiModelProperty("信息类型")
+    private InfoEnum infoType;
 
 }

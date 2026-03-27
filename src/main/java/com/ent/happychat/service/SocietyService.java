@@ -3,7 +3,11 @@ package com.ent.happychat.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.Society;
+import com.ent.happychat.entity.Topic;
 import com.ent.happychat.pojo.req.society.SocietyPageReq;
+
+import java.util.List;
+import java.util.Map;
 
 public interface SocietyService extends IService<Society> {
 
@@ -40,5 +44,6 @@ public interface SocietyService extends IService<Society> {
      */
     Society findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName);
 
+    Map<Long, Society> mapByIds(List<Long> ids);
 
 }

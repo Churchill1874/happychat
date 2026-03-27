@@ -19,5 +19,7 @@ public class ViewsRecordPageReq extends PageBase implements Serializable {
     private ViewsEnum viewsType;
     @ApiModelProperty("浏览内容")
     private String content;
+    @ApiModelProperty("ip")
+    private String ip;
 
 }

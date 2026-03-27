@@ -3,14 +3,13 @@ package com.ent.happychat.service.serviceimpl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.Society;
-import com.ent.happychat.entity.SoutheastAsia;
-import com.ent.happychat.entity.Topic;
+import com.ent.happychat.entity.*;
 import com.ent.happychat.mapper.SocietyMapper;
 import com.ent.happychat.mapper.TopicMapper;
 import com.ent.happychat.pojo.req.society.SocietyPageReq;
@@ -25,6 +24,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements TopicService {
@@ -96,6 +98,25 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         Topic topic = getById(viewsId);
         increaseViewsCount(ip, viewsId, topic.getTitle(), playerId, playerName);
         return topic;
+    }
+
+    @Override
+    public Map<Long, Topic> mapByIds(List<Long> ids) {
+        Map<Long, Topic> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(ids)){
+            return map;
+        }
+
+        QueryWrapper<Topic> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().select(Topic::getId, Topic::getTitle).in(Topic::getId, ids);
+        List<Topic> list = list(queryWrapper);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(news -> {
+                map.put(news.getId(), news);
+            });
+        }
+        return map;
     }
 
 }

@@ -11,6 +11,7 @@ import com.ent.happychat.pojo.req.society.SocietyAddReq;
 import com.ent.happychat.pojo.req.society.SocietyPageReq;
 import com.ent.happychat.pojo.req.society.SocietyUpdateReq;
 import com.ent.happychat.service.SocietyService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,8 @@ public class SocietyController {
 
     @Resource
     private SocietyService societyService;
+    @Resource
+    private UploadRecordService uploadRecordService;
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
@@ -45,6 +48,10 @@ public class SocietyController {
     public R add(@RequestBody SocietyAddReq req) {
         Society society = BeanUtil.toBean(req, Society.class);
         societyService.add(society);
+
+        uploadRecordService.cleanByPath(society.getImagePath());
+        uploadRecordService.cleanByPath(society.getVideoPath());
+        uploadRecordService.cleanByPath(society.getVideoCover());
         return R.ok(null);
     }
 
@@ -54,6 +61,11 @@ public class SocietyController {
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
         societyService.removeById(req.getId());
+        Society society = societyService.getById(req.getId());
+        uploadRecordService.cleanRemoveFile(society.getImagePath());
+        uploadRecordService.cleanRemoveFile(society.getVideoCover());
+        uploadRecordService.cleanRemoveFile(society.getVideoPath());
+
         return R.ok(null);
     }
 
@@ -72,6 +84,10 @@ public class SocietyController {
     public R update(@RequestBody @Valid SocietyUpdateReq req) {
         Society society = BeanUtil.toBean(req, Society.class);
         societyService.updateById(society);
+
+        uploadRecordService.cleanByPath(society.getImagePath());
+        uploadRecordService.cleanByPath(society.getVideoPath());
+        uploadRecordService.cleanByPath(society.getVideoCover());
         return R.ok(null);
     }
 

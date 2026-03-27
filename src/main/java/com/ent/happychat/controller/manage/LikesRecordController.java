@@ -61,10 +61,13 @@ public class LikesRecordController {
             LikesRecordPageResp likesRecordPageResp = BeanUtil.toBean(likesRecord, LikesRecordPageResp.class);
             likesRecordPageResp.setPlayerName(playerInfo.getName());
             likesRecordPageResp.setLevel(playerInfo.getLevel());
+            likesRecordPageResp.setAvatarPath(playerInfo.getAvatarPath());
             likesRecordPageResp.setAccount(playerInfo.getAccount());
             likesRecordPageRespList.add(likesRecordPageResp);
         });
 
+        likesRecordPageRespPage.setPages(iPage.getPages());
+        likesRecordPageRespPage.setTotal(iPage.getTotal());
         likesRecordPageRespPage.setRecords(likesRecordPageRespList);
         return R.ok(likesRecordPageRespPage);
     }

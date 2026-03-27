@@ -2,6 +2,7 @@ package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.InfoEnum;
@@ -13,6 +14,7 @@ import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
+import com.ent.happychat.entity.Society;
 import com.ent.happychat.mapper.PoliticsMapper;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
@@ -24,6 +26,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> implements PoliticsService {
@@ -94,5 +100,25 @@ public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> i
         increaseViewsCount(ip, viewsId, politics.getTitle(), playerId, playerName);
         return politics;
     }
+
+    @Override
+    public Map<Long, Politics> mapByIds(List<Long> ids) {
+        Map<Long, Politics> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(ids)){
+            return map;
+        }
+
+        QueryWrapper<Politics> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().select(Politics::getId, Politics::getTitle).in(Politics::getId, ids);
+        List<Politics> list = list(queryWrapper);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(news -> {
+                map.put(news.getId(), news);
+            });
+        }
+        return map;
+    }
+
 
 }

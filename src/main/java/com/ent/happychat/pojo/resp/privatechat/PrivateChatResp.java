@@ -15,5 +15,11 @@ public class PrivateChatResp extends PrivateChat implements Serializable {
 
     @ApiModelProperty("发消息人的头像")
     private String sendAvatarPath;
+    @ApiModelProperty("发送人昵称")
+    private String senderName;
+    @ApiModelProperty("接收人昵称")
+    private String receiverName;
+    @ApiModelProperty("接收人的头像")
+    private String receiveAvatarPath;
 
 }

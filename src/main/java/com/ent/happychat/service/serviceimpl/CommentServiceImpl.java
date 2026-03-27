@@ -47,6 +47,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private InteractiveStatisticsService interactiveStatisticsService;
     @Autowired
     private SystemMessageService systemMessageService;
+    @Autowired
+    private ExposureService exposureService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -138,7 +140,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(Comment::getNewsId, dto.getNewsId())
-            .eq(Comment::getInfoType, dto.getNewsType())
+            .eq(Comment::getInfoType, dto.getInfoType())
             .isNull(Comment::getTopId)
             .orderByDesc(Comment::getCreateTime);
         return page(iPage, queryWrapper);
@@ -163,20 +165,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public IPage<Comment> queryPage(CommentPageReq dto) {
-        if (StringUtils.isNotBlank(dto.getTitle())) {
-            QueryWrapper<News> newsQuery = new QueryWrapper<>();
-            newsQuery.lambda().eq(News::getTitle, dto.getTitle());
-            News news = newsService.getOne(newsQuery);
-            if (dto.getNewsId() != null && dto.getNewsId().compareTo(news.getId()) != 0) {
-                throw new DataException("您搜索的新闻id和新闻标题归属的新闻记录id不一致");
-            }
-            dto.setNewsId(news.getId());
-        }
-
         IPage<Comment> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(dto.getNewsType() != null, Comment::getInfoType, dto.getNewsType())
+            .eq(dto.getInfoType() != null, Comment::getInfoType, dto.getInfoType())
             .eq(dto.getNewsId() != null, Comment::getNewsId, dto.getNewsId())
             .eq(dto.getReplyId() != null, Comment::getReplyId, dto.getReplyId())
             .eq(dto.getPlayerId() != null, Comment::getPlayerId, dto.getPlayerId())

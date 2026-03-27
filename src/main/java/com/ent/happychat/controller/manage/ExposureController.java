@@ -16,6 +16,7 @@ import com.ent.happychat.pojo.req.topic.TopicPageReq;
 import com.ent.happychat.pojo.req.topic.TopicUpdateReq;
 import com.ent.happychat.service.ExposureService;
 import com.ent.happychat.service.TopicService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ public class ExposureController {
 
     @Autowired
     private ExposureService exposureService;
+    @Autowired
+    private UploadRecordService uploadRecordService;
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
@@ -50,6 +53,13 @@ public class ExposureController {
     public R add(@RequestBody ExposureAdd req) {
         Exposure exposure = BeanUtil.toBean(req, Exposure.class);
         exposureService.add(exposure);
+
+        uploadRecordService.cleanByPath(exposure.getImage1());
+        uploadRecordService.cleanByPath(exposure.getImage2());
+        uploadRecordService.cleanByPath(exposure.getImage3());
+        uploadRecordService.cleanByPath(exposure.getImage4());
+        uploadRecordService.cleanByPath(exposure.getImage5());
+        uploadRecordService.cleanByPath(exposure.getImage6());
         return R.ok(null);
     }
 
@@ -58,7 +68,15 @@ public class ExposureController {
     @HomeDataClean
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
+        Exposure exposure = exposureService.getById(req.getId());
         exposureService.removeById(req.getId());
+
+        uploadRecordService.cleanRemoveFile(exposure.getImage1());
+        uploadRecordService.cleanRemoveFile(exposure.getImage2());
+        uploadRecordService.cleanRemoveFile(exposure.getImage3());
+        uploadRecordService.cleanRemoveFile(exposure.getImage4());
+        uploadRecordService.cleanRemoveFile(exposure.getImage5());
+        uploadRecordService.cleanRemoveFile(exposure.getImage6());
         return R.ok(null);
     }
 
@@ -77,6 +95,13 @@ public class ExposureController {
     public R update(@RequestBody @Valid ExposureUpdate req) {
         Exposure exposure = BeanUtil.toBean(req, Exposure.class);
         exposureService.update(exposure);
+
+        uploadRecordService.cleanByPath(exposure.getImage1());
+        uploadRecordService.cleanByPath(exposure.getImage2());
+        uploadRecordService.cleanByPath(exposure.getImage3());
+        uploadRecordService.cleanByPath(exposure.getImage4());
+        uploadRecordService.cleanByPath(exposure.getImage5());
+        uploadRecordService.cleanByPath(exposure.getImage6());
         return R.ok(null);
     }
 

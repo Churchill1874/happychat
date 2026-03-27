@@ -223,9 +223,12 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Override
     public Map<Long, News> mapByIds(List<Long> ids) {
         Map<Long, News> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(ids)){
+            return map;
+        }
 
         QueryWrapper<News> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(News::getId, ids);
+        queryWrapper.lambda().select(News::getId, News::getTitle).in(News::getId, ids);
         List<News> list = list(queryWrapper);
 
         if (CollectionUtils.isNotEmpty(list)) {

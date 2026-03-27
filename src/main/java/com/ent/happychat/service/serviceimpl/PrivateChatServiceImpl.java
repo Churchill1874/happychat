@@ -114,4 +114,47 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         return count(queryWrapper);
     }
 
+    @Override
+    public IPage<PrivateChat> adminPrivateChatPage(PlayerPrivateChatPageReq po) {
+
+        IPage<PrivateChat> page = new Page<>(po.getPageNum(), po.getPageSize());
+
+        QueryWrapper<PrivateChat> queryWrapper = new QueryWrapper<>();
+
+        Long playerAId = po.getPlayerAId();
+        Long playerBId = po.getPlayerBId();
+
+        // ✅ 条件判断（外层if，不用lambda嵌套）
+        if (playerAId != null && playerBId != null) {
+            queryWrapper.lambda()
+                    .and(q -> q
+                            .eq(PrivateChat::getSendId, playerAId)
+                            .eq(PrivateChat::getReceiveId, playerBId)
+                    )
+                    .or(q -> q
+                            .eq(PrivateChat::getSendId, playerBId)
+                            .eq(PrivateChat::getReceiveId, playerAId)
+                    );
+
+        } else if (playerAId != null) {
+
+            queryWrapper.lambda()
+                    .eq(PrivateChat::getSendId, playerAId)
+                    .or()
+                    .eq(PrivateChat::getReceiveId, playerAId);
+
+        } else if (playerBId != null) {
+
+            queryWrapper.lambda()
+                    .eq(PrivateChat::getSendId, playerBId)
+                    .or()
+                    .eq(PrivateChat::getReceiveId, playerBId);
+        }
+
+        // ✅ 必须统一 return（不管有没有条件）
+        queryWrapper.lambda().orderByDesc(PrivateChat::getCreateTime);
+
+        return page(page, queryWrapper);
+    }
+
 }

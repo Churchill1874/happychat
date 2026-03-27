@@ -10,6 +10,7 @@ import com.ent.happychat.mapper.ViewsRecordMapper;
 import com.ent.happychat.pojo.req.views.ViewsRecordPageReq;
 import com.ent.happychat.service.ViewsRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,11 +24,12 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
         IPage<ViewsRecord> iPage = new Page<>(po.getPageNum(), po.getPageSize());
         QueryWrapper<ViewsRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(po.getPlayerId() != null, ViewsRecord::getPlayerId, po.getPlayerId())
-            .eq(po.getViewsId() != null, ViewsRecord::getViewsId, po.getViewsId())
-            .eq(po.getViewsType() != null, ViewsRecord::getViewsType, po.getViewsType())
-            .eq(po.getContent() != null, ViewsRecord::getContent, po.getContent())
-            .orderByDesc(ViewsRecord::getCreateTime);
+                .eq(po.getPlayerId() != null, ViewsRecord::getPlayerId, po.getPlayerId())
+                .eq(po.getViewsId() != null, ViewsRecord::getViewsId, po.getViewsId())
+                .eq(po.getViewsType() != null, ViewsRecord::getViewsType, po.getViewsType())
+                .eq(po.getContent() != null, ViewsRecord::getContent, po.getContent())
+                .eq(StringUtils.isNotBlank(po.getIp()), ViewsRecord::getIp, po.getIp())
+                .orderByDesc(ViewsRecord::getCreateTime);
         return page(iPage, queryWrapper);
     }
 

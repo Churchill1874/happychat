@@ -23,9 +23,9 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 5655088707782304840L;
 
 
-    @TableField("update_time")
+/*    @TableField("update_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+    private LocalDateTime updateTime;*/
 
     @ApiModelProperty("信息类型messageType是评论类型的时候,title是自己发表对新闻的评论信息,现在有人对此评论发表评论." +
         "信息类型messageType为系统类型的时候,title是系统消息标题")
@@ -41,11 +41,11 @@ public class SystemMessage extends BaseInfo implements Serializable {
     private MessageTypeEnum messageType;
 
     @JsonSerialize(using = ToStringSerializer.class)
-    @ApiModelProperty("收取人账号")
+    @ApiModelProperty("收取人id")
     private Long recipientId;
 
     @JsonSerialize(using = ToStringSerializer.class)
-    @ApiModelProperty("发送人账号")
+    @ApiModelProperty("发送人id")
     private Long senderId;
 
     @JsonSerialize(using = ToStringSerializer.class)

@@ -12,6 +12,9 @@ import java.io.Serializable;
 public class SystemMessageAddReq implements Serializable {
     private static final long serialVersionUID = -5157989876537390505L;
 
+    @ApiModelProperty("用户id")
+    private Long recipientId;
+
     @NotBlank(message = "标题不能为空")
     @ApiModelProperty(value = "标题",required = true)
     private String title;
@@ -25,6 +28,6 @@ public class SystemMessageAddReq implements Serializable {
 
     @NotNull(message = "是否需要弹窗不能为空")
     @ApiModelProperty(value = "需要弹窗", required = true)
-    private Boolean popUp;
+    private Boolean popup;
 
 }

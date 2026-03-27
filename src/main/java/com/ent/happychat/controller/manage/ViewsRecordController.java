@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.ViewsRecord;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.views.ViewsRecordPageReq;
 import com.ent.happychat.pojo.resp.views.ViewsRecordPageResp;
 import com.ent.happychat.service.PlayerInfoService;
@@ -55,16 +56,32 @@ public class ViewsRecordController {
 
         List<ViewsRecordPageResp> viewsRecordPageRespList = new ArrayList<>();
         iPage.getRecords().forEach(viewsRecord -> {
-            PlayerInfo playerInfo = playerInfoMap.get(viewsRecord.getPlayerId());
             ViewsRecordPageResp viewsRecordPageResp = BeanUtil.toBean(viewsRecord, ViewsRecordPageResp.class);
-            viewsRecordPageResp.setAccount(playerInfo.getAccount());
-            viewsRecordPageResp.setLevel(playerInfo.getLevel());
-            viewsRecordPageResp.setPlayerName(playerInfo.getName());
+
+            if(viewsRecord.getPlayerId() != null){
+                PlayerInfo playerInfo = playerInfoMap.get(viewsRecord.getPlayerId());
+                viewsRecordPageResp.setAccount(playerInfo.getAccount());
+                viewsRecordPageResp.setLevel(playerInfo.getLevel());
+                viewsRecordPageResp.setPlayerName(playerInfo.getName());
+            }
+
             viewsRecordPageRespList.add(viewsRecordPageResp);
         });
 
+        viewsRecordPageRespPage.setCurrent(iPage.getCurrent());
+        viewsRecordPageRespPage.setPages(iPage.getPages());
+        viewsRecordPageRespPage.setTotal(iPage.getTotal());
+        viewsRecordPageRespPage.setSize(iPage.getSize());
         viewsRecordPageRespPage.setRecords(viewsRecordPageRespList);
         return R.ok(viewsRecordPageRespPage);
+    }
+
+    @AdminLoginCheck
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除", notes = "删除")
+    public R delete(@RequestBody @Valid IdBase req) {
+        viewsRecordService.removeById(req.getId());
+        return R.ok(null);
     }
 
 }

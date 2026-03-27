@@ -17,6 +17,7 @@ import com.ent.happychat.pojo.req.news.NewsPullReq;
 import com.ent.happychat.pojo.req.news.NewsUpdateBase;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class NewsController {
     @Autowired
     private EhcacheService ehcacheService;
 
+    @Autowired
+    private UploadRecordService uploadRecordService;
+
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<News>> queryPage(@RequestBody @Valid NewsPageReq req) {
@@ -53,8 +57,11 @@ public class NewsController {
     @HomeDataClean
     @AdminLoginCheck
     public R delete(@RequestBody @Valid IdBase req) {
-        newsService.removeById(req.getId());
+        News news = newsService.getById(req.getId());
 
+        newsService.removeById(req.getId());
+        uploadRecordService.cleanRemoveFile(news.getPhotoPath());
+        uploadRecordService.cleanRemoveFile(news.getContentImagePath());
         //清理首页的新闻列表缓存
         //ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);
         ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
@@ -68,6 +75,9 @@ public class NewsController {
     public R updateNews(@RequestBody @Valid NewsUpdateBase req) {
         News news = BeanUtil.toBean(req, News.class);
         newsService.updateNews(news);
+
+        uploadRecordService.cleanByPath(news.getPhotoPath());
+        uploadRecordService.cleanByPath(news.getContentImagePath());
 
         //清理首页的新闻列表缓存
         ehcacheService.homeCache().remove(CacheKeyConstant.HOME_DATA);
@@ -90,6 +100,9 @@ public class NewsController {
         news.setCreateName(TokenTools.getAdminToken(true).getName());
         news.setCreateTime(LocalDateTime.now());
         newsService.save(news);
+
+        uploadRecordService.cleanByPath(news.getPhotoPath());
+        uploadRecordService.cleanByPath(news.getContentImagePath());
 
         //清理首页的新闻列表缓存
         //ehcacheService.homeNewsCache().remove(CacheKeyConstant.HOME_NEWS_KEY);

@@ -2,12 +2,15 @@ package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Society;
+import com.ent.happychat.entity.Topic;
 import com.ent.happychat.mapper.SocietyMapper;
 import com.ent.happychat.pojo.req.society.SocietyPageReq;
 import com.ent.happychat.service.SocietyService;
@@ -18,6 +21,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SocietyServiceImpl extends ServiceImpl<SocietyMapper, Society> implements SocietyService {
@@ -91,6 +97,25 @@ public class SocietyServiceImpl extends ServiceImpl<SocietyMapper, Society> impl
         Society society = getById(viewsId);
         increaseViewsCount(ip, viewsId, society.getTitle(), playerId, playerName);
         return society;
+    }
+
+    @Override
+    public Map<Long, Society> mapByIds(List<Long> ids) {
+        Map<Long, Society> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(ids)){
+            return map;
+        }
+
+        QueryWrapper<Society> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().select(Society::getId, Society::getTitle).in(Society::getId, ids);
+        List<Society> list = list(queryWrapper);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(news -> {
+                map.put(news.getId(), news);
+            });
+        }
+        return map;
     }
 
 }

@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @ApiModel("公司评价")
@@ -20,5 +21,6 @@ public class CompanyEvent extends BaseInfo implements Serializable {
     private String image;
     @ApiModelProperty("详细描述")
     private String description;
-
+    @ApiModelProperty("事件时间")
+    private LocalDate eventDate;
 }

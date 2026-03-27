@@ -209,12 +209,12 @@ public class HomeServiceImpl implements HomeService {
 
                 if (companyResp.getCompanyEventList().size() > 0) {
                     CompanyEvent companyEvent1 = companyResp.getCompanyEventList().get(0);
-                    company.setEventTime1(companyEvent1.getCreateTime());
+                    company.setEventTime1(companyEvent1.getEventDate());
                     company.setEventContent1(companyEvent1.getDescription());
                 }
                 if (companyResp.getCompanyEventList().size() > 1) {
                     CompanyEvent companyEvent2 = companyResp.getCompanyEventList().get(1);
-                    company.setEventTime2(companyEvent2.getCreateTime());
+                    company.setEventTime2(companyEvent2.getEventDate());
                     company.setEventContent2(companyEvent2.getDescription());
                 }
             }

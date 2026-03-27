@@ -59,9 +59,13 @@ public class SystemMessageApi {
         List<SystemMessageResp> list = new ArrayList<>();
         for(SystemMessage systemMessage: iPage.getRecords()){
             SystemMessageResp systemMessageResp = BeanUtil.toBean(systemMessage, SystemMessageResp.class);
-            PlayerInfo playerInfo = map.get(systemMessageResp.getSenderId());
-            systemMessageResp.setAvatar(playerInfo.getAvatarPath());
-            systemMessageResp.setSenderName(playerInfo.getName());
+            if(systemMessageResp.getSenderId() != null){
+                PlayerInfo playerInfo = map.get(systemMessageResp.getSenderId());
+                if(playerInfo != null){
+                    systemMessageResp.setAvatar(playerInfo.getAvatarPath());
+                    systemMessageResp.setSenderName(playerInfo.getName());
+                }
+            }
             list.add(systemMessageResp);
         }
 

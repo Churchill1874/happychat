@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
+import com.ent.happychat.entity.Society;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PoliticsService extends IService<Politics> {
 
@@ -44,5 +48,8 @@ public interface PoliticsService extends IService<Politics> {
      * @return
      */
     Politics findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName);
+
+    Map<Long, Politics> mapByIds(List<Long> ids);
+
 
 }

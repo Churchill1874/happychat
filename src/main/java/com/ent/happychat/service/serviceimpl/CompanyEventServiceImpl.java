@@ -23,7 +23,9 @@ public class CompanyEventServiceImpl extends ServiceImpl<CompanyEventMapper, Com
         Map<Long, List<CompanyEvent>> map = new HashMap<>();
 
         QueryWrapper<CompanyEvent> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(CompanyEvent::getCompanyId, companyIdList);
+        queryWrapper.lambda()
+                .in(CompanyEvent::getCompanyId, companyIdList)
+                .orderByDesc(CompanyEvent::getEventDate);
         List<CompanyEvent> companyEventList = list(queryWrapper);
 
         if (CollectionUtils.isEmpty(companyEventList)){

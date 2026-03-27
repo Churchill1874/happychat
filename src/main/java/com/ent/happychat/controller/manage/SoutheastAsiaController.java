@@ -11,6 +11,7 @@ import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaAddReq;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaUpdateReq;
 import com.ent.happychat.service.SoutheastAsiaService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class SoutheastAsiaController {
     @Autowired
     private SoutheastAsiaService southeastAsiaService;
 
+    @Autowired
+    private UploadRecordService uploadRecordService;
+
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<SoutheastAsia>> queryPage(@RequestBody SoutheastAsiaPageReq req) {
@@ -45,6 +49,7 @@ public class SoutheastAsiaController {
     public R add(@RequestBody SoutheastAsiaAddReq req) {
         SoutheastAsia southeastAsia = BeanUtil.toBean(req, SoutheastAsia.class);
         southeastAsiaService.add(southeastAsia);
+        uploadRecordService.cleanByPath(southeastAsia.getImagePath());
         return R.ok(null);
     }
 
@@ -53,7 +58,10 @@ public class SoutheastAsiaController {
     @HomeDataClean
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
+        SoutheastAsia southeastAsia = southeastAsiaService.getById(req.getId());
+
         southeastAsiaService.removeById(req.getId());
+        uploadRecordService.cleanRemoveFile(southeastAsia.getImagePath());
         return R.ok(null);
     }
 
@@ -72,6 +80,8 @@ public class SoutheastAsiaController {
     public R update(@RequestBody @Valid SoutheastAsiaUpdateReq req) {
         SoutheastAsia southeastAsia = BeanUtil.toBean(req, SoutheastAsia.class);
         southeastAsiaService.update(southeastAsia);
+
+        uploadRecordService.cleanByPath(southeastAsia.getImagePath());
         return R.ok(null);
     }
 

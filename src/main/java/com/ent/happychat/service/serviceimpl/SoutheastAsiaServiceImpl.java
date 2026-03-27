@@ -2,12 +2,14 @@ package com.ent.happychat.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.TokenException;
 import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.mapper.SoutheastAsiaMapper;
@@ -21,6 +23,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, SoutheastAsia> implements SoutheastAsiaService {
@@ -100,5 +105,26 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
         increaseViewsCount(ip, viewsId, southeastAsia.getTitle(), playerId, playerName);
         return southeastAsia;
     }
+
+    @Override
+    public Map<Long, SoutheastAsia> mapByIds(List<Long> ids) {
+        Map<Long, SoutheastAsia> map = new HashMap<>();
+
+        if(CollectionUtils.isEmpty(ids)){
+            return map;
+        }
+
+        QueryWrapper<SoutheastAsia> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().select(SoutheastAsia::getId, SoutheastAsia::getTitle).in(SoutheastAsia::getId, ids);
+        List<SoutheastAsia> list = list(queryWrapper);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(news -> {
+                map.put(news.getId(), news);
+            });
+        }
+        return map;
+    }
+
 
 }

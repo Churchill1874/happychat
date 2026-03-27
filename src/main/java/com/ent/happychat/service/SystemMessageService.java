@@ -46,4 +46,6 @@ public interface SystemMessageService extends IService<SystemMessage> {
      * @return
      */
     int unreadSystemMessage(Long playerId, MessageTypeEnum type);
+
+    void deletePublicMessage(String title);
 }

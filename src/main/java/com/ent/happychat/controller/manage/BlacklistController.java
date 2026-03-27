@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.SuperAdminLoginCheck;
 import com.ent.happychat.entity.Blacklist;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.IdListBase;
 import com.ent.happychat.pojo.req.blacklist.BlacklistAddReq;
 import com.ent.happychat.pojo.req.blacklist.BlacklistPageReq;
@@ -58,8 +59,8 @@ public class BlacklistController {
     @SuperAdminLoginCheck
     @PostMapping("/del")
     @ApiOperation(value = "删除黑名单", notes = "删除黑名单")
-    public R del(@RequestBody @Valid IdListBase req) {
-        return R.ok(blacklistService.del(req.getIdList()));
+    public R del(@RequestBody @Valid IdBase req) {
+        return R.ok(blacklistService.removeById(req.getId()));
     }
 
 

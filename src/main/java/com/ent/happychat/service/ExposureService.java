@@ -7,6 +7,9 @@ import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.exposure.ExposurePage;
 
+import java.util.List;
+import java.util.Map;
+
 public interface ExposureService extends IService<Exposure> {
 
     IPage<Exposure> queryPage(ExposurePage dto);
@@ -34,4 +37,7 @@ public interface ExposureService extends IService<Exposure> {
      * @return
      */
     Exposure findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName);
+
+    Map<Long, Exposure> mapByIds(List<Long> ids);
+
 }

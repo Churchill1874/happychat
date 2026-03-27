@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Blacklist;
 import com.ent.happychat.mapper.BlacklistMapper;
 import com.ent.happychat.service.BlacklistService;
@@ -32,6 +33,7 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean insert(Blacklist po) {
+        po.setCreateName(TokenTools.getAdminName());
         po.setCreateTime(LocalDateTime.now());
         return save(po);
     }

@@ -2,10 +2,14 @@ package com.ent.happychat.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
+
+import java.util.List;
+import java.util.Map;
 
 public interface SoutheastAsiaService extends IService<SoutheastAsia> {
 
@@ -40,4 +44,8 @@ public interface SoutheastAsiaService extends IService<SoutheastAsia> {
      * @return
      */
     SoutheastAsia findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName);
+
+    Map<Long, SoutheastAsia> mapByIds(List<Long> ids);
+
+
 }

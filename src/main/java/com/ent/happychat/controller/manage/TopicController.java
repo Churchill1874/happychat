@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.HomeDataClean;
-import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.entity.Topic;
 import com.ent.happychat.pojo.req.IdBase;
-import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaUpdateReq;
 import com.ent.happychat.pojo.req.topic.TopicAddReq;
 import com.ent.happychat.pojo.req.topic.TopicPageReq;
 import com.ent.happychat.pojo.req.topic.TopicUpdateReq;
 import com.ent.happychat.service.TopicService;
+import com.ent.happychat.service.UploadRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +31,8 @@ public class TopicController {
 
     @Autowired
     private TopicService topicService;
+    @Autowired
+    private UploadRecordService uploadRecordService;
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
@@ -46,6 +47,9 @@ public class TopicController {
     @ApiOperation(value = "新增东南亚新闻", notes = "新增东南亚新闻")
     public R add(@RequestBody TopicAddReq req) {
         topicService.add(req);
+        uploadRecordService.cleanByPath(req.getImagePath());
+        uploadRecordService.cleanByPath(req.getVideoPath());
+        uploadRecordService.cleanByPath(req.getVideoCover());
         return R.ok(null);
     }
 
@@ -55,6 +59,10 @@ public class TopicController {
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
         topicService.removeById(req.getId());
+        Topic topic = topicService.getById(req.getId());
+        uploadRecordService.cleanRemoveFile(topic.getImagePath());
+        uploadRecordService.cleanRemoveFile(topic.getVideoPath());
+        uploadRecordService.cleanRemoveFile(topic.getVideoCover());
         return R.ok(null);
     }
 
@@ -72,6 +80,9 @@ public class TopicController {
     public R update(@RequestBody @Valid TopicUpdateReq req) {
         Topic topic = BeanUtil.toBean(req, Topic.class);
         topicService.update(topic);
+        uploadRecordService.cleanByPath(req.getImagePath());
+        uploadRecordService.cleanByPath(req.getVideoPath());
+        uploadRecordService.cleanByPath(req.getVideoCover());
         return R.ok(null);
     }
 

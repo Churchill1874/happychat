@@ -99,6 +99,9 @@ public class LikesRecordApi {
             iPage.setRecords(list);
         }
 
+        iPage.setPages(likesRecordIPage.getPages());
+        iPage.setTotal(likesRecordIPage.getTotal());
+
         return R.ok(iPage);
     }
 
