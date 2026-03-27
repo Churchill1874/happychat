@@ -1,14 +1,18 @@
 package com.ent.happychat.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.tools.HttpTools;
+import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PlayerToken;
 import com.ent.happychat.mapper.PlayerTokenMapper;
 import com.ent.happychat.service.PlayerTokenService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, PlayerToken> implements PlayerTokenService {
@@ -62,6 +66,20 @@ public class PlayerTokenServiceImpl extends ServiceImpl<PlayerTokenMapper, Playe
             .lambda()
             .eq(PlayerToken::getPlayerId, playerId);
         return getOne(queryWrapper);
+    }
+
+    @Override
+    public List<PlayerToken> loginList() {
+        LambdaQueryWrapper<PlayerToken> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .select(
+                        PlayerToken::getPlayerId,
+                        PlayerToken::getCity,
+                        PlayerToken::getLoginTime)
+                .orderByDesc(PlayerToken::getLoginTime)
+                .last("LIMIT 10");
+
+        return list(queryWrapper);
     }
 
 

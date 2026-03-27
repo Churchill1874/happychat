@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.pojo.resp.report.RankReportResp;
+import com.ent.happychat.pojo.resp.report.RegisterReportResp;
 
 import java.util.List;
 import java.util.Map;
@@ -51,5 +53,8 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
      */
     Map<Long, PlayerInfo> playerIdMapPlayer(List<Long> playerIdList);
 
+    RegisterReportResp getRegisterReport();
+
+    RankReportResp rankReport();
 
 }

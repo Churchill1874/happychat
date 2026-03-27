@@ -1,18 +1,23 @@
 package com.ent.happychat.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.*;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
+import com.ent.happychat.pojo.resp.report.CommentReportResp;
+import com.ent.happychat.pojo.resp.report.RegisterReportResp;
 import com.ent.happychat.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -47,8 +52,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private InteractiveStatisticsService interactiveStatisticsService;
     @Autowired
     private SystemMessageService systemMessageService;
-    @Autowired
-    private ExposureService exposureService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -239,6 +242,56 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             .eq(Comment::getTargetPlayerId, receiveId)
             .eq(Comment::getReadStatus, false);
         return count(queryWrapper);
+    }
+
+    @Override
+    public CommentReportResp getCommentReport() {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .ge(Comment::getCreateTime, TimeUtils.startOfLastMonth())
+                .select( Comment::getId, Comment::getCreateTime );
+        List<Comment> list = list(queryWrapper);
+
+        if(CollectionUtils.isEmpty(list)){
+            return new CommentReportResp();
+        }
+
+        CommentReportResp commentReportResp = new CommentReportResp();
+
+        for(Comment comment : list){
+            //上个月统计
+            if(comment.getCreateTime().isBefore(TimeUtils.startOfThisMonth())){
+                commentReportResp.setLastMonthComment(commentReportResp.getLastMonthComment() + 1);
+            }
+            //本月统计
+            if(comment.getCreateTime().isAfter(TimeUtils.endOfLastMonth())){
+                commentReportResp.setThisMonthComment(commentReportResp.getThisMonthComment() + 1);
+            }
+            //本周统计
+            if(comment.getCreateTime().isAfter(TimeUtils.endOfLastWeek())){
+                commentReportResp.setThisWeekComment(commentReportResp.getThisWeekComment() + 1);
+            }
+            //上周统计
+            if(!comment.getCreateTime().isBefore(TimeUtils.startOfLastWeek()) && comment.getCreateTime().isBefore(TimeUtils.endOfThisWeek())){
+                commentReportResp.setLastWeekComment(commentReportResp.getLastWeekComment() + 1);
+            }
+            //今日统计
+            if(!comment.getCreateTime().isBefore(TimeUtils.startOfToday())){
+                commentReportResp.setTodayComment(commentReportResp.getTotalComment() + 1);
+            }
+            //昨日统计
+            if(!comment.getCreateTime().isBefore(TimeUtils.startOfYesterday()) && comment.getCreateTime().isBefore(TimeUtils.endOfYesterday())){
+                commentReportResp.setYesterdayComment(commentReportResp.getYesterdayComment() + 1);
+            }
+        }
+
+        //开始计算
+        commentReportResp.calcRates();
+
+        //总计
+        LambdaQueryWrapper<Comment> totalQueryWrapper = new LambdaQueryWrapper<>();
+        commentReportResp.setTotalComment(count(totalQueryWrapper));
+        return commentReportResp;
     }
 
 

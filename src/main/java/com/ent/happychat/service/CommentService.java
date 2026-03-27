@@ -6,6 +6,7 @@ import com.ent.happychat.entity.Comment;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.req.likes.LikesClickReq;
 import com.ent.happychat.pojo.resp.comment.CommentResp;
+import com.ent.happychat.pojo.resp.report.CommentReportResp;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -68,5 +69,6 @@ public interface CommentService extends IService<Comment> {
      */
     int unreadCount(Long receiveId);
 
+    CommentReportResp getCommentReport();
 
 }

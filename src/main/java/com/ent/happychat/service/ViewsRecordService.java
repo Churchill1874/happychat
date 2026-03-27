@@ -6,6 +6,7 @@ import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.entity.ViewsRecord;
 import com.ent.happychat.pojo.req.views.ViewsAddReq;
 import com.ent.happychat.pojo.req.views.ViewsRecordPageReq;
+import com.ent.happychat.pojo.resp.report.ViewReportResp;
 
 public interface ViewsRecordService extends IService<ViewsRecord> {
 
@@ -21,5 +22,5 @@ public interface ViewsRecordService extends IService<ViewsRecord> {
      */
     void addViewsRecord(String ip, Long viewsId, String content, Long playerId, String playerName, ViewsEnum viewType);
 
-
+    ViewReportResp viewReport();
 }
