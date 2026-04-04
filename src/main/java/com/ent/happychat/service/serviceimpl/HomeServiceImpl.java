@@ -69,10 +69,11 @@ public class HomeServiceImpl implements HomeService {
         getPolitics(homeResp);
         getSoutheastAsiaNews(homeResp);
         getExposure(homeResp);
+        getBannerList(homeResp);
+
 
         //getLast3BetOrderList(homeResp);
         //getNewsRank(homeResp);
-        //getBannerList(homeResp);
         //getPromotion(homeResp);
 
         //获取随机的在线人数

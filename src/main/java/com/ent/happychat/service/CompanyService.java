@@ -27,4 +27,6 @@ public interface CompanyService extends IService<Company> {
      * @return
      */
     IPage<Company> queryPage(PageBase po);
+
+    CompanyResp findById(Long id);
 }

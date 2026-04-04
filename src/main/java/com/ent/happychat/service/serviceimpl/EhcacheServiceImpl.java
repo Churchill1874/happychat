@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -148,6 +149,18 @@ public class EhcacheServiceImpl implements EhcacheService {
     public void setBlacklistIpSetCache(Set<String> blacklistIpSet) {
         cacheManager.getCache(CacheKeyConstant.BLACKLIST, String.class, (Class<Set<String>>)(Class<?>)Set.class)
                 .put(CacheKeyConstant.BLACKLIST_SET_KEY, blacklistIpSet);
+    }
+
+    @Override
+    public List<String> scrollingTextCache() {
+        Cache<String, List<String>> cache = cacheManager.getCache(CacheKeyConstant.SCROLLING_TEXT, String.class, (Class<List<String>>)(Class<?>)List.class);
+        return cache.get(CacheKeyConstant.SCROLLING_TEXT_LIST);
+    }
+
+    @Override
+    public void setScrollingTextCache(List<String> list) {
+        Cache<String, List<String>> cache = cacheManager.getCache(CacheKeyConstant.SCROLLING_TEXT, String.class, (Class<List<String>>)(Class<?>)List.class);
+        cache.put(CacheKeyConstant.SCROLLING_TEXT_LIST, list);
     }
 
 }

@@ -216,6 +216,9 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
     @Override
     public News findByIdAndInsertRecord(String ip, Long viewsId, Long playerId, String playerName) {
         News news = getById(viewsId);
+        if(news == null){
+            throw new DataException("该新闻已撤销或移除");
+        }
         increaseViewsCount(ip, viewsId, news.getTitle(), playerId, playerName);
         return news;
     }
@@ -272,7 +275,7 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
             }
             if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.ENTERTAINMENT)) {
                 //娱乐
-                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 10);
+                List<News> entertainmentNews = NewsTools.getNewsData(JuHeNewsCategoryEnum.ENTERTAINMENT, 2);
                 newsList.addAll(entertainmentNews);
             }
 /*            if (newsCategoryEnums.contains(JuHeNewsCategoryEnum.WOMAN)) {

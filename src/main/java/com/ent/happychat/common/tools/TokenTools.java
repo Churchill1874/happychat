@@ -3,6 +3,7 @@ package com.ent.happychat.common.tools;
 import cn.hutool.core.util.RandomUtil;
 import com.ent.happychat.common.constant.CacheKeyConstant;
 import com.ent.happychat.common.exception.TokenException;
+import com.ent.happychat.config.websocket.WebSocketEventListener;
 import com.ent.happychat.pojo.resp.admin.AdminTokenResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.EhcacheService;
@@ -98,33 +99,23 @@ public class TokenTools {
      */
     public static int onlineCountRandom() {
         Cache<String, Integer> cache = ehcacheService.playerOnlineCount();
-        Integer playerOnlineCount = cache.get(CacheKeyConstant.PLAYER_ONLINE_COUNT);
-        if (playerOnlineCount != null) {
-            return playerOnlineCount;
+        Integer baseCount = cache.get(CacheKeyConstant.PLAYER_ONLINE_COUNT);
+        if (baseCount == null) {
+            // 随机基数，只按时段生成一次，缓存300秒
+            int currentHour = LocalDateTime.now().getHour();
+            if (currentHour < 7) {
+                baseCount = RandomUtil.randomInt(1, 20);
+            } else if (currentHour < 11) {
+                baseCount = RandomUtil.randomInt(10, 50);
+            } else if (currentHour < 17) {
+                baseCount = RandomUtil.randomInt(40, 80);
+            } else {
+                baseCount = RandomUtil.randomInt(70, 150);
+            }
+            cache.put(CacheKeyConstant.PLAYER_ONLINE_COUNT, baseCount);
         }
-
-        //获取当前几点了
-        int currentHour = LocalDateTime.now().getHour();
-
-        //早晨七点以前人最少
-        if (currentHour < 7) {
-            playerOnlineCount = RandomUtil.randomInt(1, 20);
-        }
-        //上午人多一点
-        if (currentHour >= 7 && currentHour < 11) {
-            playerOnlineCount = RandomUtil.randomInt(10, 50);
-        }
-        //中午下午人再多一点
-        if (currentHour >= 11 && currentHour < 17) {
-            playerOnlineCount = RandomUtil.randomInt(40, 80);
-        }
-        //晚上人最多
-        if (currentHour >= 17) {
-            playerOnlineCount = RandomUtil.randomInt(70, 150);
-        }
-
-        cache.put(CacheKeyConstant.PLAYER_ONLINE_COUNT, playerOnlineCount);
-        return playerOnlineCount;
+        // 随机基数 + 真实WebSocket连接数
+        return baseCount + WebSocketEventListener.getRealOnlineCount();
     }
 
 }

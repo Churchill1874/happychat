@@ -1,5 +1,6 @@
 package com.ent.happychat.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,6 +10,7 @@ import com.ent.happychat.service.CompanyEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,18 @@ public class CompanyEventServiceImpl extends ServiceImpl<CompanyEventMapper, Com
         }
 
         return companyEventList.stream().collect(Collectors.groupingBy(CompanyEvent::getCompanyId));
+    }
+
+    @Override
+    public List<CompanyEvent> findByCompanyId(Long companyId) {
+        if(companyId == null){
+            return null;
+        }
+        LambdaQueryWrapper<CompanyEvent> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(CompanyEvent::getCompanyId, companyId)
+                .orderByDesc(CompanyEvent::getCreateTime);
+        return list(queryWrapper);
     }
 
 

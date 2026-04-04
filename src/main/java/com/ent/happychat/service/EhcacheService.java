@@ -7,6 +7,7 @@ import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import org.ehcache.Cache;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -105,5 +106,9 @@ public interface EhcacheService {
      * @return
      */
     void setBlacklistIpSetCache(Set<String> blacklistIpSet);
+
+    List<String> scrollingTextCache();
+
+    void setScrollingTextCache(List<String> list);
 
 }

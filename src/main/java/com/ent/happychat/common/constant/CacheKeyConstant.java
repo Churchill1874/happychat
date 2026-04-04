@@ -67,6 +67,15 @@ public interface CacheKeyConstant {
      */
     String HOME_DATA = "home_data";
 
+    /**
+     * 跑马灯容器
+     */
+    String SCROLLING_TEXT = "scrolling_text";
+
+    /**
+     * 跑马灯列表
+     */
+    String SCROLLING_TEXT_LIST = "scrolling_text_LIST";
 
 
 }

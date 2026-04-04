@@ -51,6 +51,13 @@ public class PlayerApi {
     @Autowired
     private PlayerRelationService playerRelationService;
 
+    @PostMapping("/onlineCount")
+    @ApiOperation(value = "在线人数", notes = "在线人数")
+    public R<Integer> onlineCount() {
+        return R.ok(TokenTools.onlineCountRandom());
+    }
+
+
     @PostMapping("/playerInfo")
     @ApiOperation(value = "玩家信息", notes = "玩家信息")
     public R<PlayerInfoResp> playerInfo() {

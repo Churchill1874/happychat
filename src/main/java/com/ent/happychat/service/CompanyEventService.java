@@ -15,4 +15,6 @@ public interface CompanyEventService extends IService<CompanyEvent> {
      */
     Map<Long, List<CompanyEvent>> mapGroup(List<Long> companyIdList);
 
+    List<CompanyEvent> findByCompanyId(Long companyId);
+
 }

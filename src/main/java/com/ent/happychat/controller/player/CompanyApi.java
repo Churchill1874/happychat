@@ -2,6 +2,7 @@ package com.ent.happychat.controller.player;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.resp.company.CompanyResp;
 import com.ent.happychat.service.CompanyService;
@@ -29,6 +30,12 @@ public class CompanyApi {
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<CompanyResp>> queryPage(@RequestBody @Valid PageBase req) {
         return R.ok(companyService.queryPageCompanyAndEvent(req));
+    }
+
+    @PostMapping("/findById")
+    @ApiOperation(value = "分页", notes = "分页")
+    public R<CompanyResp> queryPage(@RequestBody @Valid IdBase req) {
+        return R.ok(companyService.findById(req.getId()));
     }
 
 

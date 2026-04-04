@@ -20,6 +20,12 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     private PoliticsService politicsService;
     @Autowired
     private SoutheastAsiaService southeastAsiaService;
+    @Autowired
+    private SocietyService societyService;
+    @Autowired
+    private TopicService topicService;
+    @Autowired
+    private PromotionService promotionService;
 
     @Async
     @Override
@@ -28,13 +34,21 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         if (dto.getInfoType() == InfoEnum.NEWS) {
             newsService.increaseCommentsCount(dto.getNewsId());
         }
-        if (dto.getInfoType() == InfoEnum.POLITICS){
+        if (dto.getInfoType() == InfoEnum.POLITICS) {
             politicsService.increaseCommentsCount(dto.getNewsId());
         }
-        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA){
+        if (dto.getInfoType() == InfoEnum.SOUTHEAST_ASIA) {
             southeastAsiaService.increaseCommentsCount(dto.getNewsId());
         }
-
+        if (dto.getInfoType() == InfoEnum.SOCIETY) {
+            societyService.increaseCommentsCount(dto.getNewsId());
+        }
+        if (dto.getInfoType() == InfoEnum.TOPIC) {
+            topicService.increaseCommentsCount(dto.getNewsId());
+        }
+        if (dto.getInfoType() == InfoEnum.PROMOTION) {
+            promotionService.increaseCommentsCount(dto.getNewsId());
+        }
 
         //异步发送回复评论系统消息
         systemMessageService.sendCommentMessage(dto, newsTitle, replyContent);
