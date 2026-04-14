@@ -33,5 +33,7 @@ public class HomeResp implements Serializable {
     private PromotionResp promotion = new PromotionResp();
     @ApiModelProperty("曝光信息")
     private List<Exposure> exposureList = new ArrayList<>();
+    @ApiModelProperty("公告通知滚动文字")
+    private List<String> noticeList = new ArrayList<>();
 
 }

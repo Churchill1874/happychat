@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 public class HomeServiceImpl implements HomeService {
 
     @Autowired
+    private NoticeBoardService noticeBoardService;
+    @Autowired
     private NewsService newsService;
     @Autowired
     private EhcacheService ehcacheService;
@@ -70,17 +72,22 @@ public class HomeServiceImpl implements HomeService {
         getSoutheastAsiaNews(homeResp);
         getExposure(homeResp);
         getBannerList(homeResp);
-
+        getNotice(homeResp);
 
         //getLast3BetOrderList(homeResp);
         //getNewsRank(homeResp);
         //getPromotion(homeResp);
 
-        //获取随机的在线人数
-        homeResp.setOnlineCount(TokenTools.onlineCountRandom());
         //更新缓存
         cache.put(CacheKeyConstant.HOME_DATA, homeResp);
         return homeResp;
+    }
+
+    private void getNotice(HomeResp homeResp){
+        List<NoticeBoard> list = noticeBoardService.list();
+        if(CollectionUtils.isNotEmpty(list)){
+            homeResp.setNoticeList( list.stream().map(NoticeBoard::getContent).collect(Collectors.toList()));
+        }
     }
 
     private void getExposure(HomeResp homeResp){
