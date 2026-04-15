@@ -9,6 +9,7 @@ import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.AccountOrPasswordException;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.*;
+import com.ent.happychat.entity.LogInfo;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.entity.PlayerToken;
@@ -38,6 +39,9 @@ import java.time.LocalDateTime;
 @Api(tags = "玩家")
 @RequestMapping("/player/player")
 public class PlayerApi {
+
+    @Autowired
+    private LogInfoService logInfoService;
     @Autowired
     private PlayerTokenService playerTokenService;
     @Autowired
@@ -79,6 +83,20 @@ public class PlayerApi {
     @ApiOperation(value = "注册", notes = "注册")
     public R<PlayerTokenResp> register(@RequestBody @Valid PlayerRegisterReq req) {
         log.info("玩家注册入参:{}", JSONUtil.toJsonStr(req));
+        int registerCount = playerInfoService.registerCountByIpOfToday(HttpTools.getIp());
+        if(registerCount >= 10){
+            log.warn("今日注册数量以达到上限:{}", HttpTools.getIp() + "->" + HttpTools.getAddress());
+            LogInfo logInfo = new LogInfo();
+            logInfo.setType(2);//风控
+            logInfo.setContent("今日注册数量以达到上限");
+            logInfo.setIp(HttpTools.getIp());
+            logInfo.setAddress(HttpTools.getAddress());
+            logInfo.setCreateTime(LocalDateTime.now());
+            logInfo.setCreateName("系统");
+            logInfoService.asyncSave(logInfo);
+            throw new DataException("今日注册数量以达到上限");
+        }
+
         checkVerificationCode(req.getVerificationCode());
 
         CheckReqTools.account(req.getAccount());

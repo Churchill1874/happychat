@@ -71,4 +71,10 @@ public interface CommentService extends IService<Comment> {
 
     CommentReportResp getCommentReport();
 
+    /**
+     * 当日发送评论数量
+     * @return
+     */
+    int todayCommentsCount(Long playerId);
+
 }

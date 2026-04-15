@@ -1,9 +1,12 @@
 package com.ent.happychat.common.aspect;
+import java.time.LocalDateTime;
 
 import com.ent.happychat.common.exception.IpException;
 import com.ent.happychat.common.tools.HttpTools;
+import com.ent.happychat.entity.LogInfo;
 import com.ent.happychat.service.BlacklistService;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.LogInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -20,6 +23,8 @@ public class BlacklistAspect {
 
     @Autowired
     private BlacklistService blacklistService;
+    @Autowired
+    private LogInfoService logInfoService;
 
     @Pointcut("execution(* com.ent.happychat.controller.manage.*.*(..))")
     public void blacklistPointCut() {
@@ -31,6 +36,14 @@ public class BlacklistAspect {
         Set<String> blacklistIpSet = blacklistService.getIpSet();
         if (blacklistIpSet.contains(ip)) {
             log.error("黑名单ip访问异常:{}", ip);
+            LogInfo logInfo = new LogInfo();
+            logInfo.setType(2);
+            logInfo.setContent("黑名单ip访问异常");
+            logInfo.setIp(ip);
+            logInfo.setAddress(HttpTools.getAddress());
+            logInfo.setCreateTime(LocalDateTime.now());
+            logInfo.setCreateName("系统");
+            logInfoService.asyncSave(logInfo);
             throw new IpException(ip);
         }
     }

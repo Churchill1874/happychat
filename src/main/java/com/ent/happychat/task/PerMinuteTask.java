@@ -30,8 +30,8 @@ public class PerMinuteTask {
     @Scheduled(cron = "0 */1 * * * ?")
     public void perMinute() {
         LocalDateTime currentTime = LocalDateTime.now();
-        //定时检查 满足时间条件就去拉取新闻
-        newsService.pullNews(currentTime, Arrays.asList(JuHeNewsCategoryEnum.values()), true);
+        //定时检查 满足时间条件就去拉取新闻 todo 暂时注释 不搞国内新闻
+        //newsService.pullNews(currentTime, Arrays.asList(JuHeNewsCategoryEnum.values()), true);
 
         //每天晚上0点删除一遍 上传未使用的文件
         if (currentTime.getHour() == 0 && currentTime.getMinute() == 0){

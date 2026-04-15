@@ -7,10 +7,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.Comment;
+import com.ent.happychat.entity.LogInfo;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.PageBase;
@@ -23,6 +24,7 @@ import com.ent.happychat.pojo.resp.comment.NewsCommentResp;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.CommentService;
 import com.ent.happychat.service.EhcacheService;
+import com.ent.happychat.service.LogInfoService;
 import com.ent.happychat.service.PlayerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,6 +52,8 @@ public class CommentApi {
     private CommentService commentService;
     @Autowired
     private PlayerInfoService playerInfoService;
+    @Autowired
+    private LogInfoService logInfoService;
 
 
     @PostMapping("/findNewsComments")
@@ -64,7 +68,7 @@ public class CommentApi {
 
         IPage<Comment> topPage = null;
         //如果需要新闻评论位置定位查询
-        if (req.getNeedCommentPoint()){
+        if (req.getNeedCommentPoint()) {
             QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(Comment::getNewsId, req.getNewsId());
             List<Comment> list = commentService.list(queryWrapper);
@@ -154,11 +158,25 @@ public class CommentApi {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         ehcacheService.verification3SecondsRequest(playerTokenResp.getAccount());
 
+        int todayComments = commentService.todayCommentsCount(playerTokenResp.getId());
+        if (todayComments >= 100) {
+            log.warn("今日评论数量已超100:{}", playerTokenResp.getId() + "-" + playerTokenResp.getName());
+            LogInfo logInfo = new LogInfo();
+            logInfo.setType(2);//风控
+            logInfo.setContent("今日评论数量已超100");
+            logInfo.setIp(HttpTools.getIp());
+            logInfo.setAddress(HttpTools.getAddress());
+            logInfo.setPlayerId(playerTokenResp.getId());
+            logInfo.setCreateTime(LocalDateTime.now());
+            logInfo.setCreateName(playerTokenResp.getName());
+            logInfoService.asyncSave(logInfo);
+            return R.failed("今日评论数量以达标");
+        }
+
         if (req.getTopId() == null && req.getReplyId() != null) {
             log.warn("评论缺少顶层评论id:{}", JSONObject.toJSONString(req));
             throw new DataException("顶层评论不存在或已删除");
         }
-
 
         Comment comment = new Comment();
         comment.setNewsId(req.getNewsId());

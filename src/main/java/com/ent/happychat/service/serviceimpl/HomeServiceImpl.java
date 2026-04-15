@@ -4,15 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ent.happychat.common.constant.CacheKeyConstant;
-import com.ent.happychat.common.constant.enums.ImageTypeEnum;
 import com.ent.happychat.common.constant.enums.LotteryTypeEnum;
 import com.ent.happychat.common.constant.enums.NewsStatusEnum;
-import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.*;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.betorder.BetOrderPageReq;
 import com.ent.happychat.pojo.req.exposure.ExposurePage;
-import com.ent.happychat.pojo.req.image.ImageConfigPageReq;
 import com.ent.happychat.pojo.req.news.NewsPageReq;
 import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.req.promotion.PromotionPageReq;
@@ -71,9 +68,9 @@ public class HomeServiceImpl implements HomeService {
         getPolitics(homeResp);
         getSoutheastAsiaNews(homeResp);
         getExposure(homeResp);
-        getBannerList(homeResp);
         getNotice(homeResp);
 
+        //getBannerList(homeResp);
         //getLast3BetOrderList(homeResp);
         //getNewsRank(homeResp);
         //getPromotion(homeResp);
@@ -83,33 +80,33 @@ public class HomeServiceImpl implements HomeService {
         return homeResp;
     }
 
-    private void getNotice(HomeResp homeResp){
+    private void getNotice(HomeResp homeResp) {
         List<NoticeBoard> list = noticeBoardService.list();
-        if(CollectionUtils.isNotEmpty(list)){
-            homeResp.setNoticeList( list.stream().map(NoticeBoard::getContent).collect(Collectors.toList()));
+        if (CollectionUtils.isNotEmpty(list)) {
+            homeResp.setNoticeList(list.stream().map(NoticeBoard::getContent).collect(Collectors.toList()));
         }
     }
 
-    private void getExposure(HomeResp homeResp){
+    private void getExposure(HomeResp homeResp) {
         ExposurePage exposurePage = new ExposurePage();
         exposurePage.setPageNum(1);
         exposurePage.setPageSize(2);
         IPage<Exposure> iPage = exposureService.queryPage(exposurePage);
-        if(CollectionUtils.isEmpty(iPage.getRecords())){
+        if (CollectionUtils.isEmpty(iPage.getRecords())) {
             return;
         }
         homeResp.setExposureList(iPage.getRecords());
     }
 
 
-    private void getPromotion(HomeResp homeResp){
+    private void getPromotion(HomeResp homeResp) {
         PromotionPageReq promotionPageReq = new PromotionPageReq();
         promotionPageReq.setPageNum(1);
         promotionPageReq.setPageSize(2);
         promotionPageReq.setStatus(true);
         List<Promotion> list = promotionService.queryPage(promotionPageReq).getRecords();
         PromotionResp promotionResp = null;
-        if (CollectionUtils.isNotEmpty(list)){
+        if (CollectionUtils.isNotEmpty(list)) {
             Promotion promotion1 = list.get(0);
             promotionResp = new PromotionResp();
             promotionResp.setTitle1(promotion1.getTitle());
@@ -117,7 +114,7 @@ public class HomeServiceImpl implements HomeService {
             promotionResp.setVideoCover1(promotion1.getVideoCover());
             promotionResp.setImagePath1(promotion1.getImagePath());
             promotionResp.setArea1(promotion1.getArea());
-            if(list.size() > 1){
+            if (list.size() > 1) {
                 Promotion promotion2 = list.get(1);
                 promotionResp.setArea2(promotion2.getArea());
                 promotionResp.setTitle2(promotion2.getTitle());
@@ -129,7 +126,7 @@ public class HomeServiceImpl implements HomeService {
         homeResp.setPromotion(promotionResp);
     }
 
-    private void getPolitics(HomeResp homeResp){
+    private void getPolitics(HomeResp homeResp) {
         PoliticsPageReq pageBase = new PoliticsPageReq();
         pageBase.setPageNum(1);
         pageBase.setPageSize(3);

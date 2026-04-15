@@ -294,5 +294,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return commentReportResp;
     }
 
+    @Override
+    public int todayCommentsCount(Long playerId) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ge(Comment::getCreateTime, TimeUtils.startOfToday());
+        queryWrapper.eq(Comment::getPlayerId, playerId);
+        return count(queryWrapper);
+    }
+
 
 }

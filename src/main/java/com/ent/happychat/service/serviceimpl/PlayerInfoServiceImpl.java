@@ -294,5 +294,14 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         return rankReportResp;
     }
 
+    @Override
+    public int registerCountByIpOfToday(String ip) {
+        LambdaQueryWrapper<PlayerInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(PlayerInfo::getIp, ip)
+                .ge(PlayerInfo::getCreateTime, TimeUtils.startOfToday());
+        return count(queryWrapper);
+    }
+
 
 }

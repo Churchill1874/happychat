@@ -57,4 +57,6 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
 
     RankReportResp rankReport();
 
+    int registerCountByIpOfToday(String ip);
+
 }
