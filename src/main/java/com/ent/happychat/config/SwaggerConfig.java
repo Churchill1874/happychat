@@ -2,6 +2,7 @@ package com.ent.happychat.config;
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,6 +25,9 @@ import java.util.List;
 @EnableSwaggerBootstrapUI
 public class SwaggerConfig {
 
+    @Value("${swagger.enabled}")
+    private boolean swaggerEnabled;
+
     @Bean
     public Docket frontDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -34,6 +38,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                .enable(swaggerEnabled)
                 .globalOperationParameters(getPars())
                 .groupName("前台-客户端接口");
     }
@@ -48,6 +53,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                .enable(swaggerEnabled)
                 .globalOperationParameters(getPars())
                 .groupName("后台-管理接口");
     }
