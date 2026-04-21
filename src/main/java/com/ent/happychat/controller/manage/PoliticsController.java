@@ -38,6 +38,7 @@ public class PoliticsController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<Politics>> queryPage(@RequestBody PoliticsPageReq req) {
         IPage<Politics> iPage = politicsService.queryPage(req);
         return R.ok(iPage);
@@ -82,6 +83,7 @@ public class PoliticsController {
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改")
     @HomeDataClean
+    @AdminLoginCheck
     public R update(@RequestBody @Valid PoliticsUpdate req) {
         Politics politics = BeanUtil.toBean(req, Politics.class);
         politicsService.updateById(politics);

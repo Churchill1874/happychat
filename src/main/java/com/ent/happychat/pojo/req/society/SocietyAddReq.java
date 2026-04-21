@@ -39,4 +39,9 @@ public class SocietyAddReq implements Serializable {
     @ApiModelProperty("视频路径")
     private String videoPath;
 
+    @ApiModelProperty("封面图片")
+    private String videoCover;
+
+    @ApiModelProperty("标题")
+    private String title;
 }

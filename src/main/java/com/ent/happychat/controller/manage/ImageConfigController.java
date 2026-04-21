@@ -68,6 +68,7 @@ public class ImageConfigController {
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
+    @AdminLoginCheck
     public R page(@RequestBody ImageConfigPageReq req) {
         return R.ok(imageConfigService.queryPage(req));
     }

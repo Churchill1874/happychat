@@ -54,8 +54,8 @@ public class ToolsController {
             FileTypeEnum fileTypeEnum = FileTools.getFileType(fileExtension);
 
             // 3️⃣ 上传目录（你现在用 root 目录）
-            String uploadDir = "D:" + "\\bignews\\" + fileTypeEnum.getName() + "\\";
-            //String uploadDir =  "/bignews/" + fileTypeEnum.getName() + "/";
+            //String uploadDir = "D:" + "\\bignews\\" + fileTypeEnum.getName() + "\\";
+            String uploadDir =  "/bignews/" + fileTypeEnum.getName() + "/";
 
             // 4️⃣ 文件名
             String fileName;

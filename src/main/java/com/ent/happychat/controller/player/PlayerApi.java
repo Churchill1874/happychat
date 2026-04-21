@@ -121,7 +121,7 @@ public class PlayerApi {
         playerInfo.setAvatarPath("1");
         playerInfo.setBalance(BigDecimal.ZERO);
         playerInfo.setAddress(HttpTools.getAddress());
-        playerInfo.setCampType(req.getCampType());
+        //playerInfo.setCampType(req.getCampType());
         playerInfo.setIp(HttpTools.getIp());
         playerInfoService.add(playerInfo);
 

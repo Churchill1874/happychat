@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public R errorExceptionHandler(Exception e) {
-        //e.printStackTrace();
+        e.printStackTrace();
         log.error("系统异常信息:", e.getMessage());
         insertInfo("系统异常信息:" + e.getMessage());
         return R.failed(e.toString()).setCode(-1);

@@ -51,6 +51,7 @@ public class PlayerInfoController {
 
     @PostMapping("/onlinePlayerList")
     @ApiOperation(value = "在线玩家信息", notes = "在线玩家信息")
+    @AdminLoginCheck
     public R<List<PlayerTokenResp>> onlinePlayerList() {
         List<PlayerTokenResp> list = new ArrayList<>();
         Iterator<Cache.Entry<String, PlayerTokenResp>> iterator = ehcacheService.onlineCountCache().iterator();
@@ -65,6 +66,7 @@ public class PlayerInfoController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<PlayerInfo>> queryPage(@RequestBody @Valid PlayerInfoPageReq req) {
         PlayerInfo playerInfo = BeanUtil.toBean(req, PlayerInfo.class);
         PageBase pageBase = BeanUtil.toBean(req, PageBase.class);
@@ -136,12 +138,14 @@ public class PlayerInfoController {
 
     @PostMapping("/updateStatus")
     @ApiOperation(value = "修改状态", notes = "修改状态")
+    @AdminLoginCheck
     public R updateStatus(@RequestBody @Valid UpdateStatusBase req) {
         playerInfoService.updateStatus(req.getId(), req.getStatus());
         return R.ok(null);
     }
 
     @PostMapping("/levelTypeList")
+    @AdminLoginCheck
     @ApiOperation(value = "枚举类型列表", notes = "枚举类型列表")
     public R<List<LevelEnum.LevelType>> levelTypeList() {
         List<LevelEnum.LevelType> list = new ArrayList<>();
@@ -167,6 +171,7 @@ public class PlayerInfoController {
 
     @PostMapping("/findById")
     @ApiOperation(value = "根据id查询", notes = "根据id查询")
+    @AdminLoginCheck
     public R<PlayerInfo> findById(@RequestBody @Valid IdBase req) {
         PlayerInfo playerInfo = playerInfoService.getById(req.getId());
         return R.ok(playerInfo);

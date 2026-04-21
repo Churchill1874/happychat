@@ -49,9 +49,9 @@ public class PlayerRegisterReq implements Serializable {
     @NotBlank(message = "验证码不能为空")
     @ApiModelProperty(value = "验证码", required = true)
     private String verificationCode;
-
+/*
     @NotNull(message = "阵营不能为空")
     @ApiModelProperty("阵营")
-    private CampEnum campType;
+    private CampEnum campType;*/
 
 }

@@ -41,6 +41,7 @@ public class ExposureController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<Exposure>> queryPage(@RequestBody ExposurePage req) {
         IPage<Exposure> iPage = exposureService.queryPage(req);
         return R.ok(iPage);

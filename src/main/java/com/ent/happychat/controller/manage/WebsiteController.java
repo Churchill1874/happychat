@@ -88,7 +88,7 @@ public class WebsiteController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        String tokenId = TokenTools.getAdminToken(false).getTokenId();
+        String tokenId = TokenTools.getAdminToken(true).getTokenId();
         if (StringUtils.isBlank(tokenId)){
             return R.ok(null);
         }

@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 import java.time.LocalDateTime;
 
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.annotation.HomeDataClean;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.MessageTypeEnum;
@@ -37,6 +38,7 @@ public class SystemMessageController {
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
     @HomeDataClean
+    @AdminLoginCheck
     public R<IPage<SystemMessage>> queryPage(@RequestBody SystemMessagePageReq req) {
         IPage<SystemMessage> iPage = systemMessageService.queryPage(req);
         return R.ok(iPage);
@@ -45,6 +47,7 @@ public class SystemMessageController {
     @PostMapping("/send")
     @ApiOperation(value = "发送系统消息", notes = "发送系统消息")
     @HomeDataClean
+    @AdminLoginCheck
     public R send(@RequestBody @Valid SystemMessageAddReq req) {
         systemMessageService.sendSystemMessage(req);
         return R.ok(null);
@@ -53,6 +56,7 @@ public class SystemMessageController {
     @PostMapping("/deletePublicMessage")
     @ApiOperation(value = "删除系统消息", notes = "删除系统消息")
     @HomeDataClean
+    @AdminLoginCheck
     public R deletePublicMessage(@RequestBody @Valid SystemMessageDelete req) {
         systemMessageService.deletePublicMessage(req.getTitle());
         return R.ok(null);

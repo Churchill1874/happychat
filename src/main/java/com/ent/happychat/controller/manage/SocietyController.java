@@ -36,6 +36,7 @@ public class SocietyController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<Society>> queryPage(@RequestBody SocietyPageReq req) {
         IPage<Society> iPage = societyService.queryPage(req);
         return R.ok(iPage);
@@ -60,8 +61,9 @@ public class SocietyController {
     @HomeDataClean
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
-        societyService.removeById(req.getId());
         Society society = societyService.getById(req.getId());
+        societyService.removeById(req.getId());
+
         uploadRecordService.cleanRemoveFile(society.getImagePath());
         uploadRecordService.cleanRemoveFile(society.getVideoCover());
         uploadRecordService.cleanRemoveFile(society.getVideoPath());
@@ -81,6 +83,7 @@ public class SocietyController {
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改")
     @HomeDataClean
+    @AdminLoginCheck
     public R update(@RequestBody @Valid SocietyUpdateReq req) {
         Society society = BeanUtil.toBean(req, Society.class);
         societyService.updateById(society);

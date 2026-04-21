@@ -47,6 +47,7 @@ public class NewsController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<News>> queryPage(@RequestBody @Valid NewsPageReq req) {
         IPage<News> iPage = newsService.queryPage(req);
         return R.ok(iPage);

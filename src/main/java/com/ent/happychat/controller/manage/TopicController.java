@@ -36,6 +36,7 @@ public class TopicController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<Topic>> queryPage(@RequestBody TopicPageReq req) {
         IPage<Topic> iPage = topicService.queryPage(req);
         return R.ok(iPage);
@@ -58,8 +59,8 @@ public class TopicController {
     @HomeDataClean
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
-        topicService.removeById(req.getId());
         Topic topic = topicService.getById(req.getId());
+        topicService.removeById(req.getId());
         uploadRecordService.cleanRemoveFile(topic.getImagePath());
         uploadRecordService.cleanRemoveFile(topic.getVideoPath());
         uploadRecordService.cleanRemoveFile(topic.getVideoCover());
@@ -76,6 +77,7 @@ public class TopicController {
 
     @PostMapping("/update")
     @HomeDataClean
+    @AdminLoginCheck
     @ApiOperation(value = "修改", notes = "修改详情")
     public R update(@RequestBody @Valid TopicUpdateReq req) {
         Topic topic = BeanUtil.toBean(req, Topic.class);

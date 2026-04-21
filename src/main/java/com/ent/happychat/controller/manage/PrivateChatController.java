@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.entity.PlayerInfo;
 import com.ent.happychat.entity.PrivateChat;
 import com.ent.happychat.entity.Society;
@@ -38,6 +39,7 @@ public class PrivateChatController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<PrivateChatResp>> queryPage(@RequestBody PlayerPrivateChatPageReq req) {
         IPage<PrivateChat> iPage = privateChatService.adminPrivateChatPage(req);
 

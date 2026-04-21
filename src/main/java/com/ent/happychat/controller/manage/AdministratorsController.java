@@ -40,6 +40,7 @@ public class AdministratorsController {
 
     @PostMapping("/list")
     @ApiOperation(value = "分页查询管理员", notes = "分页查询管理员")
+    @AdminLoginCheck
     public R<IPage<Administrators>> list(@RequestBody @Valid PageBase req) {
         log.info("管理员分页查询入参:{}", JSONObject.toJSONString(req));
 

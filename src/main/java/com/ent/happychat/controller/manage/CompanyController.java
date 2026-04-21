@@ -79,7 +79,8 @@ public class CompanyController {
         Company company = BeanUtil.toBean(req, Company.class);
         company.setCreateTime(LocalDateTime.now());
         company.setCreateName(TokenTools.getAdminToken(true).getName());
-
+        company.setUpdateName(TokenTools.getAdminToken(true).getName());
+        company.setUpdateTime(LocalDateTime.now());
         companyService.save(company);
 
         uploadRecordService.cleanByPath(company.getImage());
@@ -105,9 +106,10 @@ public class CompanyController {
     @ApiOperation(value = "删除公司", notes = "删除公司")
     @HomeDataClean
     public R delete(@RequestBody @Valid IdBase req) {
-        companyService.removeById(req.getId());
 
         Company company = companyService.getById(req.getId());
+        companyService.removeById(req.getId());
+
         uploadRecordService.cleanRemoveFile(company.getImage());
 
         QueryWrapper<CompanyEvent> queryWrapper = new QueryWrapper<>();

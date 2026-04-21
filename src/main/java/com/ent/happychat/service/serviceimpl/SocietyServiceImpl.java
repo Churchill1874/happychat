@@ -60,6 +60,9 @@ public class SocietyServiceImpl extends ServiceImpl<SocietyMapper, Society> impl
         if (StringUtils.isBlank(society.getContent())) {
             throw new DataException("内容不能为空");
         }
+        if(StringUtils.isBlank(society.getTitle())){
+            throw new DataException("标题不能为空");
+        }
         if (society.getIsHot() == null) {
             society.setIsHot(false);
         }

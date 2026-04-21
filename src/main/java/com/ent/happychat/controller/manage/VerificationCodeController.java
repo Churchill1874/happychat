@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.tools.GenerateTools;
 import com.ent.happychat.common.tools.HttpTools;
 import com.ent.happychat.pojo.resp.verification.VerificationCodeResp;
@@ -24,6 +25,7 @@ public class VerificationCodeController {
 
     @PostMapping("/get")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
+    @AdminLoginCheck
     public synchronized R<VerificationCodeResp> get() {
         String ip = HttpTools.getIp();
         log.info("ip:{}请求图片验证码", ip);

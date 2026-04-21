@@ -1,6 +1,7 @@
 package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.pojo.resp.report.CommentReportResp;
 import com.ent.happychat.pojo.resp.report.RankReportResp;
 import com.ent.happychat.pojo.resp.report.RegisterReportResp;
@@ -30,18 +31,21 @@ public class ReportController {
 
     @PostMapping("/registerReport")
     @ApiOperation(value = "统计注册", notes = "统计注册信息")
+    @AdminLoginCheck
     public R<RegisterReportResp> registerReport() {
         return R.ok(playerInfoService.getRegisterReport());
     }
 
     @PostMapping("/commentReport")
     @ApiOperation(value = "统计注册", notes = "统计注册信息")
+    @AdminLoginCheck
     public R<CommentReportResp> commentReport() {
         return R.ok(commentService.getCommentReport());
     }
 
     @PostMapping("/viewReport")
     @ApiOperation(value = "统计注册", notes = "统计注册信息")
+    @AdminLoginCheck
     public R<ViewReportResp> viewReport() {
         return R.ok(viewsRecordService.viewReport());
     }
@@ -49,6 +53,7 @@ public class ReportController {
 
     @PostMapping("/rankReport")
     @ApiOperation(value = "统计注册", notes = "统计注册信息")
+    @AdminLoginCheck
     public R<RankReportResp> rankReport() {
         return R.ok(playerInfoService.rankReport());
     }

@@ -2,6 +2,7 @@ package com.ent.happychat.controller.manage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.entity.LogInfo;
 import com.ent.happychat.pojo.req.login.LogInfoPage;
 import com.ent.happychat.service.LogInfoService;
@@ -27,6 +28,7 @@ public class LogInfoController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<LogInfo>> queryPage(@RequestBody @Valid LogInfoPage req) {
         return R.ok(logInfoService.queryPage(req));
     }

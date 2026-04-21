@@ -110,7 +110,7 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
                 }
             }
             //本周统计
-            if (viewsRecord.getCreateTime().isAfter(TimeUtils.endOfLastWeek())) {
+            if (!viewsRecord.getCreateTime().isBefore(TimeUtils.startOfThisWeek())) {
                 if(viewsRecord.getViewsType() == ViewsEnum.SOUTHEAST_ASIA){
                     southeastView.setThisWeekView(southeastView.getThisWeekView() + 1);
                 }
@@ -128,7 +128,8 @@ public class ViewsRecordServiceImpl extends ServiceImpl<ViewsRecordMapper, Views
                 }
             }
             //上周统计
-            if (!viewsRecord.getCreateTime().isBefore(TimeUtils.startOfLastWeek()) && viewsRecord.getCreateTime().isBefore(TimeUtils.endOfThisWeek())) {
+            if (!viewsRecord.getCreateTime().isBefore(TimeUtils.startOfLastWeek())
+                    && viewsRecord.getCreateTime().isBefore(TimeUtils.startOfThisWeek())) {
                 if(viewsRecord.getViewsType() == ViewsEnum.SOUTHEAST_ASIA){
                     southeastView.setLastWeekView(southeastView.getLastWeekView() + 1);
                 }

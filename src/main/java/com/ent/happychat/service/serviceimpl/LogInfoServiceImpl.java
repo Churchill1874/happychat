@@ -31,7 +31,8 @@ public class LogInfoServiceImpl extends ServiceImpl<LogInfoMapper, LogInfo> impl
                 .eq(StringUtils.isNotBlank(req.getIp()), LogInfo::getIp, req.getIp())
                 .eq(req.getPlayerId() != null, LogInfo::getPlayerId, req.getPlayerId())
                 .like(StringUtils.isNotBlank(req.getContent()), LogInfo::getContent, req.getContent())
-                .eq(StringUtils.isNotBlank(req.getCreateName()), LogInfo::getCreateName, req.getCreateName());
+                .eq(StringUtils.isNotBlank(req.getCreateName()), LogInfo::getCreateName, req.getCreateName())
+                .orderByDesc(LogInfo::getCreateTime);
         return page(iPage, queryWrapper);
     }
 

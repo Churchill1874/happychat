@@ -37,6 +37,7 @@ public class SoutheastAsiaController {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
+    @AdminLoginCheck
     public R<IPage<SoutheastAsia>> queryPage(@RequestBody SoutheastAsiaPageReq req) {
         IPage<SoutheastAsia> iPage = southeastAsiaService.queryPage(req);
         return R.ok(iPage);
@@ -76,6 +77,7 @@ public class SoutheastAsiaController {
 
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改")
+    @AdminLoginCheck
     @HomeDataClean
     public R update(@RequestBody @Valid SoutheastAsiaUpdateReq req) {
         SoutheastAsia southeastAsia = BeanUtil.toBean(req, SoutheastAsia.class);
