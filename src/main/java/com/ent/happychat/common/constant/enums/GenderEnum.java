@@ -25,4 +25,12 @@ public enum GenderEnum {
         return this.name + ":" + this.code;
     }
 
+    public static GenderEnum findByCode(int code) {
+        for (GenderEnum genderEnum : GenderEnum.values()) {
+            if (genderEnum.code == code) {
+                return genderEnum;
+            }
+        }
+        return null;
+    }
 }

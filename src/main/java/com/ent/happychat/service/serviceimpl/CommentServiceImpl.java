@@ -17,7 +17,6 @@ import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.pojo.resp.report.CommentReportResp;
-import com.ent.happychat.pojo.resp.report.RegisterReportResp;
 import com.ent.happychat.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -120,15 +119,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 title = promotion.getTitle();
             }
         }
-        if (dto.getInfoType() == InfoEnum.SOCIETY){
+        if (dto.getInfoType() == InfoEnum.SOCIETY) {
             Society society = societyService.getById(dto.getNewsId());
-            if (society != null){
+            if (society != null) {
                 title = society.getTitle();
             }
         }
-        if (dto.getInfoType() == InfoEnum.TOPIC){
+        if (dto.getInfoType() == InfoEnum.TOPIC) {
             Topic topic = topicService.getById(dto.getNewsId());
-            if (topic != null){
+            if (topic != null) {
                 title = topic.getTitle();
             }
         }
@@ -142,10 +141,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         IPage<Comment> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(Comment::getNewsId, dto.getNewsId())
-            .eq(Comment::getInfoType, dto.getInfoType())
-            .isNull(Comment::getTopId)
-            .orderByDesc(Comment::getCreateTime);
+                .eq(Comment::getNewsId, dto.getNewsId())
+                .eq(Comment::getInfoType, dto.getInfoType())
+                .isNull(Comment::getTopId)
+                .orderByDesc(Comment::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
@@ -153,8 +152,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public List<Comment> replyList(List<Long> topIdList) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .in(Comment::getTopId, topIdList)
-            .orderByDesc(Comment::getCreateTime);
+                .in(Comment::getTopId, topIdList)
+                .orderByDesc(Comment::getCreateTime);
         return list(queryWrapper);
     }
 
@@ -171,14 +170,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         IPage<Comment> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(dto.getInfoType() != null, Comment::getInfoType, dto.getInfoType())
-            .eq(dto.getNewsId() != null, Comment::getNewsId, dto.getNewsId())
-            .eq(dto.getReplyId() != null, Comment::getReplyId, dto.getReplyId())
-            .eq(dto.getPlayerId() != null, Comment::getPlayerId, dto.getPlayerId())
-            .eq(dto.getTargetPlayerId() != null, Comment::getTargetPlayerId, dto.getTargetPlayerId())
-            .ge(dto.getStartTime() != null, Comment::getCreateTime, dto.getStartTime())
-            .le(dto.getEndTime() != null, Comment::getCreateTime, dto.getEndTime())
-            .orderByDesc(Comment::getCreateTime);
+                .eq(dto.getInfoType() != null, Comment::getInfoType, dto.getInfoType())
+                .eq(dto.getNewsId() != null, Comment::getNewsId, dto.getNewsId())
+                .eq(dto.getReplyId() != null, Comment::getReplyId, dto.getReplyId())
+                .eq(dto.getPlayerId() != null, Comment::getPlayerId, dto.getPlayerId())
+                .eq(dto.getTargetPlayerId() != null, Comment::getTargetPlayerId, dto.getTargetPlayerId())
+                .ge(dto.getStartTime() != null, Comment::getCreateTime, dto.getStartTime())
+                .le(dto.getEndTime() != null, Comment::getCreateTime, dto.getEndTime())
+                .orderByDesc(Comment::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
@@ -198,20 +197,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
         QueryWrapper<LikesRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
-            .eq(LikesRecord::getLikesId, id)
-            .eq(LikesRecord::getLikesType, LikesEnum.COMMENT);
+                .eq(LikesRecord::getPlayerId, playerTokenResp.getId())
+                .eq(LikesRecord::getLikesId, id)
+                .eq(LikesRecord::getLikesType, LikesEnum.COMMENT);
         int count = likesRecordService.count(queryWrapper);
         //增加点赞次数
         if (count == 0) {
             likesRecordService.increaseLikesCount(
-                playerTokenResp.getId(),
-                playerTokenResp.getName(),
-                id,
-                comment.getContent(),
-                LikesEnum.COMMENT,
-                comment.getPlayerId(),
-                comment.getInfoType()
+                    playerTokenResp.getId(),
+                    playerTokenResp.getName(),
+                    id,
+                    comment.getContent(),
+                    LikesEnum.COMMENT,
+                    comment.getPlayerId(),
+                    comment.getInfoType()
             );
 
             baseMapper.increaseLikesCount(id);
@@ -219,15 +218,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
             String content = comment.getContent();
             //如果评论内容大于12个字符 只保留12个字符就够了
-            if (StringUtils.isNotBlank(content) && content.length() > 12){
+            if (StringUtils.isNotBlank(content) && content.length() > 12) {
                 content = "点赞了您的评论:" + content.substring(0, 12) + "...";
             }
             systemMessageService.sendInteractiveMessage(
-                playerTokenResp.getId(),
-                comment.getPlayerId(),
-                "您收到了 " + playerTokenResp.getName() + " 的点赞",
-                content,
-                SystemNoticeEnum.LIKES
+                    playerTokenResp.getId(),
+                    comment.getPlayerId(),
+                    "您收到了 " + playerTokenResp.getName() + " 的点赞",
+                    content,
+                    SystemNoticeEnum.LIKES
             );
             return true;
         } else {
@@ -239,8 +238,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public int unreadCount(Long receiveId) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(Comment::getTargetPlayerId, receiveId)
-            .eq(Comment::getReadStatus, false);
+                .eq(Comment::getTargetPlayerId, receiveId)
+                .eq(Comment::getReadStatus, false);
         return count(queryWrapper);
     }
 
@@ -249,38 +248,38 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
                 .ge(Comment::getCreateTime, TimeUtils.startOfLastMonth())
-                .select( Comment::getId, Comment::getCreateTime );
+                .select(Comment::getId, Comment::getCreateTime);
         List<Comment> list = list(queryWrapper);
 
-        if(CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return new CommentReportResp();
         }
 
         CommentReportResp commentReportResp = new CommentReportResp();
 
-        for(Comment comment : list){
+        for (Comment comment : list) {
             //上个月统计
-            if(comment.getCreateTime().isBefore(TimeUtils.startOfThisMonth())){
+            if (comment.getCreateTime().isBefore(TimeUtils.startOfThisMonth())) {
                 commentReportResp.setLastMonthComment(commentReportResp.getLastMonthComment() + 1);
             }
             //本月统计
-            if(comment.getCreateTime().isAfter(TimeUtils.endOfLastMonth())){
+            if (comment.getCreateTime().isAfter(TimeUtils.endOfLastMonth())) {
                 commentReportResp.setThisMonthComment(commentReportResp.getThisMonthComment() + 1);
             }
             //本周统计
-            if(comment.getCreateTime().isAfter(TimeUtils.endOfLastWeek())){
+            if (comment.getCreateTime().isAfter(TimeUtils.endOfLastWeek())) {
                 commentReportResp.setThisWeekComment(commentReportResp.getThisWeekComment() + 1);
             }
             //上周统计
-            if(!comment.getCreateTime().isBefore(TimeUtils.startOfLastWeek()) && comment.getCreateTime().isBefore(TimeUtils.endOfThisWeek())){
+            if (!comment.getCreateTime().isBefore(TimeUtils.startOfLastWeek()) && comment.getCreateTime().isBefore(TimeUtils.endOfThisWeek())) {
                 commentReportResp.setLastWeekComment(commentReportResp.getLastWeekComment() + 1);
             }
             //今日统计
-            if(!comment.getCreateTime().isBefore(TimeUtils.startOfToday())){
+            if (!comment.getCreateTime().isBefore(TimeUtils.startOfToday())) {
                 commentReportResp.setTodayComment(commentReportResp.getTotalComment() + 1);
             }
             //昨日统计
-            if(!comment.getCreateTime().isBefore(TimeUtils.startOfYesterday()) && comment.getCreateTime().isBefore(TimeUtils.endOfYesterday())){
+            if (!comment.getCreateTime().isBefore(TimeUtils.startOfYesterday()) && comment.getCreateTime().isBefore(TimeUtils.endOfYesterday())) {
                 commentReportResp.setYesterdayComment(commentReportResp.getYesterdayComment() + 1);
             }
         }

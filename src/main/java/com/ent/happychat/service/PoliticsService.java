@@ -51,5 +51,7 @@ public interface PoliticsService extends IService<Politics> {
 
     Map<Long, Politics> mapByIds(List<Long> ids);
 
+    void pullNews();
+
 
 }

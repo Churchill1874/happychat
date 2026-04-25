@@ -1,16 +1,16 @@
 package com.ent.happychat.task;
 
-import com.ent.happychat.common.constant.enums.JuHeNewsCategoryEnum;
+import com.ent.happychat.entity.Comment;
+import com.ent.happychat.service.CommentService;
 import com.ent.happychat.service.NewsService;
+import com.ent.happychat.service.PoliticsService;
 import com.ent.happychat.service.UploadRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 /**
  * 定时任务类
@@ -23,6 +23,11 @@ public class PerMinuteTask {
     private NewsService newsService;
     @Autowired
     private UploadRecordService uploadRecordService;
+    @Autowired
+    private PoliticsService politicsService;
+    @Autowired
+    private CommentService commentService;
+
 
     /**
      * 每分钟执行定时任务
@@ -35,8 +40,23 @@ public class PerMinuteTask {
 
         //每天晚上0点删除一遍 上传未使用的文件
         if (currentTime.getHour() == 0 && currentTime.getMinute() == 0){
+            //清理未用的磁盘上的图片
             uploadRecordService.cleanNotUsedFile();
         }
+
+        //早晨五点
+        if(currentTime.getHour() == 5 && currentTime.getMinute() == 0){
+            //politicsService.pullNews();
+        }
+        //中午12点
+        if (currentTime.getHour() == 12 && currentTime.getMinute() == 0) {
+            //politicsService.pullNews();
+        }
+        //下午六点
+        if (currentTime.getHour() == 18 && currentTime.getMinute() == 0){
+            //politicsService.pullNews();
+        }
+
     }
 
 }

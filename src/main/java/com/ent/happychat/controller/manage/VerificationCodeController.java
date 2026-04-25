@@ -25,7 +25,6 @@ public class VerificationCodeController {
 
     @PostMapping("/get")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
-    @AdminLoginCheck
     public synchronized R<VerificationCodeResp> get() {
         String ip = HttpTools.getIp();
         log.info("ip:{}请求图片验证码", ip);

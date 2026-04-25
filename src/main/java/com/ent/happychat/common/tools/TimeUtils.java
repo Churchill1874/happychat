@@ -131,6 +131,13 @@ public class TimeUtils {
                 .atTime(END_OF_DAY);
     }
 
+    /*******
+     * 获取N天前的开始时间
+     */
+    public static LocalDateTime startOfLastNDays(int n) {
+        return LocalDate.now().minusDays(n).atStartOfDay();
+    }
+
     // ======================== 测试入口 ========================
 
     public static void main(String[] args) {

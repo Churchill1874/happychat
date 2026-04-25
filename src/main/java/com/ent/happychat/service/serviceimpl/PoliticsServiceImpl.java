@@ -9,28 +9,25 @@ import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.common.exception.TokenException;
-import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.LikesRecord;
-import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
-import com.ent.happychat.entity.Society;
 import com.ent.happychat.mapper.PoliticsMapper;
-import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
 import com.ent.happychat.service.LikesRecordService;
 import com.ent.happychat.service.PoliticsService;
 import com.ent.happychat.service.ViewsRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Service
 public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> implements PoliticsService {
 
@@ -118,6 +115,32 @@ public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> i
             });
         }
         return map;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void pullNews() {
+/*        List<Politics> politicsList = new ArrayList<>();
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(newsDTO -> {
+                Politics politics = new Politics();
+                politics.setTitle(newsDTO.getTitleZh());
+                politics.setContent(newsDTO.getSummaryZh());
+                politics.setViewCount(0);
+                politics.setLikesCount(0);
+                politics.setCommentsCount(0);
+                politics.setNewsStatus(NewsStatusEnum.NORMAL);
+                politics.setImagePath(newsDTO.getImageUrl());
+                politics.setCountry("国际");
+                politics.setSource(newsDTO.getSourceName());
+                politics.setCreateTime(LocalDateTime.now());
+                politics.setCreateName("GNews");
+                politicsList.add(politics);
+            });
+        }
+        log.info("GNews拉取新闻成功,准备入库数量：{}", politicsList.size());
+        saveBatch(politicsList);*/
     }
 
 

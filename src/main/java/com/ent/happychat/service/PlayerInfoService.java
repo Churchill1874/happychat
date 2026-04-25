@@ -59,4 +59,5 @@ public interface PlayerInfoService extends IService<PlayerInfo> {
 
     int registerCountByIpOfToday(String ip);
 
+    List<PlayerInfo> allListBot();
 }

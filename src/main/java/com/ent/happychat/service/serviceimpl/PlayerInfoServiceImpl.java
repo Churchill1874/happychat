@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.CampEnum;
+import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.entity.Comment;
@@ -301,6 +302,14 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
                 .eq(PlayerInfo::getIp, ip)
                 .ge(PlayerInfo::getCreateTime, TimeUtils.startOfToday());
         return count(queryWrapper);
+    }
+
+    @Override
+    public List<PlayerInfo> allListBot() {
+        LambdaQueryWrapper<PlayerInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PlayerInfo::getIsBot, true);
+        queryWrapper.eq(PlayerInfo::getStatus, UserStatusEnum.NORMAL);
+        return list(queryWrapper);
     }
 
 

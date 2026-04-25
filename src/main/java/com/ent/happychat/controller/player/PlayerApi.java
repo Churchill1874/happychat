@@ -84,7 +84,7 @@ public class PlayerApi {
     public R<PlayerTokenResp> register(@RequestBody @Valid PlayerRegisterReq req) {
         log.info("玩家注册入参:{}", JSONUtil.toJsonStr(req));
         int registerCount = playerInfoService.registerCountByIpOfToday(HttpTools.getIp());
-        if(registerCount >= 10){
+        if (registerCount >= 10) {
             log.warn("今日注册数量以达到上限:{}", HttpTools.getIp() + "->" + HttpTools.getAddress());
             LogInfo logInfo = new LogInfo();
             logInfo.setType(2);//风控
@@ -98,6 +98,17 @@ public class PlayerApi {
         }
 
         checkVerificationCode(req.getVerificationCode());
+
+        if (req.getName().contains("huiya")
+                || req.getName().contains("灰亚")
+                || req.getName().contains("grayasia")
+                || req.getName().contains("站长")
+                || req.getName().contains("官方")
+                || req.getName().contains("管理员")
+                || req.getName().contains("客服")
+                || req.getName().contains("系统")) {
+            throw new DataException("请您更换名称");
+        }
 
         CheckReqTools.account(req.getAccount());
         CheckReqTools.name(req.getName());

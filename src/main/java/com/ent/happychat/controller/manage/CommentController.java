@@ -9,6 +9,7 @@ import com.ent.happychat.common.annotation.AdminLoginCheck;
 import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.entity.*;
+import com.ent.happychat.pojo.req.comment.BotCommentSend;
 import com.ent.happychat.pojo.req.comment.CommentPageReq;
 import com.ent.happychat.pojo.resp.comment.CommentPageResp;
 import com.ent.happychat.service.*;
@@ -32,8 +33,6 @@ import java.util.stream.Collectors;
 public class CommentController {
 
     @Autowired
-    private ExposureService exposureService;
-    @Autowired
     private PoliticsService politicsService;
     @Autowired
     private SocietyService societyService;
@@ -47,6 +46,7 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private NewsService newsService;
+
 
     @AdminLoginCheck
     @PostMapping("/queryPage")
