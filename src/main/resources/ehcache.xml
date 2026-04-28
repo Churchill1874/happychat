@@ -30,7 +30,7 @@
         <key-type>java.lang.String</key-type>
         <value-type>com.ent.happychat.pojo.resp.admin.AdminTokenResp</value-type>
         <expiry>
-            <ttl unit="days">1</ttl>
+            <ttl unit="days">3</ttl>
         </expiry>
         <resources>
             <heap unit="entries">50</heap>
