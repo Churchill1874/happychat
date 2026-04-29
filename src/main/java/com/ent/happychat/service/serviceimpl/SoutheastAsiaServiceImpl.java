@@ -1,5 +1,6 @@
 package com.ent.happychat.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -8,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.exception.TokenException;
+import com.ent.happychat.common.tools.FreeNewsTools;
+import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.common.tools.TokenTools;
 import com.ent.happychat.entity.News;
 import com.ent.happychat.entity.Politics;
@@ -17,6 +20,7 @@ import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.service.SoutheastAsiaService;
 import com.ent.happychat.service.ViewsRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -26,7 +30,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Service
 public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, SoutheastAsia> implements SoutheastAsiaService {
 
@@ -126,5 +130,35 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
         return map;
     }
 
-
+    public void southeastAsiaPull(){
+        List<FreeNewsTools.NewsItem> list = FreeNewsTools.fetchAllCountryNews();
+        log.info("从freenews请求东南亚新闻返回:{}", list.size());
+        if (CollectionUtils.isNotEmpty(list)) {
+            //遍历
+            for (FreeNewsTools.NewsItem item : list) {
+                LambdaQueryWrapper<SoutheastAsia> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                lambdaQueryWrapper.eq(SoutheastAsia::getTitle, item.title);
+                lambdaQueryWrapper.ge(SoutheastAsia::getCreateTime, TimeUtils.startOfLastNDays(7));
+                lambdaQueryWrapper.select(SoutheastAsia::getId);
+                //如果30天内没有重复标题
+                if (count(lambdaQueryWrapper) > 0) {
+                    continue;
+                }
+                SoutheastAsia southeastAsia = new SoutheastAsia();
+                southeastAsia.setSource(item.source);
+                southeastAsia.setContent(item.content);
+                southeastAsia.setImagePath(item.imagePath);
+                southeastAsia.setViewCount(0);
+                southeastAsia.setCommentsCount(0);
+                southeastAsia.setIsTop(false);
+                southeastAsia.setIsHot(false);
+                southeastAsia.setArea(item.area);
+                southeastAsia.setStatus(true);
+                southeastAsia.setTitle(item.title);
+                southeastAsia.setCreateTime(LocalDateTime.now());
+                southeastAsia.setCreateName("系统");
+                save(southeastAsia);
+            }
+        }
+    }
 }

@@ -13,6 +13,7 @@ import java.util.Map;
 
 public interface SoutheastAsiaService extends IService<SoutheastAsia> {
 
+    void southeastAsiaPull();
 
     IPage<SoutheastAsia> queryPage(SoutheastAsiaPageReq req);
 

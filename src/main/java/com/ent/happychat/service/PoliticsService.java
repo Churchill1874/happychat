@@ -53,5 +53,6 @@ public interface PoliticsService extends IService<Politics> {
 
     void pullNews();
 
+    void politicsPull();
 
 }

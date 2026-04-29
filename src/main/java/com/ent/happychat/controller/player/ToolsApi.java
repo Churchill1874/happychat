@@ -23,15 +23,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Slf4j
+/*@Slf4j
 @RestController
 @Api(tags = "工具")
-@RequestMapping("/player/tools")
+@RequestMapping("/player/tools")*/
 public class ToolsApi {
-
+/*
     @Autowired
-    private UploadRecordService uploadRecordService;
-
+    private UploadRecordService uploadRecordService;*/
+/*
     @ApiOperation("上传文件")
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
@@ -71,7 +71,7 @@ public class ToolsApi {
             e.printStackTrace();
             return R.failed("上传失败");
         }
-    }
+    }*/
 
 
 }

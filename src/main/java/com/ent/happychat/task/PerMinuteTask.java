@@ -56,7 +56,9 @@ public class PerMinuteTask {
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void perMinute() {
+        log.info("进入定时任务");
         LocalDateTime currentTime = LocalDateTime.now();
+        log.info("获取到的时间:{}", currentTime);
 
         //随即赞
         randomLikes(currentTime);
@@ -72,85 +74,35 @@ public class PerMinuteTask {
 
         //早晨五点
         if (currentTime.getHour() == 5 && currentTime.getMinute() == 0) {
-            //拉取freenews
-            List<FreeNewsTools.NewsItem> list = FreeNewsTools.fetchAllCountryNews();
-            if (CollectionUtils.isNotEmpty(list)) {
-                //遍历
-                for (FreeNewsTools.NewsItem item : list) {
-                    LambdaQueryWrapper<SoutheastAsia> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    lambdaQueryWrapper.eq(SoutheastAsia::getTitle, item.title);
-                    lambdaQueryWrapper.ge(SoutheastAsia::getCreateTime, TimeUtils.startOfLastNDays(7));
-                    lambdaQueryWrapper.select(SoutheastAsia::getId);
-                    //如果30天内没有重复标题
-                    if (southeastAsiaService.count(lambdaQueryWrapper) > 0) {
-                        continue;
-                    }
-                    SoutheastAsia southeastAsia = new SoutheastAsia();
-                    southeastAsia.setSource(item.source);
-                    southeastAsia.setContent(item.content);
-                    southeastAsia.setImagePath(item.imagePath);
-                    southeastAsia.setViewCount(0);
-                    southeastAsia.setCommentsCount(0);
-                    southeastAsia.setIsTop(false);
-                    southeastAsia.setIsHot(false);
-                    southeastAsia.setArea(item.area);
-                    southeastAsia.setStatus(true);
-                    southeastAsia.setTitle(item.title);
-                    southeastAsia.setCreateTime(LocalDateTime.now());
-                    southeastAsia.setCreateName("系统");
-                    southeastAsiaService.add(southeastAsia);
-                }
-            }
+            //拉取 freenews
+            southeastAsiaService.southeastAsiaPull();
         }
 
         // 早上6点 抓政治新闻
         if (currentTime.getHour() == 6 && currentTime.getMinute() == 0) {
             //政治新闻 freenews
-            List<PoliticsNewsTools.NewsItem> politicsList = PoliticsNewsTools.fetchAllPoliticsNews();
-            if(CollectionUtils.isNotEmpty(politicsList)){
-                //遍历
-                for (PoliticsNewsTools.NewsItem item : politicsList) {
-                    LambdaQueryWrapper<SoutheastAsia> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-                    lambdaQueryWrapper.eq(SoutheastAsia::getTitle, item.title);
-                    lambdaQueryWrapper.ge(SoutheastAsia::getCreateTime, TimeUtils.startOfLastNDays(7));
-                    lambdaQueryWrapper.select(SoutheastAsia::getId);
-                    //如果30天内没有重复标题
-                    if (southeastAsiaService.count(lambdaQueryWrapper) > 0) {
-                        continue;
-                    }
-                    SoutheastAsia southeastAsia = new SoutheastAsia();
-                    southeastAsia.setSource(item.source);
-                    southeastAsia.setContent(item.content);
-                    southeastAsia.setImagePath(item.imagePath);
-                    southeastAsia.setViewCount(0);
-                    southeastAsia.setCommentsCount(0);
-                    southeastAsia.setIsTop(false);
-                    southeastAsia.setIsHot(false);
-                    southeastAsia.setArea("国际政治");
-                    southeastAsia.setStatus(true);
-                    southeastAsia.setTitle(item.title);
-                    southeastAsia.setCreateTime(LocalDateTime.now());
-                    southeastAsia.setCreateName("系统");
-                    southeastAsiaService.add(southeastAsia);
-                }
-            }
+            politicsService.politicsPull();
         }
 
         //中午12点
         if (currentTime.getHour() == 12 && currentTime.getMinute() == 0) {
-            //politicsService.pullNews();
+
         }
 
         //下午六点
         if (currentTime.getHour() == 18 && currentTime.getMinute() == 0) {
-            //politicsService.pullNews();
+
         }
 
     }
 
 
+
+
+
+
     private void randomLikes(LocalDateTime currentTime) {
-        if (currentTime.getMinute() % 10 == 0) {
+        if (currentTime.getMinute() % 5 == 0) {
             //获取最新50个东南亚新闻 然后根据返回集合长度 作为上限下限,随机点赞
             List<SoutheastAsia> southeastAsiaList = southeastAsiaService.list(new LambdaQueryWrapper<SoutheastAsia>()
                     .orderByDesc(SoutheastAsia::getCreateTime)
@@ -161,7 +113,7 @@ public class PerMinuteTask {
                 southeastAsiaMapper.increaseViewsCount(southeastAsia.getId());
             }
 
-            //获取最新10个话题
+            //获取最新50个话题
             List<Topic> topicList = topicService.list(new LambdaQueryWrapper<Topic>()
                     .orderByDesc(Topic::getCreateTime)
                     .last("limit 50"));
@@ -171,7 +123,7 @@ public class PerMinuteTask {
                 topicMapper.increaseViewsCount(topic.getId());
             }
 
-            //获取最新10个社会新闻
+            //获取最新50个社会新闻
             List<Society> societyList = societyService.list(new LambdaQueryWrapper<Society>()
                     .orderByDesc(Society::getCreateTime)
                     .last("limit 50"));

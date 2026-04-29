@@ -1,5 +1,7 @@
 package com.ent.happychat.service.serviceimpl;
+import com.ent.happychat.common.constant.enums.NewsStatusEnum;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -9,8 +11,11 @@ import com.ent.happychat.common.constant.enums.InfoEnum;
 import com.ent.happychat.common.constant.enums.LikesEnum;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
+import com.ent.happychat.common.tools.PoliticsNewsTools;
+import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.entity.LikesRecord;
 import com.ent.happychat.entity.Politics;
+import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.mapper.PoliticsMapper;
 import com.ent.happychat.pojo.req.politics.PoliticsPageReq;
 import com.ent.happychat.pojo.resp.player.PlayerTokenResp;
@@ -24,6 +29,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,5 +149,34 @@ public class PoliticsServiceImpl extends ServiceImpl<PoliticsMapper, Politics> i
         saveBatch(politicsList);*/
     }
 
-
+    public void politicsPull(){
+        List<PoliticsNewsTools.NewsItem> politicsList = PoliticsNewsTools.fetchAllPoliticsNews();
+        log.info("从freenews请求国际政治新闻返回:{}", politicsList.size());
+        if(CollectionUtils.isNotEmpty(politicsList)){
+            //遍历
+            for (PoliticsNewsTools.NewsItem item : politicsList) {
+                LambdaQueryWrapper<Politics> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+                lambdaQueryWrapper.eq(Politics::getTitle, item.title);
+                lambdaQueryWrapper.ge(Politics::getCreateTime, TimeUtils.startOfLastNDays(7));
+                lambdaQueryWrapper.select(Politics::getId);
+                //如果30天内没有重复标题
+                if (count(lambdaQueryWrapper) > 0) {
+                    continue;
+                }
+                Politics politics = new Politics();
+                politics.setLikesCount(0);
+                politics.setNewsStatus(NewsStatusEnum.NORMAL);
+                politics.setCountry("国际政治");
+                politics.setSource(item.source);
+                politics.setContent(item.content);
+                politics.setImagePath(item.imagePath);
+                politics.setViewCount(0);
+                politics.setCommentsCount(0);
+                politics.setTitle(item.title);
+                politics.setCreateTime(LocalDateTime.now());
+                politics.setCreateName("系统");
+                save(politics);
+            }
+        }
+    }
 }
