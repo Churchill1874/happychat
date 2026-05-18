@@ -3,9 +3,6 @@ package com.ent.happychat.task;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.ent.happychat.common.tools.FreeNewsTools;
-import com.ent.happychat.common.tools.PoliticsNewsTools;
-import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.entity.Politics;
 import com.ent.happychat.entity.Society;
 import com.ent.happychat.entity.SoutheastAsia;
@@ -31,7 +28,9 @@ import java.util.List;
 public class PerMinuteTask {
 
     @Autowired
-    private NewsService newsService;
+    private SoutheastAsiaTemporaryService southeastAsiaTemporaryService;
+    @Autowired
+    private PoliticsTemporaryService politicsTemporaryService;
     @Autowired
     private UploadRecordService uploadRecordService;
     @Autowired
@@ -56,12 +55,16 @@ public class PerMinuteTask {
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void perMinute() {
-        log.info("进入定时任务");
         LocalDateTime currentTime = LocalDateTime.now();
-        log.info("获取到的时间:{}", currentTime);
 
         //随即赞
         randomLikes(currentTime);
+
+        //迁移临时政治新闻到正式表中
+        politicsTemporaryService.moveData();
+
+        //迁移临时东南亚新闻到正是表中
+        southeastAsiaTemporaryService.moveData();
 
         //定时检查 满足时间条件就去拉取新闻  暂时注释 不搞国内新闻
         //newsService.pullNews(currentTime, Arrays.asList(JuHeNewsCategoryEnum.values()), true);
@@ -74,24 +77,18 @@ public class PerMinuteTask {
 
         //早晨五点
         if (currentTime.getHour() == 5 && currentTime.getMinute() == 0) {
-            //拉取 freenews
-            southeastAsiaService.southeastAsiaPull();
         }
 
         // 早上6点 抓政治新闻
         if (currentTime.getHour() == 6 && currentTime.getMinute() == 0) {
-            //政治新闻 freenews
-            politicsService.politicsPull();
         }
 
         //中午12点
         if (currentTime.getHour() == 12 && currentTime.getMinute() == 0) {
-
         }
 
         //下午六点
         if (currentTime.getHour() == 18 && currentTime.getMinute() == 0) {
-
         }
 
     }

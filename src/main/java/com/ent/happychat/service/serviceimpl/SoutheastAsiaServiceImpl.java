@@ -8,15 +8,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.ViewsEnum;
 import com.ent.happychat.common.exception.DataException;
-import com.ent.happychat.common.exception.TokenException;
-import com.ent.happychat.common.tools.FreeNewsTools;
+import com.ent.happychat.common.tools.SoutheastAsiaNewsTools;
 import com.ent.happychat.common.tools.TimeUtils;
 import com.ent.happychat.common.tools.TokenTools;
-import com.ent.happychat.entity.News;
-import com.ent.happychat.entity.Politics;
 import com.ent.happychat.entity.SoutheastAsia;
 import com.ent.happychat.mapper.SoutheastAsiaMapper;
-import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.req.southeastasia.SoutheastAsiaPageReq;
 import com.ent.happychat.service.SoutheastAsiaService;
 import com.ent.happychat.service.ViewsRecordService;
@@ -131,11 +127,11 @@ public class SoutheastAsiaServiceImpl extends ServiceImpl<SoutheastAsiaMapper, S
     }
 
     public void southeastAsiaPull(){
-        List<FreeNewsTools.NewsItem> list = FreeNewsTools.fetchAllCountryNews();
+        List<SoutheastAsiaNewsTools.NewsItem> list = SoutheastAsiaNewsTools.fetchAllCountryNews();
         log.info("从freenews请求东南亚新闻返回:{}", list.size());
         if (CollectionUtils.isNotEmpty(list)) {
             //遍历
-            for (FreeNewsTools.NewsItem item : list) {
+            for (SoutheastAsiaNewsTools.NewsItem item : list) {
                 LambdaQueryWrapper<SoutheastAsia> lambdaQueryWrapper = new LambdaQueryWrapper<>();
                 lambdaQueryWrapper.eq(SoutheastAsia::getTitle, item.title);
                 lambdaQueryWrapper.ge(SoutheastAsia::getCreateTime, TimeUtils.startOfLastNDays(7));

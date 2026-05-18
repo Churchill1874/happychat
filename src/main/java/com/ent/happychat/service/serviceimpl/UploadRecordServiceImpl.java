@@ -92,7 +92,8 @@ public class UploadRecordServiceImpl extends ServiceImpl<UploadRecordMapper, Upl
             }
             //如果删除成功
             if (!result) {
-                throw new DataException("删除文件异常");
+                log.warn("删除文件异常:{}", path);
+                //throw new DataException("删除文件异常");
             }
         }
 

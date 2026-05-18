@@ -8,15 +8,16 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.happychat.common.constant.enums.CampEnum;
+import com.ent.happychat.common.constant.enums.MessageTypeEnum;
+import com.ent.happychat.common.constant.enums.SystemNoticeEnum;
 import com.ent.happychat.common.constant.enums.UserStatusEnum;
 import com.ent.happychat.common.exception.DataException;
 import com.ent.happychat.common.tools.TimeUtils;
-import com.ent.happychat.entity.Comment;
-import com.ent.happychat.entity.InteractiveStatistics;
-import com.ent.happychat.entity.PlayerInfo;
-import com.ent.happychat.entity.PlayerToken;
+import com.ent.happychat.common.tools.TokenTools;
+import com.ent.happychat.entity.*;
 import com.ent.happychat.mapper.CommentMapper;
 import com.ent.happychat.mapper.PlayerInfoMapper;
+import com.ent.happychat.mapper.SystemMessageMapper;
 import com.ent.happychat.pojo.req.PageBase;
 import com.ent.happychat.pojo.resp.report.RankInfoResp;
 import com.ent.happychat.pojo.resp.report.RankReportResp;
@@ -44,6 +45,8 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
     private PlayerTokenService playerTokenService;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private SystemMessageMapper systemMessageMapper;
 
 
     @Override
@@ -90,6 +93,17 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
             throw new DataException("刚刚网络繁忙,请稍后再次请求");
         }
 
+        SystemMessage systemMessage = new SystemMessage();
+        systemMessage.setTitle("\uD83C\uDF39欢迎来到灰亚新闻");
+        systemMessage.setContent("不管你是刚到东南亚，还是已经在这里摸爬滚打多年，灰亚新闻始终希望成为你最即时，最有效的情报信息站");
+        systemMessage.setPopup(false);
+        systemMessage.setStatus(false);
+        systemMessage.setMessageType(MessageTypeEnum.SYSTEM);
+        systemMessage.setCreateTime(LocalDateTime.now());
+        systemMessage.setCreateName("系统");
+        systemMessage.setRecipientId(playerInfo.getId());
+        systemMessage.setSystemNoticeType(SystemNoticeEnum.APPLICATION_TIPS);
+        systemMessageMapper.insert(systemMessage);
     }
 
     @Override
