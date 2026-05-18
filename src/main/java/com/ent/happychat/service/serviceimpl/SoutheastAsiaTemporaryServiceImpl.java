@@ -39,7 +39,7 @@ public class SoutheastAsiaTemporaryServiceImpl extends ServiceImpl<SoutheastAsia
 
         removeById(southeastAsiaTemporary.getId());
 
-        telegramBotTools.sendNews(southeastAsiaTemporary.getTitle(), southeastAsiaTemporary.getContent(), southeastAsiaTemporary.getSource(),null);
+        telegramBotTools.sendNews(southeastAsiaTemporary.getTitle(), southeastAsiaTemporary.getContent(), southeastAsiaTemporary.getSource(),"东南亚新闻",null);
     }
 
 }

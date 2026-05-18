@@ -40,7 +40,7 @@ public class PoliticsTemporaryServiceImpl extends ServiceImpl<PoliticsTemporaryM
 
         removeById(politicsTemporary.getId());
 
-        telegramBotTools.sendNews(politics.getTitle(), politics.getContent(), politics.getSource(),null);
+        telegramBotTools.sendNews(politics.getTitle(), politics.getContent(), politics.getSource(),"国际政治",null);
     }
 
 }
