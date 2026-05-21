@@ -81,12 +81,12 @@ public class TelegramBotTools {
         StringBuilder sb = new StringBuilder();
 
         // 标题加粗，后面空一行
-        sb.append("<b>").append(escapeHtml(title)).append("</b>");
+        sb.append("\uD83D\uDCCC <b>").append(escapeHtml(title)).append("</b>");
         sb.append("\n\n");
 
         // 正文截取前500字
         if (content != null && !content.isEmpty()) {
-            String trimmed = content.length() > 500 ? content.substring(0, 500) + "..." : content;
+            String trimmed = content.length() > 3000 ? content.substring(0, 3000) + "..." : content;
             sb.append(escapeHtml(trimmed));
             sb.append("\n\n");
         }
@@ -97,13 +97,19 @@ public class TelegramBotTools {
 
         // 来源
         if (source != null && !source.isEmpty()) {
-            sb.append(" 📰来源: ").append(escapeHtml(source)).append("\n");
+            sb.append(" 📰来源: ").append("<i>").append(escapeHtml(source)).append("</i>").append("\n\n\n");
         }
 
         // 原文链接
         if (originalUrl != null && !originalUrl.isEmpty()) {
             sb.append("<a href=\"").append(originalUrl).append("\">📖 阅读原文</a>");
         }
+
+
+        sb.append("\uD83D\uDCE3").append("<b>").append("投搞爆料:").append("</b>").append("@grayasia");
+        sb.append("\n\n<i>#灰亚新闻 专属东南亚灰产圈的新闻咨询网站</i>");
+        sb.append("\n\n<i>www.grayasia.com</i>");
+
 
         return sendMessage(sb.toString());
     }
