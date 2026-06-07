@@ -106,6 +106,7 @@ public class PrivateChatApi {
         for (PrivateChat privateChat : list) {
             //不论聊天记录的发送人和接收人是谁,只保留过滤对方的账号 作为过滤依据
             Long chatTargetId = myAccountId.compareTo(privateChat.getSendId()) == 0 ? privateChat.getReceiveId() : privateChat.getSendId();
+            if (chatTargetId.equals(myAccountId)) continue;
 
             if (!linkedHashMap.containsKey(chatTargetId)) {
                 set.add(chatTargetId);

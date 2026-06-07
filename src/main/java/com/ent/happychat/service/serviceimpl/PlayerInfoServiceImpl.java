@@ -326,5 +326,16 @@ public class PlayerInfoServiceImpl extends ServiceImpl<PlayerInfoMapper, PlayerI
         return list(queryWrapper);
     }
 
+    @Override
+    public List<PlayerInfo> searchByKeyword(String keyword) {
+        LambdaQueryWrapper<PlayerInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .and(w -> w.eq(PlayerInfo::getAccount, keyword)
+                        .or()
+                        .like(PlayerInfo::getName, keyword))
+                .eq(PlayerInfo::getIsBot, false)
+                .last("LIMIT 10");
+        return list(queryWrapper);
+    }
 
 }

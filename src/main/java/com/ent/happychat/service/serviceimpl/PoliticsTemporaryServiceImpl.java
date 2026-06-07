@@ -14,13 +14,14 @@ import com.ent.happychat.mapper.PoliticsTemporaryMapper;
 import com.ent.happychat.pojo.resp.news.HomeResp;
 import com.ent.happychat.service.EhcacheService;
 import com.ent.happychat.service.PoliticsTemporaryService;
+import lombok.extern.slf4j.Slf4j;
 import org.ehcache.Cache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-
+@Slf4j
 @Service
 public class PoliticsTemporaryServiceImpl extends ServiceImpl<PoliticsTemporaryMapper, PoliticsTemporary> implements PoliticsTemporaryService {
 
@@ -47,7 +48,11 @@ public class PoliticsTemporaryServiceImpl extends ServiceImpl<PoliticsTemporaryM
         queryWrapper
                 .eq(Politics::getTitle, politics.getTitle())
                 .ge(Politics::getCreateTime, TimeUtils.startOfLastNDays(7));
-        if(CollectionUtils.isNotEmpty(politicsMapper.selectList(queryWrapper))){
+
+        List<Politics> politicsList = politicsMapper.selectList(queryWrapper);
+
+        if(CollectionUtils.isNotEmpty(politicsList)){
+            removeById(politicsTemporary.getId());
             return;
         }
 

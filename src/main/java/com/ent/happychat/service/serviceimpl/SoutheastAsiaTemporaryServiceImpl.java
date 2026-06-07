@@ -48,7 +48,9 @@ public class SoutheastAsiaTemporaryServiceImpl extends ServiceImpl<SoutheastAsia
         queryWrapper
                 .eq(SoutheastAsia::getTitle, southeastAsia.getTitle())
                 .ge(SoutheastAsia::getCreateTime, TimeUtils.startOfLastNDays(7));
+
         if(CollectionUtils.isNotEmpty(southeastAsiaMapper.selectList(queryWrapper))){
+            removeById(southeastAsiaTemporary.getId());
             return;
         }
 

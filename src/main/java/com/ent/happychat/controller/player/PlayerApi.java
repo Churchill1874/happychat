@@ -15,6 +15,7 @@ import com.ent.happychat.entity.PlayerRelation;
 import com.ent.happychat.entity.PlayerToken;
 import com.ent.happychat.pojo.req.IdBase;
 import com.ent.happychat.pojo.req.player.PersonalInfoUpdateReq;
+import com.ent.happychat.pojo.req.player.PlayerAccountReq;
 import com.ent.happychat.pojo.req.player.PlayerLoginReq;
 import com.ent.happychat.pojo.req.player.PlayerRegisterReq;
 import com.ent.happychat.pojo.resp.player.PlayerInfoResp;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -260,5 +265,22 @@ public class PlayerApi {
         return R.ok(playerInfoResp);
     }
 
+    @PostMapping("/findPlayerByAccount")
+    @ApiOperation(value = "按账号或名称搜索玩家", notes = "按账号精确匹配或名称模糊匹配，用于私信搜索")
+    public R<List<PlayerInfoResp>> findPlayerByAccount(@RequestBody @Valid PlayerAccountReq req) {
+        PlayerTokenResp currentPlayer = TokenTools.getPlayerToken(true);
+
+        List<PlayerInfo> playerInfoList = playerInfoService.searchByKeyword(req.getAccount());
+        if (CollectionUtils.isEmpty(playerInfoList)) {
+            return R.ok(Collections.emptyList());
+        }
+
+        List<PlayerInfoResp> respList = playerInfoList.stream()
+                .filter(p -> !p.getId().equals(currentPlayer.getId()))  // ← 过滤掉自己
+                .map(p -> BeanUtil.toBean(p, PlayerInfoResp.class))
+                .collect(Collectors.toList());
+
+        return R.ok(respList);
+    }
 
 }

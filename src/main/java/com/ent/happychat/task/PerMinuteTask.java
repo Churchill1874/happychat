@@ -99,7 +99,7 @@ public class PerMinuteTask {
 
 
     private void randomLikes(LocalDateTime currentTime) {
-        if (currentTime.getMinute() % 5 == 0) {
+        if (currentTime.getMinute() % 10 ==0){
             //获取最新50个东南亚新闻 然后根据返回集合长度 作为上限下限,随机点赞
             List<SoutheastAsia> southeastAsiaList = southeastAsiaService.list(new LambdaQueryWrapper<SoutheastAsia>()
                     .orderByDesc(SoutheastAsia::getCreateTime)
