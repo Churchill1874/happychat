@@ -55,7 +55,6 @@ public class PrivateChatApi {
         privateChatRespPage.setTotal(privateChatPage.getTotal());
         privateChatRespPage.setRecords(new ArrayList<>());
 
-
         if (CollectionUtils.isEmpty(privateChatPage.getRecords())) {
             return R.ok(privateChatRespPage);
         }
@@ -117,8 +116,10 @@ public class PrivateChatApi {
                 notReadAccountSet.add(chatTargetId);
             }
         }
-
+        log.info("查询玩家id集合 set: {}", set);
         Map<Long, PlayerInfo> map = playerInfoService.playerIdMapPlayer(new ArrayList<>(set));
+        log.info("playerIdMap result: {}", map);
+
         List<PrivateChatOuterResp> resultList = new ArrayList<>();
 
         for (Long key : linkedHashMap.keySet()) {
@@ -148,6 +149,24 @@ public class PrivateChatApi {
         privateChatListResp.setList(resultList);
         return R.ok(privateChatListResp);
     }
+
+
+    @PostMapping("/cleanByPlayerId")
+    @ApiOperation(value = "清除某个用户与自己的聊天记录", notes = "清除某个用户与自己的聊天记录")
+    public R privateChatPage(@RequestBody PlayerPrivateChatPageReq req) {
+        if(req.getPlayerAId() == null){
+            return R.ok(null);
+        }
+
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
+        Long playerId = playerTokenResp.getId();
+        Long targetId = req.getPlayerAId();
+
+        privateChatService.cleanByPlayerIdAndTargetPlayerId(playerId, targetId);
+        return R.ok(null);
+    }
+
 
 
 }

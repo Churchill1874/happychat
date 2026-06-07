@@ -20,4 +20,7 @@ public interface PrivateChatService extends IService<PrivateChat> {
     int unreadCount(Long playerId);
 
     IPage<PrivateChat> adminPrivateChatPage(PlayerPrivateChatPageReq po);
+
+    void cleanByPlayerIdAndTargetPlayerId(Long playerId, Long targetPlayerId);
+
 }

@@ -70,16 +70,20 @@ public class PrivateChatController {
             if(privateChat.getSendId() != null){
                 PlayerInfo playerSender = map.get(privateChat.getSendId());
                 if(playerSender != null){
-                    privateChatResp.setSenderName(playerSender.getName());
+                    privateChatResp.setSendName(playerSender.getName());
                     privateChatResp.setSendAvatarPath(playerSender.getAvatarPath());
+                    privateChatResp.setSendAccount(playerSender.getAccount());
+                    privateChatResp.setSendLevel(playerSender.getLevel());
                 }
             }
 
             if(privateChat.getReceiveId() != null){
                 PlayerInfo receivePlayer = map.get(privateChat.getReceiveId());
                 if(receivePlayer != null){
-                    privateChatResp.setReceiverName(receivePlayer.getName());
+                    privateChatResp.setReceiveName(receivePlayer.getName());
                     privateChatResp.setReceiveAvatarPath(receivePlayer.getAvatarPath());
+                    privateChatResp.setReceiverAccount(receivePlayer.getAccount());
+                    privateChatResp.setReceiveLevel(receivePlayer.getLevel());
                 }
             }
 

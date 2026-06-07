@@ -1,7 +1,9 @@
 package com.ent.happychat.service.serviceimpl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -77,10 +79,18 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         po.setStatus(false);
         save(po);
 
-        PlayerInfo targetPlayer = playerInfoService.getById(po.getSendId());
-        PrivateChatResp playerInfoResp = BeanUtil.toBean(po, PrivateChatResp.class);
-        playerInfoResp.setSendAvatarPath(targetPlayer.getAvatarPath());
 
+        PlayerInfo senderPlayer = playerInfoService.getById(po.getSendId());
+        PlayerInfo receiverPlayer = playerInfoService.getById(po.getReceiveId());
+        PrivateChatResp playerInfoResp = BeanUtil.toBean(po, PrivateChatResp.class);
+
+        // 发送方信息
+        playerInfoResp.setSendAvatarPath(senderPlayer.getAvatarPath());
+        playerInfoResp.setSendName(senderPlayer.getName());
+
+        // 接收方信息
+        playerInfoResp.setReceiveAvatarPath(receiverPlayer.getAvatarPath());
+        playerInfoResp.setReceiveName(receiverPlayer.getName());
 
         messagingTemplate.convertAndSendToUser(po.getReceiveId() + "","/queue/private", playerInfoResp);
     }
@@ -155,6 +165,21 @@ public class PrivateChatServiceImpl extends ServiceImpl<PrivateChatMapper, Priva
         queryWrapper.lambda().orderByDesc(PrivateChat::getCreateTime);
 
         return page(page, queryWrapper);
+    }
+
+    @Override
+    public void cleanByPlayerIdAndTargetPlayerId(Long playerId, Long targetPlayerId) {
+        LambdaQueryWrapper<PrivateChat> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(PrivateChat::getSendId, playerId)
+                .eq(PrivateChat::getReceiveId, targetPlayerId);
+        remove(queryWrapper);
+
+        LambdaQueryWrapper<PrivateChat> queryWrapper1 = new LambdaQueryWrapper<>();
+        queryWrapper1
+                .eq(PrivateChat::getSendId, targetPlayerId)
+                .eq(PrivateChat::getReceiveId, playerId);
+        remove(queryWrapper1);
     }
 
 }
