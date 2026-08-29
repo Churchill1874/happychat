@@ -1,3 +1,6 @@
+// 目标路径: src/main/java/com/ent/happychat/controller/player/SitemapController.java
+// 完整文件，直接整份覆盖替换。在原文件基础上只加了 telegram 相关的几处（都标了"电报："注释），
+// 其余 southeastAsia/politics/society/exposure/topic/company 六个原有类型一字未改。
 package com.ent.happychat.controller.player;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -34,6 +37,8 @@ public class SitemapController {
     private ExposureMapper exposureMapper;
     @Autowired
     private CompanyMapper companyMapper;
+    @Autowired
+    private TelegramMapper telegramMapper; // 电报：注入mapper
 
     @GetMapping(value = "/sitemap.xml", produces = "application/xml;charset=UTF-8")
     public void sitemapIndex(HttpServletResponse response) throws IOException {
@@ -49,6 +54,9 @@ public class SitemapController {
         writeIndex(writer, "exposure", pages(exposureMapper.selectCount(null)));
         writeIndex(writer, "topic", pages(topicMapper.selectCount(null)));
         writeIndex(writer, "company", pages(companyMapper.selectCount(null)));
+        // 电报：加入 sitemap 索引，只统计已上架（status=true）的条数
+        writeIndex(writer, "telegram", pages(telegramMapper.selectCount(
+                new LambdaQueryWrapper<Telegram>().eq(Telegram::getStatus, true))));
 
         writer.println("</sitemapindex>");
         writer.flush();
@@ -102,6 +110,11 @@ public class SitemapController {
                         new LambdaQueryWrapper<Company>().select(Company::getId).last(last)
                 ).stream().map(e -> String.valueOf(e.getId())).collect(Collectors.toList());
                 break;
+            case "telegram": // 电报：只把已上架的条目列进sitemap，下架/草稿不给谷歌
+                ids = telegramMapper.selectList(
+                        new LambdaQueryWrapper<Telegram>().select(Telegram::getId).eq(Telegram::getStatus, true).last(last)
+                ).stream().map(e -> String.valueOf(e.getId())).collect(Collectors.toList());
+                break;
             default:
                 ids = Collections.emptyList();
         }
@@ -139,6 +152,8 @@ public class SitemapController {
                 return "/topic/";
             case "company":
                 return "/company/";
+            case "telegram": // 电报：对应前端详情页路由 /telegram/:id
+                return "/telegram/";
             default:
                 return "/";
         }
