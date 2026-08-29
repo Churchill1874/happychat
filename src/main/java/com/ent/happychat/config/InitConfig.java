@@ -32,9 +32,8 @@ public class InitConfig {
     private AdministratorsService administratorsService;
 
     //超管管理员账号
-    private static final String SUPER_ADMIN_ACCOUNT = "admin";
-
-    private static final String PASSWORD = "111111a";
+    private static final String SUPER_ADMIN_ACCOUNT = "superadmin";
+    private static final String PASSWORD = "Aa@joy1cs1112.123";
 
     //获取创建机器人开关
     @Value("${init.create.bot}")
