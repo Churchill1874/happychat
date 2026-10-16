@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ent.happychat.mapper.VoteMapper">
+
+    <update id="increaseCommentsCount">
+        UPDATE vote SET comments_count = comments_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="increaseViewsCount">
+        UPDATE vote SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+    <update id="changeVoterCount">
+        UPDATE vote SET voter_count = GREATEST(voter_count + #{delta}, 0) WHERE id = #{id}
+    </update>
+
+    <update id="recountVoterCount">
+        UPDATE vote
+        SET voter_count = (SELECT COUNT(DISTINCT r.player_id) FROM vote_record r WHERE r.vote_id = #{id})
+        WHERE id = #{id}
+    </update>
+
+</mapper>

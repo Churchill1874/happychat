@@ -17,7 +17,8 @@ public enum InfoEnum {
     TOPIC(6,"话题"),
     Tieba(7,"帖吧"),
     EXPOSURE(8,"曝光"),
-    COMPANY(9,"公司")
+    COMPANY(9,"公司"),
+    VOTE(10,"投票")
     ;
 
     @Getter

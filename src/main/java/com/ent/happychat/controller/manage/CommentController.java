@@ -46,6 +46,8 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private VoteService voteService;
 
 
     @AdminLoginCheck
@@ -69,6 +71,13 @@ public class CommentController {
 
         newsData(commentPage.getRecords(), newsMap, southeastAsiaMap, topicMap, societyMap, politicsMap);
 
+        //投票评论的标题
+        List<Long> voteIdList = commentPage.getRecords().stream()
+            .filter(c -> c.getInfoType() == InfoEnum.VOTE)
+            .map(Comment::getNewsId)
+            .collect(Collectors.toList());
+        Map<Long, Vote> voteMap = voteService.mapByIds(voteIdList);
+
         List<Long> playerIdList = commentPage.getRecords().stream().map(Comment::getPlayerId).collect(Collectors.toList());
         List<Long> targetPlayerIdList = commentPage.getRecords().stream().map(Comment::getTargetPlayerId).filter(Objects::nonNull).collect(Collectors.toList());
         playerIdList.addAll(targetPlayerIdList);
@@ -82,6 +91,9 @@ public class CommentController {
             CommentPageResp commentPageResp = BeanUtil.toBean(comment, CommentPageResp.class);
             commentPageResp.setCommentator(player.getName());
             commentPageResp.setTitle(getTitle(comment, newsMap, southeastAsiaMap, topicMap, societyMap, politicsMap));
+            if (comment.getInfoType() == InfoEnum.VOTE && voteMap.get(comment.getNewsId()) != null) {
+                commentPageResp.setTitle(voteMap.get(comment.getNewsId()).getTitle());
+            }
             commentPageResp.setLevel(player.getLevel());
 
             if (comment.getTargetPlayerId() != null) {

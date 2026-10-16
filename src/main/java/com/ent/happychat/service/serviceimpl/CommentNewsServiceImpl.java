@@ -26,6 +26,8 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     private TopicService topicService;
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private VoteService voteService;
 
     @Async
     @Override
@@ -48,6 +50,9 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         }
         if (dto.getInfoType() == InfoEnum.PROMOTION) {
             promotionService.increaseCommentsCount(dto.getNewsId());
+        }
+        if (dto.getInfoType() == InfoEnum.VOTE) {
+            voteService.increaseCommentsCount(dto.getNewsId());
         }
 
         //异步发送回复评论系统消息

@@ -48,6 +48,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     private SocietyService societyService;
     @Autowired
+    private VoteService voteService;
+    @Autowired
     private InteractiveStatisticsService interactiveStatisticsService;
     @Autowired
     private SystemMessageService systemMessageService;
@@ -129,6 +131,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             Topic topic = topicService.getById(dto.getNewsId());
             if (topic != null) {
                 title = topic.getTitle();
+            }
+        }
+        if (dto.getInfoType() == InfoEnum.VOTE) {
+            Vote vote = voteService.getById(dto.getNewsId());
+            if (vote != null) {
+                title = vote.getTitle();
             }
         }
 
