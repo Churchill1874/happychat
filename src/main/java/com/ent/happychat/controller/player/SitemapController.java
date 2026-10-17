@@ -39,6 +39,8 @@ public class SitemapController {
     private CompanyMapper companyMapper;
     @Autowired
     private TelegramMapper telegramMapper; // 电报：注入mapper
+    @Autowired
+    private VoteMapper voteMapper; // 投票：注入mapper
 
     @GetMapping(value = "/sitemap.xml", produces = "application/xml;charset=UTF-8")
     public void sitemapIndex(HttpServletResponse response) throws IOException {
@@ -57,6 +59,9 @@ public class SitemapController {
         // 电报：加入 sitemap 索引，只统计已上架（status=true）的条数
         writeIndex(writer, "telegram", pages(telegramMapper.selectCount(
                 new LambdaQueryWrapper<Telegram>().eq(Telegram::getStatus, true))));
+        // 投票：只统计展示中（status=true）的投票
+        writeIndex(writer, "vote", pages(voteMapper.selectCount(
+                new LambdaQueryWrapper<Vote>().eq(Vote::getStatus, true))));
 
         writer.println("</sitemapindex>");
         writer.flush();
@@ -115,6 +120,11 @@ public class SitemapController {
                         new LambdaQueryWrapper<Telegram>().select(Telegram::getId).eq(Telegram::getStatus, true).last(last)
                 ).stream().map(e -> String.valueOf(e.getId())).collect(Collectors.toList());
                 break;
+            case "vote": // 投票：只把展示中的投票列进sitemap
+                ids = voteMapper.selectList(
+                        new LambdaQueryWrapper<Vote>().select(Vote::getId).eq(Vote::getStatus, true).last(last)
+                ).stream().map(e -> String.valueOf(e.getId())).collect(Collectors.toList());
+                break;
             default:
                 ids = Collections.emptyList();
         }
@@ -154,6 +164,8 @@ public class SitemapController {
                 return "/company/";
             case "telegram": // 电报：对应前端详情页路由 /telegram/:id
                 return "/telegram/";
+            case "vote": // 投票：对应前端详情页路由 /vote/:id
+                return "/vote/";
             default:
                 return "/";
         }
